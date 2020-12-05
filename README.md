@@ -21,15 +21,21 @@
 
 ## 联系方式
 
+### 邮箱
+
+我的邮箱：【zhangpanqin@outlook.com】
+
+<a href="Mailto:zhangpanqin@outlook.com">给张攀钦发邮件</a>
+
 ### 微信
 
-欢迎加群（请备注【加群】）进行交流
+欢迎加群（请备注【加群】）进行交流，微信号：【Daojian_qin】
 
 <img src="http://oss.mflyyou.cn/blog/20201205145742.jpg?author=zhangpanqin" alt="张攀钦的微信" style="zoom:50%;" />
 
 ### 公众号
 
-
+公众号：【Mflyyou】
 
 <img src="http://oss.mflyyou.cn/blog/20201205145423.png?author=zhangpanqin" alt="公众号：【Mflyyou】" style="zoom: 50%;" />
 
