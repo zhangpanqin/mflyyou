@@ -8,7 +8,7 @@
 </p>
 
 
-![](./blog.png)
+![](http://oss.mflyyou.cn/blog/20201205192219.png?author=zhangpanqin)
 
 [在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
 
@@ -31,11 +31,11 @@
 
 欢迎加群（请备注【加群】）进行交流，微信号：【Daojian_qin】
 
-<img src="./resource/pic/wx_zhangpanqin.jpg" alt="张攀钦的微信" style="zoom:25%;" />
+<img src="http://oss.mflyyou.cn/blog/20201205192200.jpg?author=zhangpanqin" alt="张攀钦的微信" style="zoom:25%;" />
 
 ### 公众号
 
 公众号：【Mflyyou】
 
-![公众号：Mflyyou](./resource/pic/wx_gongzhonghao.jpg)
+![公众号：Mflyyou](http://oss.mflyyou.cn/blog/20201205192205.jpg?author=zhangpanqin)
 
