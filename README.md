@@ -7,6 +7,7 @@
   <a href="https://www.toutiao.com/c/user/111159900906/#mid=1660292020183044"><img src="https://img.shields.io/badge/toutiao-头条-blue" alt="头条"></a>
 </p>
 
+
 ![](http://assets.processon.com/chart_image/5fcb396763768926b54f0577.png)
 
 [在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
@@ -37,5 +38,5 @@
 
 公众号：【Mflyyou】
 
-<img src="http://oss.mflyyou.cn/blog/20201205145423.png?author=zhangpanqin" alt="公众号：【Mflyyou】" style="zoom: 50%;" />
+<img src="http://oss.mflyyou.cn/blog/20201205145423.png?author=zhangpanqin" alt="公众号：【Mflyyou】" />
 
