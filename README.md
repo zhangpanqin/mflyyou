@@ -37,6 +37,5 @@
 ### 公众号
 
 公众号：【Mflyyou】
-
-<img src="http://oss.mflyyou.cn/blog/20201205145423.png?author=zhangpanqin" alt="公众号：【Mflyyou】" />
+![公众号：Mflyyou](http://oss.mflyyou.cn/blog/20201205182547.jpg?author=zhangpanqin)
 
