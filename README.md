@@ -8,7 +8,7 @@
 </p>
 
 
-<img src="http://assets.processon.com/chart_image/5fcb396763768926b54f0577.png"/>
+<img src="http://oss.mflyyou.cn/blog/20201205184138.png?author=zhangpanqin"/>
 
 [在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
 
@@ -26,13 +26,12 @@
 
 我的邮箱：【zhangpanqin@outlook.com】
 
-<a href="Mailto:zhangpanqin@outlook.com">给张攀钦发邮件</a>
 
 ### 微信
 
 欢迎加群（请备注【加群】）进行交流，微信号：【Daojian_qin】
 
-<img src="http://oss.mflyyou.cn/blog/20201205145742.jpg?author=zhangpanqin" alt="张攀钦的微信" style="zoom:50%;" />
+<img src="http://oss.mflyyou.cn/blog/20201205145742.jpg?author=zhangpanqin" alt="张攀钦的微信" style="zoom: 25%;" />
 
 ### 公众号
 
