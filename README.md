@@ -8,7 +8,7 @@
 </p>
 
 
-![](http://assets.processon.com/chart_image/5fcb396763768926b54f0577.png)
+<img src="http://assets.processon.com/chart_image/5fcb396763768926b54f0577.png"/>
 
 [在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
 
@@ -37,5 +37,6 @@
 ### 公众号
 
 公众号：【Mflyyou】
+
 ![公众号：Mflyyou](http://oss.mflyyou.cn/blog/20201205182547.jpg?author=zhangpanqin)
 
