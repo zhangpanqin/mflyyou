@@ -31,7 +31,7 @@
 
 欢迎加群（请备注【加群】）进行交流，微信号：【Daojian_qin】
 
-<img src="./resource/pic/wx_zhangpanqin.jpg" alt="张攀钦的微信" style="zoom: 25%;" />
+<img src="./resource/pic/wx_zhangpanqin.jpg" alt="张攀钦的微信" style="zoom:25%;" />
 
 ### 公众号
 
