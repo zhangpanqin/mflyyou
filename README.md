@@ -14,11 +14,75 @@
 
 ## 内容
 
+### Java
+
+[深入理解 Java 乱码问题【原创】](https://mp.weixin.qq.com/s/fHrHJg_njDgEE1rHTGgxhA)
+
+[JAVA 中强软弱虚引用的妙用【原创】](https://mp.weixin.qq.com/s/L_CQpZzRU6ZyTz6IM_9GWg)
+
+#### JUC
+
+[JUC之ThreadPoolExecutor 【原创】](https://mp.weixin.qq.com/s/d1WzMtovW_iNcpVB_WXx1A)
+
+[java 异步编程【原创】](https://mp.weixin.qq.com/s/OpDqkoczaO4z0kA9bCo-Xw)
+
+[你需要了解锁的前提-volatile【原创】](https://mp.weixin.qq.com/s/xtRLc8ExJ7yG0pHEg1p-qQ)
+
+[从锁升级的角度理解synchronized【原创】](https://mp.weixin.qq.com/s/8qw1z0k7bthI_eVc-M6o-A)
+
+
+
+#### IO
+
+[从Linux内核理解Java中的IO【原创】](https://mp.weixin.qq.com/s/wcwKYU38wGLZUaryf1pqPw)
+
+[从Linux内核理解JAVA的NIO【原创】](https://mp.weixin.qq.com/s/K72PLIgSNFH_GuOh5L0Clg)
+
+[从linux内核理解Java怎样实现Socket通信【原创】](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
+
+### Mysql
+
+[深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
+
+[Mysql 权限管理【原创】](https://mp.weixin.qq.com/s/WbilZ1mxH9u9YXflRpkccQ)
+
+[Mysql数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)
+
+### TCP/IP
+
+[你需要知道的TCP/IP 原创](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
+
+[再也不用为跨域而苦恼](https://mp.weixin.qq.com/s/1F-5r3NZ-h92hpFDeW3dNA)
+
+### 分布式事务
+
+[分布式事务，原来可以这么玩？【转载-58沈剑-公众号-架构师之路】](https://mp.weixin.qq.com/s/juG8cZejCiSLWjkaaHTQiw)
+
 ### 开发工具
 
-[你确定 Maven 相关的东西全部了解吗](https://mp.weixin.qq.com/s/WkfW3veizz3XbtbTL50KLQ)
+[你确定 Maven 相关的东西全部了解吗【原创】](https://mp.weixin.qq.com/s/WkfW3veizz3XbtbTL50KLQ)
+
+### Nginx
+
+[Nginx-包教包会-入门【原创】](https://mp.weixin.qq.com/s/iztoTXcmtYVJhbo-SvsHCQ)
+
+[Nginx-包教包会-进阶【原创】](https://mp.weixin.qq.com/s/L591AkXS1t0dzsmMqJYv8A)
+
+[Nginx-性能优化【原创】](https://mp.weixin.qq.com/s/7ZqvGc_uuMlIOhJMMd41mQ)
+
+### Linux
+
+[Linux-包教包会系列【原创】](https://mp.weixin.qq.com/s/JG3W0qz9fxhHlq6gZ0rKXg)
+
+[Centos 7 实战总结【原创】](https://mp.weixin.qq.com/s/v6quqwBicHAoXcU6LFv26Q)
+
+[Linux-包教包会系列之-shell【原创】](https://mp.weixin.qq.com/s/q591TSaOXjQWedOcyEUIig)
 
 
+
+### 架构
+
+[“反向代理层”绝不能替代“DNS轮询”【转载-58沈剑-公众号-架构师之路】](https://mp.weixin.qq.com/s/-tkXEjmzW92W5p43sf2h2w)
 
 ## 联系方式
 
