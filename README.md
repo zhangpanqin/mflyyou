@@ -8,7 +8,7 @@
 </p>
 
 
-![](http://oss.mflyyou.cn/blog/20201205192219.png?author=zhangpanqin)
+![blog.png](http://ww1.sinaimg.cn/large/005YdyTogy1glfke3pv76j31rb3d7qgy.jpg)
 
 [在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
 
@@ -64,7 +64,7 @@
 
 ### Nginx
 
-[Nginx-包教包会-入门【原创】](https://mp.weixin.qq.com/s/iztoTXcmtYVJhbo-SvsHCQ)
+[nginx 配置就是这么简单【原创】](https://mp.weixin.qq.com/s/XxUM45WFv3sl0LWZp6zEMw)
 
 [Nginx-包教包会-进阶【原创】](https://mp.weixin.qq.com/s/L591AkXS1t0dzsmMqJYv8A)
 
@@ -95,11 +95,11 @@
 
 欢迎加群（请备注【加群】）进行交流，微信号：【Daojian_qin】
 
-<img src="http://oss.mflyyou.cn/blog/20201205192200.jpg?author=zhangpanqin" alt="张攀钦的微信" style="zoom:25%;" />
+![wx_zhangpanqin.jpg](http://ww1.sinaimg.cn/mw690/005YdyTogy1glfkhhid1gj30s311c76m.jpg)
 
 ### 公众号
 
 公众号：【Mflyyou】
 
-![公众号：Mflyyou](http://oss.mflyyou.cn/blog/20201205192205.jpg?author=zhangpanqin)
+![wx_gongzhonghao.jpg](http://ww1.sinaimg.cn/large/005YdyTogy1glfkguufkvj3076076gm3.jpg)
 
