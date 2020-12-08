@@ -68,7 +68,7 @@
 
 [Nginx-包教包会-进阶【原创】](https://mp.weixin.qq.com/s/L591AkXS1t0dzsmMqJYv8A)
 
-[Nginx-性能优化【原创】](https://mp.weixin.qq.com/s/7ZqvGc_uuMlIOhJMMd41mQ)
+[Nginx-性能优化【原创】](https://mp.weixin.qq.com/s/itSoW-AFH1dx6vu5cFdshw)
 
 ### Linux
 
