@@ -66,7 +66,7 @@
 
 [nginx 配置就是这么简单【原创】](https://mp.weixin.qq.com/s/XxUM45WFv3sl0LWZp6zEMw)
 
-[Nginx-包教包会-进阶【原创】](https://mp.weixin.qq.com/s/L591AkXS1t0dzsmMqJYv8A)
+[Nginx 限流及反向代理了解一下【原创】](https://mp.weixin.qq.com/s/yZJ1rAdgMQL7O0Fi9Re5_Q)
 
 [Nginx-性能优化【原创】](https://mp.weixin.qq.com/s/itSoW-AFH1dx6vu5cFdshw)
 
