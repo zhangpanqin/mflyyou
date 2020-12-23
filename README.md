@@ -26,7 +26,7 @@
 
 [java 异步编程【原创】](https://mp.weixin.qq.com/s/OpDqkoczaO4z0kA9bCo-Xw)
 
-[你需要了解锁的前提-volatile【原创】](https://mp.weixin.qq.com/s/xtRLc8ExJ7yG0pHEg1p-qQ)
+[你需要了解锁的前提-volatile【原创】](https://mp.weixin.qq.com/s/2JtQXDSnBFuf0pSMEFMPdA)
 
 [从锁升级的角度理解synchronized【原创】](https://mp.weixin.qq.com/s/8qw1z0k7bthI_eVc-M6o-A)
 
