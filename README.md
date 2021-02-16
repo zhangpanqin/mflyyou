@@ -41,6 +41,7 @@
 [从linux内核理解Java怎样实现Socket通信【原创】](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
 
 ### Mysql
+[深入了解Mysql索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
 
 [深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
 
