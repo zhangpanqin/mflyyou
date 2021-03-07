@@ -41,6 +41,11 @@
 [从linux内核理解Java怎样实现Socket通信【原创】](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
 
 ### Mysql
+
+[Mysql优化及问题定位,看这一篇就够了](https://mp.weixin.qq.com/s/2riFK_0cCii9pV3fY9G6JA)
+
+[面试必问的Mysql事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
+
 [深入了解Mysql索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
 
 [深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
