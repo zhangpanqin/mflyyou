@@ -30,7 +30,9 @@
 
 [从锁升级的角度理解synchronized【原创】](https://mp.weixin.qq.com/s/8qw1z0k7bthI_eVc-M6o-A)
 
+###JVM
 
+[走进JVM-认识JAVA内存区域 【原创】](https://mp.weixin.qq.com/s/BMFA62rQJDvdaH9R9ppPXQ)
 
 #### IO
 
