@@ -92,6 +92,9 @@
 
 [“反向代理层”绝不能替代“DNS轮询”【转载-58沈剑-公众号-架构师之路】](https://mp.weixin.qq.com/s/-tkXEjmzW92W5p43sf2h2w)
 
+### 问题定位
+[CPU & Load又极速飙升，系统性能问题如何排查『转载-阿里技术-雍雍』](https://mp.weixin.qq.com/s/tbn6U330KgyxluiIF2PDxQ)
+
 ## 联系方式
 
 ### 邮箱
