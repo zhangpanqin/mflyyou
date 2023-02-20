@@ -1,0 +1,31 @@
+name: Build and Push static content to gh-pages branches
+on:
+  push:
+    branches: ["main"]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .tool-versions
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependency and Build
+        run: yarn && yarn docs:build
+
+      - name: Deploy GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: success()
+        with:
+          token: ${{ github.token }}
+          BRANCH: gh-pages
+          FOLDER: docs/.vuepress/dist

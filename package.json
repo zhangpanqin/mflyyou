@@ -1,0 +1,16 @@
+{
+  "name": "mflyyou",
+  "version": "1.0.0",
+  "description": "张攀钦的学习笔记及博客",
+  "main": "index.js",
+  "repository": "git@github.com:zhangpanqin/mflyyou.git",
+  "author": "zhangpanqin <zhangpanqin@outlook.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.8"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  }
+}
