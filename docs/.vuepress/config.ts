@@ -1,84 +1,55 @@
-import { defineConfig } from "vuepress/config";
+import { defineConfig } from 'vuepress/config'
 import {
     Sidebar4ZH,
-    NavItems4ZH,
-} from "./config/index";
+    NavItems4ZH
+} from './config/index'
 
 export default defineConfig({
-    title: "张攀钦的博客",
-    base: "/mflyyou/",
-    locales: {
-        "/": {
-            lang: "zh-CN",
-            title: "Mflyyou",
-            description: "张攀钦的学习笔记及博客",
-        },
-    },
+    dest: '../../vuepress',
     head: [
-        ["link", { rel: "icon", href: `/logo.png` }],
-        ["meta", { name: "robots", content: "all" }],
-        ["meta", { name: "author", content: "张攀钦" }],
+        ['link', { rel: 'icon', href: `/logo.png` }],
+        ['link', { rel: 'manifest', href: '/manifest.json' }],
+        ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+        ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
         [
-            "meta",
-            {
-                "http-equiv": "Cache-Control",
-                content: "max-age=604800",
-            },
+            'meta',
+            { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
         ],
         [
-            "meta",
-            {
-                name: "keywords",
-                content: "张攀钦的学习笔记",
-            },
+            'link',
+            { rel: 'apple-touch-icon', href: `/icons/apple-touch-icon-152x152.png` }
         ],
-
+        [
+            'link',
+            {
+                rel: 'mask-icon',
+                href: '/icons/safari-pinned-tab.svg',
+                color: '#3eaf7c'
+            }
+        ],
+        [
+            'meta',
+            {
+                name: 'msapplication-TileImage',
+                content: '/icons/msapplication-icon-144x144.png'
+            }
+        ],
+        ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
     ],
+    locales: {
+        '/': {
+            lang: 'zh-CN',
+            title: 'VuePress',
+            description: 'Vue 驱动的静态网站生成器'
+        }
+    },
     themeConfig: {
-        docsRepo: "zhangpanqin/mflyyou",
-        docsDir: "docs",
-        docsBranch: "main",
+        repo: 'vuejs/vuepress',
         editLinks: true,
-        sidebarDepth: 0,
+        docsDir: 'packages/docs/docs',
         smoothScroll: true,
-        editLinkText: "在 GitHub 上编辑此页",
         locales: {
-            "/": {
-                label: "简体中文",
-                selectText: "Languages",
-                editLinkText: "在 GitHub 上编辑此页",
-                lastUpdated: "上次更新",
-                nav: [
-                    {
-                        text: "开发工具",
-                        items: [
-                            {
-                                text: "Git",
-                                link: "/md/dev-tools/git.md",
-                            },
-                            {
-                                text: "iTerm2",
-                                link: "/md/dev-tools/iterm2.md",
-                            },
-                            {
-                                text: "Mac",
-                                link: "/md/dev-tools/mac.md",
-                            },
-                        ],
-                    },
-                    {
-                        text: "DevOps",
-                        items: [
-                            {
-                                text: "Terraform",
-                                link: "/md/devops/terraform/terraform.md",
-                            },
-                        ],
-                    },
-                ],
-                sidebar: "auto",
-            },
-            '/zh/': {
+            '/': {
                 label: '简体中文',
                 selectText: '选择语言',
                 ariaLabel: '选择语言',
@@ -87,19 +58,18 @@ export default defineConfig({
                 nav: NavItems4ZH,
                 sidebar: Sidebar4ZH
             }
-        },
+        }
     },
     plugins: [
-        ["@vuepress/back-to-top", true],
-        ["@vuepress/medium-zoom", true],
-        ["vuepress-plugin-code-copy"],
+        ['@vuepress/back-to-top', true],
         [
-            "@vuepress/pwa",
+            '@vuepress/pwa',
             {
                 serviceWorker: true,
-                updatePopup: true,
-            },
+                updatePopup: true
+            }
         ],
+        ['@vuepress/medium-zoom', true],
         [
             'vuepress-plugin-container',
             {
@@ -112,9 +82,10 @@ export default defineConfig({
             'vuepress-plugin-container',
             {
                 type: 'upgrade',
-                before: info => `<UpgradePath title="${info}">`,
+                before: (info: any) => `<UpgradePath title="${info}">`,
                 after: '</UpgradePath>'
             }
         ],
-    ],
+        ['vuepress-plugin-flowchart']
+    ]
 });

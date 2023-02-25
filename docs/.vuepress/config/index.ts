@@ -1,2 +1,3 @@
-export * from "./nav/zh";
-export * from "./sidebar/zh";
+export * from './nav/zh'
+export * from './sidebar/zh'
+
