@@ -1,34 +1,91 @@
----
-home: true
-heroImage: /hero.png
-actionText: 快速上手 →
-actionLink: /zh/guide/
-features:
-- title: 简洁至上
-  details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
-- title: Vue 驱动
-  details: 享受 Vue + webpack 的开发体验，可以在 Markdown 中使用 Vue 组件，又可以使用 Vue 来开发自定义主题。
-- title: 高性能
-  details: VuePress 会为每个页面预渲染生成静态的 HTML，同时，每个页面被加载的时候，将作为 SPA 运行。
-footer: MIT Licensed | Copyright © 2018-present Evan You
----
+![blog.png](http://ww1.sinaimg.cn/large/005YdyTogy1glfke3pv76j31rb3d7qgy.jpg)
 
-### 像数 1, 2, 3 一样容易
+[在线浏览上图内容](https://www.processon.com/view/link/5fcb3cc163768926b54f0c99)
 
-``` bash
-# 安装
-yarn global add vuepress # 或者：npm install -g vuepress
+## 内容
 
-# 新建一个 markdown 文件
-echo '# Hello VuePress!' > README.md
+### Java
 
-# 开始写作
-vuepress dev .
+[深入理解 Java 乱码问题【原创】](https://mp.weixin.qq.com/s/fHrHJg_njDgEE1rHTGgxhA)
 
-# 构建静态文件
-vuepress build .
-```
+[JAVA 中强软弱虚引用的妙用【原创】](https://mp.weixin.qq.com/s/L_CQpZzRU6ZyTz6IM_9GWg)
 
-::: warning 注意
-请确保你的 Node.js 版本 >= 8.6。
-:::
+#### JUC
+
+[JUC之ThreadPoolExecutor 【原创】](https://mp.weixin.qq.com/s/d1WzMtovW_iNcpVB_WXx1A)
+
+[java 异步编程【原创】](https://mp.weixin.qq.com/s/OpDqkoczaO4z0kA9bCo-Xw)
+
+[你需要了解锁的前提-volatile【原创】](https://mp.weixin.qq.com/s/2JtQXDSnBFuf0pSMEFMPdA)
+
+[从锁升级的角度理解synchronized【原创】](https://mp.weixin.qq.com/s/8qw1z0k7bthI_eVc-M6o-A)
+
+### JVM
+
+[走进JVM-认识JAVA内存区域 【原创】](https://mp.weixin.qq.com/s/BMFA62rQJDvdaH9R9ppPXQ)
+
+#### IO
+
+[从Linux内核理解Java中的IO【原创】](https://mp.weixin.qq.com/s/wcwKYU38wGLZUaryf1pqPw)
+
+[从Linux内核理解JAVA的NIO【原创】](https://mp.weixin.qq.com/s/K72PLIgSNFH_GuOh5L0Clg)
+
+[从linux内核理解Java怎样实现Socket通信【原创】](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
+
+### Mysql
+
+[Mysql优化及问题定位,看这一篇就够了](https://mp.weixin.qq.com/s/2riFK_0cCii9pV3fY9G6JA)
+
+[面试必问的Mysql事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
+
+[深入了解Mysql索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
+
+[深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
+
+[Mysql 权限管理【原创】](https://mp.weixin.qq.com/s/WbilZ1mxH9u9YXflRpkccQ)
+
+[Mysql数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)
+
+### TCP/IP
+
+[你需要知道的TCP/IP 原创](https://mp.weixin.qq.com/s/W2E90sVT_wDArKMNxoQ0Mw)
+
+[再也不用为跨域而苦恼](https://mp.weixin.qq.com/s/1F-5r3NZ-h92hpFDeW3dNA)
+
+### 分布式事务
+
+[分布式事务，原来可以这么玩？【转载-58沈剑-公众号-架构师之路】](https://mp.weixin.qq.com/s/juG8cZejCiSLWjkaaHTQiw)
+
+### 开发工具
+
+[你确定 Maven 相关的东西全部了解吗【原创】](https://mp.weixin.qq.com/s/WkfW3veizz3XbtbTL50KLQ)
+
+### Nginx
+
+[nginx 配置就是这么简单【原创】](https://mp.weixin.qq.com/s/XxUM45WFv3sl0LWZp6zEMw)
+
+[Nginx 限流及反向代理了解一下【原创】](https://mp.weixin.qq.com/s/yZJ1rAdgMQL7O0Fi9Re5_Q)
+
+[Nginx-性能优化【原创】](https://mp.weixin.qq.com/s/itSoW-AFH1dx6vu5cFdshw)
+
+### Linux
+
+[Linux-包教包会系列【原创】](https://mp.weixin.qq.com/s/JG3W0qz9fxhHlq6gZ0rKXg)
+
+[Centos 7 实战总结【原创】](https://mp.weixin.qq.com/s/v6quqwBicHAoXcU6LFv26Q)
+
+[Linux-包教包会系列之-shell【原创】](https://mp.weixin.qq.com/s/q591TSaOXjQWedOcyEUIig)
+
+### 架构
+
+[“反向代理层”绝不能替代“DNS轮询”【转载-58沈剑-公众号-架构师之路】](https://mp.weixin.qq.com/s/-tkXEjmzW92W5p43sf2h2w)
+
+### 问题定位
+
+[CPU & Load又极速飙升，系统性能问题如何排查『转载-阿里技术-雍雍』](https://mp.weixin.qq.com/s/tbn6U330KgyxluiIF2PDxQ)
+
+## 联系方式
+
+### 邮箱
+
+我的邮箱：【zhangpanqin@outlook.com】
