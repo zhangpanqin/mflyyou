@@ -1,16 +1,29 @@
 {
-  "name": "mflyyou",
-  "version": "1.0.0",
-  "description": "张攀钦的学习笔记及博客",
-  "main": "index.js",
-  "repository": "git@github.com:zhangpanqin/mflyyou.git",
-  "author": "zhangpanqin <zhangpanqin@outlook.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "vuepress": "^1.9.8"
-  },
-  "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
-  }
+    "name": "mflyyou",
+    "version": "1.0.0",
+    "description": "张攀钦的学习笔记及博客",
+    "main": "index.js",
+    "repository": "git@github.com:zhangpanqin/mflyyou.git",
+    "author": "zhangpanqin <zhangpanqin@outlook.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@vuepress/plugin-back-to-top": "^1.9.8",
+        "@vuepress/plugin-medium-zoom": "^1.9.8",
+        "@vuepress/plugin-pwa": "^1.9.8",
+        "vuepress": "^1.9.8",
+        "vuepress-plugin-mathjax": "^1.2.8",
+        "vuepress-plugin-medium-zoom": "^1.1.9",
+        "vuepress-plugin-seo": "^0.2.0"
+    },
+    "dependencies": {
+        "vuepress-plugin-code-copy": "^1.0.6",
+        "vuepress-plugin-copyright": "^1.0.2",
+        "vuepress-plugin-img-lazy": "^1.0.4",
+        "vuepress-plugin-sitemap": "^2.3.1",
+        "vuepress-plugin-tags": "^1.0.2"
+    },
+    "scripts": {
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs"
+    }
 }

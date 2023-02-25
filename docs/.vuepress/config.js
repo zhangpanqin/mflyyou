@@ -3,7 +3,7 @@ module.exports = {
     base: "/mflyyou/",
     description: "学习笔记及博客",
     shouldPrefetch: (file, type) => {
-        return false;
+        return true;
     },
     markdown: {
         lineNumbers: true,
@@ -52,18 +52,31 @@ module.exports = {
         ],
     ],
     plugins: [
-        // [{ globalUIComponents: ["LockArticle", "PayArticle"] }],
-        // See: https://github.com/francoischalifour/medium-zoom#options
+        [
+            "@vuepress/active-header-links",
+            {
+                sidebarLinkSelector: ".sidebar-link",
+                headerAnchorSelector: ".header-anchor",
+            },
+        ],
+        [
+            "vuepress-plugin-mathjax",
+            {
+                target: "svg",
+                macros: {
+                    "*": "\\times",
+                },
+            },
+        ],
         [
             "@vuepress/medium-zoom",
             {
-                selector: "img:not(.nozoom)",
+                selector: "img.zoom-custom-imgs",
                 options: {
                     margin: 16,
                 },
             },
         ],
-        // see: https://github.com/znicholasbrown/vuepress-plugin-code-copy
         [
             "vuepress-plugin-code-copy",
             {
@@ -71,8 +84,22 @@ module.exports = {
                 color: "#3eaf7c",
             },
         ],
-        // see: https://github.com/tolking/vuepress-plugin-img-lazy
-        ["img-lazy", {}],
+        [
+            "sitemap",
+            {
+                hostname: "http://mflyyou.cn",
+            },
+        ],
+        [
+            "@vuepress/pwa",
+            {
+                serviceWorker: true,
+                updatePopup: true,
+            },
+        ],
+        ["@vuepress/nprogress"],
+        ["@vuepress/back-to-top"],
+        [("img-lazy", {})],
         [
             "vuepress-plugin-tags",
             {
@@ -83,7 +110,6 @@ module.exports = {
                 selector: ".page .content__default h1", // ^v1.0.1 你要将此标签渲染挂载到哪个元素后面？默认是第一个 H1 标签后面；
             },
         ],
-        // https://github.com/lorisleiva/vuepress-plugin-seo
         [
             "seo",
             {
