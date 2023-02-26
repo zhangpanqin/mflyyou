@@ -45,7 +45,7 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
-import { resolvePage } from '@vuepress/theme-default/util'
+import { resolvePage } from '@parent-theme/util'
 
 export default {
     name: 'PageSidebar',

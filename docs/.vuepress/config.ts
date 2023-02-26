@@ -3,7 +3,7 @@ import {
     MFlyYouThemeConfig,
     MFlyYouPlugin,
     MFlyYouHeads
-} from './config/index'
+} from './config/theme'
 
 export default defineConfig(ctx => ({
     head: MFlyYouHeads,
@@ -21,7 +21,9 @@ export default defineConfig(ctx => ({
     // 监听文件变化并重新构建
     extraWatchFiles: [
         '.vuepress/**/*.ts',
-        '**/*.md'
-    ]
+        '**/*.md',
+        '**/*.vue'
+    ],
+    evergreen: !ctx.isProd
 }));
 

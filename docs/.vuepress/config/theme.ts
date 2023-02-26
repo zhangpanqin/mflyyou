@@ -1,13 +1,14 @@
 import { DefaultThemeConfig } from 'vuepress/config'
 
-import { NavItems4ZH } from './nav/zh'
-import { Sidebar4ZH } from './sidebar/zh'
-export * from './plugin/index'
-export * from './head/index'
+import { NavItems4ZH } from './nav'
+import { Sidebar4ZH } from './sidebar'
+export * from './plugin'
+export * from './head'
 
 
 export const MFlyYouThemeConfig: DefaultThemeConfig = {
     repo: 'zhangpanqin/mflyyou',
+    repoLabel: 'GitHub1',
     docsRepo: "zhangpanqin/mflyyou",
     docsDir: "docs",
     docsBranch: "main",
@@ -16,6 +17,7 @@ export const MFlyYouThemeConfig: DefaultThemeConfig = {
     sidebarDepth: 2,
     smoothScroll: true,
     editLinkText: "在 GitHub 上编辑此页",
+    activeHeaderLinks: true,
     locales: {
         '/': {
             label: '简体中文',

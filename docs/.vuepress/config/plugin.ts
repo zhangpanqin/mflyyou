@@ -25,6 +25,5 @@ export const MFlyYouPlugin: UserPlugins = [
             before: (info: any) => `<UpgradePath title="${info}">`,
             after: '</UpgradePath>'
         }
-    ],
-    ['vuepress-plugin-flowchart']
+    ]
 ];
