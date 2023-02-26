@@ -7,11 +7,13 @@ export * from './head/index'
 
 
 export const MFlyYouThemeConfig: DefaultThemeConfig = {
+    repo: 'zhangpanqin/mflyyou',
     docsRepo: "zhangpanqin/mflyyou",
     docsDir: "docs",
     docsBranch: "main",
     editLinks: true,
-    sidebarDepth: 3,
+    sidebar: 'auto',
+    sidebarDepth: 2,
     smoothScroll: true,
     editLinkText: "在 GitHub 上编辑此页",
     locales: {

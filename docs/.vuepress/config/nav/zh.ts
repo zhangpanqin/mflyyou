@@ -6,15 +6,15 @@ export const NavItems4ZH: NavItem[] = [
         items: [
             {
                 text: "Git",
-                link: "/md/dev-tools/git.md",
+                link: "/dev-tools/git.md",
             },
             {
                 text: "iTerm2",
-                link: "/md/dev-tools/iterm2.md",
+                link: "/dev-tools/iterm2.md",
             },
             {
                 text: "Mac",
-                link: "/md/dev-tools/mac.md",
+                link: "/dev-tools/mac.md",
             },
         ],
     },
@@ -23,7 +23,16 @@ export const NavItems4ZH: NavItem[] = [
         items: [
             {
                 text: "Terraform",
-                link: "/md/devops/terraform/terraform.md",
+                link: "/devops/terraform/terraform.md",
+            },
+        ],
+    },
+    {
+        text: "测试",
+        items: [
+            {
+                text: "测试主题",
+                link: "/test/",
             },
         ],
     },
