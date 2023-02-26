@@ -223,9 +223,6 @@ function flatten(items, res) {
   width: 240px;
   background: #fff;
   border: 1px solid #eee;
-  // -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
-  // box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
-  // border-radius: 4px;
   left: unset;
   right: 100%;
   margin-right: 10px;
@@ -377,8 +374,6 @@ function flatten(items, res) {
     top 65px !important
     div.option-box-toc-over
       display flex
-  .page-side-sitemap
-    right 6px
 
 @media (max-width: $MQMobile)
   .toc-container-sidebar

@@ -8,7 +8,7 @@ export * from './head'
 
 export const MFlyYouThemeConfig: DefaultThemeConfig = {
     repo: 'zhangpanqin/mflyyou',
-    repoLabel: 'GitHub1',
+    repoLabel: 'GitHub',
     docsRepo: "zhangpanqin/mflyyou",
     docsDir: "docs",
     docsBranch: "main",

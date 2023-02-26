@@ -103,7 +103,7 @@ a.toc-sidebar-link
   font-weight 400
   display inline-block
   color $textColor
-  border-left 0.25rem solid transparent
+  border-left 0.1rem transparent
   padding 0.35rem 1rem 0.35rem 1.25rem
   line-height 1
   width: 100%
