@@ -1374,7 +1374,7 @@
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
 
-"@vuepress/core@1.9.8", "@vuepress/core@^1.9.8":
+"@vuepress/core@1.9.8":
   version "1.9.8"
   resolved "https://registry.yarnpkg.com/@vuepress/core/-/core-1.9.8.tgz#56acf26d7c1a3c82b0b57bc778fef73024dc1854"
   integrity sha512-ZDm253vcjKlWIxd6c18aZWJZkWCmhBUXRT/X5eKFEoDO3aQatb+OpFYP6eH3zufD2VXjZwE5kV4MAMwtBHK+DQ==
