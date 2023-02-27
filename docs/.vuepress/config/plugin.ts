@@ -1,6 +1,7 @@
 import { UserPlugins } from 'vuepress/config'
 
 export const MFlyYouPlugin: UserPlugins = [
+    ['vuepress-plugin-code-copy', true],
     ['@vuepress/back-to-top', true],
     [
         '@vuepress/pwa',

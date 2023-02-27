@@ -1,6 +1,6 @@
 <template>
     <DropdownTransition>
-        <ul class="toc-sidebar-links" v-if="items[0].children.length">
+        <ul v-if="items[0].children.length">
             <li v-for="(item, i) in items[0].children" :key="i">
                 <TocLink :sidebarDepth="sidebarDepth" :item="item" />
             </li>
@@ -20,7 +20,6 @@ export default {
 
     props: [
         'items',
-        'depth',  // depth of current sidebar links
         'sidebarDepth' // depth of headers to be extracted
     ],
 

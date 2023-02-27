@@ -5,10 +5,10 @@
             <div class="pos-box">
                 <div class="icon-arrow"></div>
                 <div class="scroll-box" style="max-height:650px">
-                    <div style="font-weight:bold;text-align:center;">{{ pageSidebarItems[0].title }}</div>
+                    <div style="font-weight:bold;text-align:center;">{{ rightSidebarItems[0].title }}</div>
                     <hr />
                     <div class="toc-box">
-                        <TocLinks :depth="0" :items="pageSidebarItems" :sidebarDepth="3" />
+                        <TocLinks :items="rightSidebarItems" :sidebarDepth="3" />
                     </div>
                 </div>
             </div>
@@ -37,8 +37,6 @@
                 </router-link>
             </div>
         </div>
-        <slot name="middle" />
-
         <slot name="bottom" />
     </aside>
 </template>
@@ -48,11 +46,11 @@ import TocLinks from '@theme/components/TocLinks.vue'
 import { resolvePage } from '@parent-theme/util'
 
 export default {
-    name: 'PageSidebar',
+    name: 'RightSidebar',
 
     components: { TocLinks, },
 
-    props: ['pageSidebarItems', 'sidebarItems'],
+    props: ['rightSidebarItems', 'sidebarItems'],
 
     computed: {
         showPageToc() {

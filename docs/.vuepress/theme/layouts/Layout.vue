@@ -24,13 +24,13 @@
             </template>
         </Page>
 
-        <RightSidebar v-if="shouldShowPageSidebar" :page-sidebar-items="pageSidebarItems" :sidebar-items="sidebarItems"
+        <RightSidebar v-if="shouldShowPageSidebar" :rightSidebarItems="rightSidebarItems" :sidebar-items="sidebarItems"
             @toggle-sidebar-force="toggleSidebarForce">
             <template #top>
-                <slot name="page-sidebar-top" />
+                <slot name="right-sidebar-top" />
             </template>
             <template #bottom>
-                <slot name="page-sidebar-bottom" />
+                <slot name="right-sidebar-bottom" />
             </template>
         </RightSidebar>
     </div>
@@ -112,7 +112,7 @@ export default {
             )
         },
 
-        pageSidebarItems() {
+        rightSidebarItems() {
             const page = this.$page
             const headers = groupHeaders(page.headers || [])
             return [{
