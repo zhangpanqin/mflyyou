@@ -24,7 +24,7 @@
             </template>
         </Page>
 
-        <RightSidebar v-if="shouldShowPageSidebar" :rightSidebarItems="rightSidebarItems" :sidebar-items="sidebarItems"
+        <RightSidebar v-if="shouldShowPageSidebar" :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems"
             @toggle-sidebar-force="toggleSidebarForce">
             <template #top>
                 <slot name="right-sidebar-top" />
