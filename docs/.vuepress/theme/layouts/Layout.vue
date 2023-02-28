@@ -39,10 +39,13 @@
 <script>
 import Home from '@parent-theme/components/Home.vue'
 import Navbar from '@parent-theme/components/Navbar.vue'
-import Page from '@parent-theme/components/Page.vue'
+import Page from '@theme/components/Page.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
-import { resolveSidebarItems, groupHeaders } from '@vuepress/theme-default/util'
+import { resolveSidebarItems, groupHeaders } from '@parent-theme/util'
 import RightSidebar from '@theme/components/RightSidebar'
+import { resolvePage } from '@parent-theme/util'
+import isString from 'lodash/isString'
+import isNil from 'lodash/isNil'
 
 export default {
     name: 'Layout',
@@ -60,6 +63,10 @@ export default {
             isSidebarOpen: false,
             isForeCloseSidebar: false,
         }
+    },
+
+    provide: {
+        name: '浪里行舟'
     },
 
     computed: {

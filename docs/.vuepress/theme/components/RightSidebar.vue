@@ -84,6 +84,7 @@ export default {
 
     methods: {
         toggleShowTocContainer() {
+            this.$set
             this.showTocContainer = !this.showTocContainer
         }
     }
