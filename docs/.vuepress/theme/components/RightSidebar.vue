@@ -57,14 +57,12 @@ export default {
     },
 
     computed: {
-        computed: {
-            prev() {
-                return this.$prev
-            },
+        prev() {
+            return this.$prev
+        },
 
-            next() {
-                return this.$next
-            }
+        next() {
+            return this.$next
         }
     },
 
