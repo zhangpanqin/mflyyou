@@ -1,9 +1,9 @@
 <template>
     <main class="page">
         <slot name="top" />
-        <Content class="theme-default-content" />
+        <Content :name="$page.key" class="theme-default-content" />
         <div>
-            <h1>11111</h1>
+            <h1>1111122222</h1>
         </div>
         <PageEdit />
         <PageNav :sidebarItems="sidebarItems" :prev="prev" :next="next" />
