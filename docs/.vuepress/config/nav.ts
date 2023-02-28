@@ -31,8 +31,12 @@ export const NavItems4ZH: NavItem[] = [
         text: "测试",
         items: [
             {
-                text: "测试主题",
+                text: "测试自己主题效果",
                 link: "/test/",
+            },
+            {
+                text: "用 vuepress 验证效果",
+                link: "/vuepress/guide/",
             },
         ],
     },

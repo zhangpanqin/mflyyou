@@ -16,6 +16,7 @@ import PageEdit from '@parent-theme/components/PageEdit.vue'
 import PageNav from '@theme/components/PageNav.vue'
 
 export default {
+    name: 'Page1',
     components: { PageEdit, PageNav },
     props: ['sidebarItems']
 }

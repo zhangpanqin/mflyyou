@@ -26,7 +26,7 @@ export const MFlyYouThemeConfig: DefaultThemeConfig = {
             editLinkText: '在 GitHub 上编辑此页',
             lastUpdated: '上次更新',
             nav: NavItems4ZH,
-            // sidebar: Sidebar4ZH
+            sidebar: Sidebar4ZH
         }
     }
 }

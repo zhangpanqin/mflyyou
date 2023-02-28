@@ -31,18 +31,9 @@
 <script>
 
 export default {
-    name: 'PageNav',
+    name: 'PageNav1',
     props: ['sidebarItems'],
-    inject: ['$prev', '$next'],
-    computed: {
-        prev() {
-            return this.$prev
-        },
-
-        next() {
-            return this.$next
-        }
-    }
+    inject: ['prev', 'next']
 }
 </script>
 

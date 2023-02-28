@@ -46,7 +46,7 @@ import TocLinks from '@theme/components/TocLinks.vue'
 
 export default {
     name: 'RightSidebar',
-    inject: ['$prev', '$next'],
+    inject: ['prev', 'next'],
     components: { TocLinks, },
     props: ['rightSidebarItems', 'sidebarItems'],
 

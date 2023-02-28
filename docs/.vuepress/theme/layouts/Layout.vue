@@ -24,7 +24,7 @@
             </template>
         </Page>
 
-        <RightSidebar v-if="shouldShowPageSidebar" :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems"
+        <!-- <RightSidebar v-if="shouldShowPageSidebar" :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems"
             @toggle-sidebar-force="toggleSidebarForce">
             <template #top>
                 <slot name="right-sidebar-top" />
@@ -32,7 +32,7 @@
             <template #bottom>
                 <slot name="right-sidebar-bottom" />
             </template>
-        </RightSidebar>
+        </RightSidebar> -->
     </div>
 </template>
 
@@ -41,9 +41,12 @@ import Home from '@parent-theme/components/Home.vue'
 import Navbar from '@parent-theme/components/Navbar.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
 import { resolveSidebarItems, groupHeaders } from '@parent-theme/util'
-import Page from '../components/Page.vue'
+import Page from '@parent-theme/components/Page.vue'
 import RightSidebar from '../components/RightSidebar'
-import { LINK_TYPES, resolvePageLink } from '../util/prevAndNext'
+// import { LINK_TYPES, resolvePageLink } from '../util/prevAndNext'
+import { resolvePage } from "@parent-theme/util";
+import isString from "lodash/isString";
+import isNil from "lodash/isNil";
 
 
 export default {
@@ -64,20 +67,20 @@ export default {
         }
     },
 
-    provide() {
-        return {
-            $prev: this.prev,
-            $next: this.next,
-        }
-    },
+    // provide() {
+    //     return {
+    //         prev: this.prev,
+    //         next: this.next,
+    //     }
+    // },
 
     computed: {
-        prev() {
-            return resolvePageLink(LINK_TYPES.PREV, this)
-        },
-        next() {
-            return resolvePageLink(LINK_TYPES.NEXT, this)
-        },
+        // prev() {
+        //     return resolvePageLink(LINK_TYPES.PREV, this)
+        // },
+        // next() {
+        //     return resolvePageLink(LINK_TYPES.NEXT, this)
+        // },
         shouldShowNavbar() {
             const { themeConfig } = this.$site
             const { frontmatter } = this.$page
@@ -196,6 +199,72 @@ export default {
                     this.toggleSidebar(false)
                 }
             }
+        }
+    }
+}
+const LINK_TYPES = {
+    NEXT: {
+        resolveLink: resolveNext,
+        getThemeLinkConfig: ({ nextLinks }) => nextLinks,
+        getPageLinkConfig: ({ frontmatter }) => frontmatter.next,
+    },
+    PREV: {
+        resolveLink: resolvePrev,
+        getThemeLinkConfig: ({ prevLinks }) => prevLinks,
+        getPageLinkConfig: ({ frontmatter }) => frontmatter.prev,
+    },
+};
+function resolvePrev(page, items) {
+    return find(page, items, -1);
+}
+
+function resolveNext(page, items) {
+    return find(page, items, 1);
+}
+
+
+
+function resolvePageLink(
+    linkType,
+    { $themeConfig, $page, $route, $site, sidebarItems }
+) {
+    const { resolveLink, getThemeLinkConfig, getPageLinkConfig } = linkType;
+
+    // Get link config from theme
+    const themeLinkConfig = getThemeLinkConfig($themeConfig);
+
+    // Get link config from current page
+    const pageLinkConfig = getPageLinkConfig($page);
+
+    // Page link config will overwrite global theme link config if defined
+    const link = isNil(pageLinkConfig) ? themeLinkConfig : pageLinkConfig;
+
+    if (link === false) {
+        return;
+    } else if (isString(link)) {
+        return resolvePage($site.pages, link, $route.path);
+    } else {
+        return resolveLink($page, sidebarItems);
+    }
+}
+
+function find(page, items, offset) {
+    const res = [];
+    flatten(items, res);
+    for (let i = 0; i < res.length; i++) {
+        const cur = res[i];
+        if (cur.type === "page" && cur.path === decodeURIComponent(page.path)) {
+            return res[i + offset];
+        }
+    }
+}
+
+function flatten(items, res) {
+    for (let i = 0, l = items.length; i < l; i++) {
+        if (items[i].type === "group") {
+            flatten(items[i].children || [], res);
+        } else {
+            res.push(items[i]);
         }
     }
 }
