@@ -2,10 +2,10 @@
     <main class="page">
         <slot name="top" />
 
-        <Content class="theme-default-content" />
+        <!-- <Content class="theme-default-content" /> -->
         <PageEdit />
 
-        <PageNav v-bind="{ sidebarItems }" />
+        <PageNav :sidebarItems="sidebarItems" :prev="prev" :next="next" />
 
         <slot name="bottom" />
     </main>
@@ -16,9 +16,8 @@ import PageEdit from '@parent-theme/components/PageEdit.vue'
 import PageNav from '@theme/components/PageNav.vue'
 
 export default {
-    name: 'Page1',
     components: { PageEdit, PageNav },
-    props: ['sidebarItems']
+    props: ['sidebarItems', 'prev', 'next']
 }
 </script>
 

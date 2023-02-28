@@ -24,17 +24,17 @@
                 <span class="show-txt">左栏</span>
             </div>
 
-            <div class="option-box" v-if="prev" style="padding-left:2px;text-align:center;" v-bind:title="prev.title">
-                <router-link v-if="prev" :to="prev.path">
+            <div class="option-box" v-if="prev" style="padding-left:2px;text-align:center;" :title="prev.title">
+                <RouterLink :to="prev.path">
                     <img src="/images/system/pre2.png" width="30px" class="nozoom" />
                     <span class="show-txt">上一篇</span>
-                </router-link>
+                </RouterLink>
             </div>
-            <div class="option-box" v-if="next" style="padding-left:2px;text-align:center;" v-bind:title="next.title">
-                <router-link v-if="next" :to="next.path">
+            <div class="option-box" v-if="next" style="padding-left:2px;text-align:center;" :title="next.title">
+                <RouterLink :to="next.path">
                     <img src="/images/system/next2.png" width="30px" class="nozoom" />
                     <span class="show-txt">下一篇</span>
-                </router-link>
+                </RouterLink>
             </div>
         </div>
         <slot name="bottom" />
@@ -43,29 +43,24 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
-
+// import { LINK_TYPES, resolvePageLink } from '../util/prevAndNext'
 export default {
     name: 'RightSidebar',
-    inject: ['prev', 'next'],
     components: { TocLinks, },
-    props: ['rightSidebarItems', 'sidebarItems'],
-
+    props: ['rightSidebarItems', 'sidebarItems', 'prev', 'next'],
     data() {
         return {
             showTocContainer: true
         }
     },
-
-    computed: {
-        prev() {
-            return this.$prev
-        },
-
-        next() {
-            return this.$next
-        }
-    },
-
+    // computed: {
+    //     prev2222() {
+    //         return resolvePageLink(LINK_TYPES.PREV, this, this.sidebarItems)
+    //     },
+    //     next2222() {
+    //         return resolvePageLink(LINK_TYPES.NEXT, this, this.sidebarItems)
+    //     },
+    // },
     methods: {
         toggleShowTocContainer() {
             this.showTocContainer = !this.showTocContainer
