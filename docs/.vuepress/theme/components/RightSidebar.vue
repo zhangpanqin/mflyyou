@@ -43,13 +43,11 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
-import { resolvePage } from '@parent-theme/util'
 
 export default {
     name: 'RightSidebar',
-
+    inject: ['$prev', '$next'],
     components: { TocLinks, },
-
     props: ['rightSidebarItems', 'sidebarItems'],
 
     data() {
@@ -59,65 +57,23 @@ export default {
     },
 
     computed: {
-        prev() {
-            const prev = this.$page.frontmatter.prev
-            if (prev === false) {
-                return
-            } else if (prev) {
-                return resolvePage(this.$site.pages, prev, this.$route.path)
-            } else {
-                return resolvePrev(this.$page, this.sidebarItems)
-            }
-        },
+        computed: {
+            prev() {
+                return this.$prev
+            },
 
-        next() {
-            const next = this.$page.frontmatter.next
-            if (next === false) {
-                return
-            } else if (next) {
-                return resolvePage(this.$site.pages, next, this.$route.path)
-            } else {
-                return resolveNext(this.$page, this.sidebarItems)
+            next() {
+                return this.$next
             }
         }
     },
 
     methods: {
         toggleShowTocContainer() {
-            this.$set
             this.showTocContainer = !this.showTocContainer
         }
     }
 
-}
-
-function resolvePrev(page, items) {
-    return find(page, items, -1)
-}
-
-function resolveNext(page, items) {
-    return find(page, items, 1)
-}
-
-function find(page, items, offset) {
-    const res = []
-    flatten(items, res)
-    for (let i = 0; i < res.length; i++) {
-        const cur = res[i]
-        if (cur.type === 'page' && cur.path === decodeURIComponent(page.path)) {
-            return res[i + offset]
-        }
-    }
-}
-
-function flatten(items, res) {
-    for (let i = 0, l = items.length; i < l; i++) {
-        if (items[i].type === 'group') {
-            flatten(items[i].children || [], res)
-        } else {
-            res.push(items[i])
-        }
-    }
 }
 </script>
 

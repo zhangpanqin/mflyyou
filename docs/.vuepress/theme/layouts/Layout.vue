@@ -39,13 +39,12 @@
 <script>
 import Home from '@parent-theme/components/Home.vue'
 import Navbar from '@parent-theme/components/Navbar.vue'
-import Page from '@theme/components/Page.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
 import { resolveSidebarItems, groupHeaders } from '@parent-theme/util'
-import RightSidebar from '@theme/components/RightSidebar'
-import { resolvePage } from '@parent-theme/util'
-import isString from 'lodash/isString'
-import isNil from 'lodash/isNil'
+import Page from '../components/Page.vue'
+import RightSidebar from '../components/RightSidebar'
+import { LINK_TYPES, resolvePageLink } from '../util/prevAndNext'
+
 
 export default {
     name: 'Layout',
@@ -65,11 +64,20 @@ export default {
         }
     },
 
-    provide: {
-        name: '浪里行舟'
+    provide() {
+        return {
+            $prev: this.prev,
+            $next: this.next,
+        }
     },
 
     computed: {
+        prev() {
+            return resolvePageLink(LINK_TYPES.PREV, this)
+        },
+        next() {
+            return resolvePageLink(LINK_TYPES.NEXT, this)
+        },
         shouldShowNavbar() {
             const { themeConfig } = this.$site
             const { frontmatter } = this.$page
