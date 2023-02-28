@@ -43,7 +43,6 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
-// import { LINK_TYPES, resolvePageLink } from '../util/prevAndNext'
 export default {
     name: 'RightSidebar',
     components: { TocLinks, },
@@ -53,14 +52,6 @@ export default {
             showTocContainer: true
         }
     },
-    // computed: {
-    //     prev2222() {
-    //         return resolvePageLink(LINK_TYPES.PREV, this, this.sidebarItems)
-    //     },
-    //     next2222() {
-    //         return resolvePageLink(LINK_TYPES.NEXT, this, this.sidebarItems)
-    //     },
-    // },
     methods: {
         toggleShowTocContainer() {
             this.showTocContainer = !this.showTocContainer
