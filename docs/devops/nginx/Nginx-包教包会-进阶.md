@@ -1,18 +1,6 @@
 ---
 title: Nginx-包教包会-进阶
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-04-04 16:34:45
-password:
-summary: 访问控制,url 鉴权,负载均衡,代理
-tags: Nginx
-categories: Nginx
-img: http://oss.mflyyou.cn/blog/20200328203106.png?author=zhangpanqin
 ---
-
-
 
 ## 前言
 
@@ -24,26 +12,23 @@ img: http://oss.mflyyou.cn/blog/20200328203106.png?author=zhangpanqin
 
 我们也会使用 `Nginx` 作为代理服务器，将我们的动态内容的请求转发到应用服务器去处理。
 
-
 下一期,总结一下 `Nginx` 相关的配置,给出一个配置模板
 
 ### 本文内容
 
-- 基于 `ngx_http_auth_basic_module`模块，使用用户名和密码限制资源的访问
-- 基于 `ngx_http_auth_request_module ` 集成已有的授权验证
-- 基于 `ngx_http_secure_link_module` 限制连接的时效性和访问控制
-- 基于请求的限流、基于并发链接数限流，限制每个链接的带宽
-- 为什么要使用 Nginx 作为代理服务器及代理的配置，及获取用户的真实 ip 。
-- 基于代理的负载均衡
-
-
+-   基于 `ngx_http_auth_basic_module`模块，使用用户名和密码限制资源的访问
+-   基于 `ngx_http_auth_request_module ` 集成已有的授权验证
+-   基于 `ngx_http_secure_link_module` 限制连接的时效性和访问控制
+-   基于请求的限流、基于并发链接数限流，限制每个链接的带宽
+-   为什么要使用 Nginx 作为代理服务器及代理的配置，及获取用户的真实 ip 。
+-   基于代理的负载均衡
 
 ## 授权才能访问 Nginx 中的资源
 
 有的时候我们想简单限制用户的访问。可以使用 `ngx_http_auth_basic_module` 模块，我们预先设置好账号和密码，用户需要使用特定的用户和密码才能访问。在网站没有用户登录管理功能的时候，可以作为一个替代品。
 
-| Syntax:  | `auth_basic string | off;`                   |
-| :------- | -------------------------------------------- |
+| Syntax:  | `auth_basic string                           | off;` |
+| :------- | -------------------------------------------- | ----- |
 | Default: | `auth_basic off;`                            |
 | Context: | `http`, `server`, `location`, `limit_except` |
 
@@ -56,7 +41,7 @@ img: http://oss.mflyyou.cn/blog/20200328203106.png?author=zhangpanqin
 
 #### 密码生成
 
-可以使用 `htpasswd` 生成密码，也可以使用  `OpenSSL` 生成密码。
+可以使用 `htpasswd` 生成密码，也可以使用 `OpenSSL` 生成密码。
 
 ```bash
 yum install httpd-tools -y
@@ -76,8 +61,6 @@ zhang1:$apr1$5dvJBg5z$aY.ncM55O8caHgyOvd.G0/
 zhang2:$apr1$3YUp0G3g$agIpFCfS4K3rfqn.F29VB1
 ```
 
-
-
 #### 配置访问控制
 
 然后再 nginx 中添加这个配置
@@ -91,8 +74,6 @@ location / {
 
 `nginx -s reload` 刷新配置，然后再访问资源就需要输入预先设置好的用户名和密码。
 
-
-
 ### 第三方授权访问
 
 `ngx_http_auth_basic_module` 尽管可以限制访问，但是作用太鸡肋了，它相当于另一套登录逻辑。它不能集成我们已有的授权功能。
@@ -101,11 +82,11 @@ location / {
 
 `nginx -V` 看你的编译的模块中是否包含此模块。
 
-| -      | 说明                            |
-| ------ | ------------------------------- |
+| -      | 说明                   |
+| ------ | ---------------------- | ------ |
 | 语法   | **auth_request** `uri` | `off`; |
-| 默认   | auth_request off;               |
-| 上下文 | http、server、location          |
+| 默认   | auth_request off;      |
+| 上下文 | http、server、location |
 
 `auth_request` 启用基于子请求 (`uri`) 结果的授权。子请求返回一个 `2xx` 响应吗，则允许访问。如果返回 `401` 和 `403` 则拒绝访问。
 
@@ -146,10 +127,6 @@ server {
 
 用户访问资源，如果鉴权失败会跳转到登录页面，在登录页面登录之后，重新跳转到用户访问的资源路径。
 
-
-
-
-
 登录页面实现逻辑：点击登录，地址栏刷新地址，请求接口 `http://localhost:8087/login?oriUrl=xxx`，访问成功，接口会设置 `cookie` 并跳转到 `oriUrl` 指定的资源。
 
 `login.html` 内容，这里我不想在写 ajax 去请求接口饭后进行跳转，所以改变浏览器地址栏
@@ -157,26 +134,23 @@ server {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title> 登录 </title>
-</head>
-<body>
-登录页面,点击登录之后跳转到访问的页面.
-<br>
-<a id="login"><button>登录</button></a>
-<script>
-
-    let elementById = document.getElementById("login");
-    elementById.onclick=()=>{
-        window.location.href="/login"+window.location.search;
-    }
-</script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <title>登录</title>
+    </head>
+    <body>
+        登录页面,点击登录之后跳转到访问的页面.
+        <br />
+        <a id="login"><button>登录</button></a>
+        <script>
+            let elementById = document.getElementById("login");
+            elementById.onclick = () => {
+                window.location.href = "/login" + window.location.search;
+            };
+        </script>
+    </body>
 </html>
 ```
-
-
 
 `服务端代码`，`http://localhost:8087`
 
@@ -216,19 +190,11 @@ public class AuthController {
 }
 ```
 
-
-
- 效果演示，访问` http://localhost:9090/index.html` 的时候由于没有登录，`nginx` 错误状态码 `403` 跳转到了登录页面，在登录页面点击登录，跳转到 ` http://localhost:9090/index.html`
-
-
+效果演示，访问` http://localhost:9090/index.html` 的时候由于没有登录，`nginx` 错误状态码 `403` 跳转到了登录页面，在登录页面点击登录，跳转到 ` http://localhost:9090/index.html`
 
 ![auth](http://oss.mflyyou.cn/blog/20200404234250.gif?author=zhangpanqin)
 
-
-
-
-
-### **ngx_http_secure_link_module** 
+### **ngx_http_secure_link_module**
 
 有的时候呢，我们希望访问的链接具有时效性。比如微信发布的文章中，文章路径有时效性，过了这个时效性就没有办法访问了。或者有的资源必须带有一些字段我们才让其访问。
 
@@ -254,9 +220,9 @@ secure_link $arg_md5,$arg_expires;
 | Default: | —                             |
 | Context: | `http`, `server`, `location`  |
 
-在`secure_link_md5`  的 `expression`  中可以通过 `$secure_link_expires` (只能在 `secure_link_md5 expression;` 使用)获取链接指定的过期时间。
+在`secure_link_md5` 的 `expression` 中可以通过 `$secure_link_expires` (只能在 `secure_link_md5 expression;` 使用)获取链接指定的过期时间。
 
-nginx 会校验取到的 `md5` （secure_link 指定的第一个值）和 `secure_link_md5` 指定的 `expression` 计算出来的 `md5`  是否一致， 不一样会将 `secure_lin`  设置为 `""` 。校验 md5 成功，校验过期时间，过期将 `secure_link` 设置为 `"0”` ,校验成功设置为 `"1"`  。
+nginx 会校验取到的 `md5` （secure_link 指定的第一个值）和 `secure_link_md5` 指定的 `expression` 计算出来的 `md5` 是否一致， 不一样会将 `secure_lin` 设置为 `""` 。校验 md5 成功，校验过期时间，过期将 `secure_link` 设置为 `"0”` ,校验成功设置为 `"1"` 。
 
 ```nginx
 location /s/ {
@@ -279,7 +245,7 @@ location /s/ {
 
 比如说我想限制 `/s/a.jpg` 访问。那么我需要使用算法计算链接。比如说
 
-#### shell 命令生成 md5 的值。 
+#### shell 命令生成 md5 的值。
 
 ```bash
 #!/bin/bash
@@ -329,19 +295,13 @@ public class HttpSecureLink {
 </dependency>
 ```
 
-
-
 这样我们的链接就可以限制到哪些用户可以访问，还可以具有一定的时效性。
-
-
 
 ## 基于请求限流
 
 **ngx_http_limit_req_module** 采用 `漏桶算法` 进行限流。
 
 <img src="http://oss.mflyyou.cn/blog/20200405104827.png?author=zhangpanqin" alt="28171216_TJQR" style="zoom:67%;" />
-
-
 
 水滴比作网络请求，当水滴超过桶的容量，请求会被拒绝。`漏桶算法`是以匀速掉落水滴（处理请求）。
 
@@ -350,8 +310,6 @@ public class HttpSecureLink {
 比如 `rate=3r/m` ,那么 `20s` 处理一个请求。这 `20s` 来两个请求就会有一个请求被抛弃掉。
 
 `rate=3r/m` 和 `burst=3` 可以应对突发请求，`20s` 内来了五个请求，一个被处理，三个请求放到缓冲队列等待处理，剩下的一个被抛弃掉。然后匀速处理请求，一个一个消耗掉队列中的请求，队列中有空余位置，又可以应对突发请求了。
-
-
 
 ### 设置以什么为标识限流
 
@@ -371,8 +329,6 @@ key 可以包含文本、变量及组合。设置限制请求的标识。
 limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
 ```
 
-
-
 下面这个以用户的 `ip` +访问路径为限制标识。
 
 比如说，我访问 `http://localhost:9091/2.jpg` 限流了，但是我可以访问 `http://localhost:9091/1.jpg`。
@@ -381,11 +337,7 @@ limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
 limit_req_zone $binary_remote_addr$uri zone=one11:10m rate=3r/m;
 ```
 
-
-
 `size` 相当于为设置保存 key 的空间，超过这个空间大小，就会使用缓存策略，清楚掉最近最少使用的状态。
-
-
 
 ### 设置哪些地方限流
 
@@ -395,13 +347,9 @@ limit_req_zone $binary_remote_addr$uri zone=one11:10m rate=3r/m;
 | 默认   | -                                                 |
 | 上下文 | http、server、location                            |
 
-
-
-一般我们都会配置 `limit_req zone=one11 burst=4 nodelay;` 
+一般我们都会配置 `limit_req zone=one11 burst=4 nodelay;`
 
 **nodelay** 为配置缓冲队列中的请求，不延迟执行，但是队列中的空间还是需要匀速消耗请求去恢复。
-
-
 
 ###设置限流的响应状态码
 
@@ -412,8 +360,6 @@ limit_req_zone $binary_remote_addr$uri zone=one11:10m rate=3r/m;
 | 上下文 | http、server、location     |
 
 设置拒绝请求的响应状态码。
-
-
 
 ### 列子讲解
 
@@ -428,8 +374,6 @@ server {
 }
 ```
 
-
-
 缓冲队列为 4。每 20 s 处理一个请求。nodelay 让队列中的请求不延迟执行。
 
 第一个 20 s 内，可以处理 5 个请求。队列和匀速加一块正好五个。
@@ -438,13 +382,9 @@ server {
 
 如果接下来一段时间都没有请求处理的话，那么队列就会每 20 s 回复一个位置，回复的位置可以处理请求，这样慢慢达到 4 个。又可以 20 s 内处理 5 个请求了。
 
-
-
 `limit_req_zone` 配置的是用户的 ip 和 path 作为限流标识。
 
 比如说，我访问 `http://localhost:9091/2.jpg` 五次限流之后，但是我可以访问 `http://localhost:9091/1.jpg`五次。
-
-
 
 ## 基于链接数限流
 
@@ -455,8 +395,6 @@ server {
 针对上述情况，我们可以结合连接数限流，每个 ip 限制并发链接 5 个。这样就没有办法一次性下载 100 个文件了。
 
 **ngx_http_limit_conn_module** 就是针对并发链接限制的，服务器处理了请求并读取了整个请求头，并发链接才会计数。
-
-
 
 ### limit_conn_zone
 
@@ -472,11 +410,7 @@ key 用于限流标识。zone 定义存储的大小和名称。
 limit_conn_zone $binary_remote_addr zone=addr:10m;
 ```
 
-
-
 ### limit_conn 在哪里限制
-
-
 
 | -      | 说明                        |
 | ------ | --------------------------- |
@@ -484,20 +418,16 @@ limit_conn_zone $binary_remote_addr zone=addr:10m;
 | 默认   | -                           |
 | 上下文 | http、server、location      |
 
-
-
 配置允许的最大并发链接数。
 
 ```nginx
 limit_conn_zone $binary_remote_addr zone=addr:10m;
 server {
     location /download/ {
-        limit_conn addr 1; 
+        limit_conn addr 1;
     }
 }
 ```
-
-
 
 ### limit_conn_status 配置限流时的响应状态码
 
@@ -506,8 +436,6 @@ server {
 | 语法   | **limit_conn_status** code; |
 | 默认   | limit_conn_status 503;      |
 | 上下文 | http、server、location      |
-
-
 
 配置限流时响应状态码，我们可以根据状态码跳转到提示页面。
 
@@ -520,8 +448,6 @@ location @limit2 {
 }
 ```
 
-
-
 ## 基于响应带宽限制
 
 | -      | 说明                                     |
@@ -529,8 +455,6 @@ location @limit2 {
 | 语法   | **limit_rate** rate;                     |
 | 默认   | **limit_rate** 0；                       |
 | 上下文 | http、server、location、location 中的 if |
-
-
 
 设置为 0 标识不限制响应。rate 为字节/秒为单位。
 
@@ -540,10 +464,6 @@ location @limit2 {
 set $limit_rate 4k;
 
 ```
-
-
-
-
 
 ## 代理
 
@@ -555,11 +475,10 @@ set $limit_rate 4k;
 
 `nginx` 收到代理服务器的响应内容会边缓存边发送给客户端。
 
-
-
 我会列举一些我了解并常用的配置。
 
 ### proxy_buffering
+
 ```nginx
 # 启用代理代理服务器缓冲，默认开启
 proxy_buffering on;
@@ -569,11 +488,11 @@ proxy_buffering on;
 
 ### proxy_buffer_size
 
-| -      | 说明                         |
-| ------ | ---------------------------- |
-| 语法   | **proxy_buffer_size**  size; |
-| 默认   | proxy_buffer_size 4k \| 8k;  |
-| 上下文 | http、server、location       |
+| -      | 说明                        |
+| ------ | --------------------------- |
+| 语法   | **proxy_buffer_size** size; |
+| 默认   | proxy_buffer_size 4k \| 8k; |
+| 上下文 | http、server、location      |
 
 设置从代理服务器读取的响应头的缓冲区大小。默认情况下等于一个系统内存页大小。建议设置成内存页的整数倍，如果响应头比较大，可以修改此部分
 
@@ -582,7 +501,7 @@ proxy_buffering on;
 getconf PAGESIZE
 ```
 
-第一次测试，我返回 10m响应体。响应头很小，低于 4k。服务端的端口为 8087。
+第一次测试，我返回 10m 响应体。响应头很小，低于 4k。服务端的端口为 8087。
 
 ```nginx
 @GetMapping("/proxy")
@@ -604,8 +523,6 @@ nginx 配置如下，浏览器请求 `http://localhost:9092/test/proxy`，请求
         }
     }
 ```
-
-
 
 第二次测试，我返回 10m 响应体，外加大于 4k 的响应头。请求失败。
 
@@ -631,8 +548,6 @@ server {
     }
 }
 ```
-
-
 
 ### proxy_buffers
 
@@ -662,8 +577,6 @@ server {
 
 `proxy_busy_buffers_size` 用于指定缓冲区（`proxy_buffers` 和 `proxy_buffer_size`）写入多大内容的时候往客户端发送。默认为 `proxy_buffers` 中 size 的两倍。
 
-
-
 ### proxy_temp_file_write_size 一次写入临时文件的数据大小
 
 | -      | 说明                                  |
@@ -688,8 +601,6 @@ server {
 proxy_temp_path /spool/nginx/proxy_temp 1 2;
 ```
 
- 
-
 ### proxy_pass
 
 | -      | 说明                   |
@@ -704,13 +615,9 @@ proxy_temp_path /spool/nginx/proxy_temp 1 2;
 proxy_set_header Host $host;
 ```
 
-
-
 设置代理的 URL。会将匹配的 location 路径替换成指定的 `URL`。
 
-
-
-<font color=red>注意这里 `proxy_pass` 是否以 `/` 结尾，处理是不一样的。</font>
+<font color=red>注意这里 `proxy_pass`  是否以  `/`  结尾，处理是不一样的。</font>
 
 ```nginx
 server {
@@ -725,8 +632,6 @@ server {
 
 `proxy_pass` 不以 `/` 结尾，会将匹配的路径追加到代理去。
 
-
-
 都以 `/` 就是替换，就是替换处理。
 
 ```nginx
@@ -740,8 +645,6 @@ server {
 
 访问 `http://localhost:81/api/flyyou/a` 会转发到 `http://localhost:8081/a`
 
-
-
 ### proxy_set_header 传递请求头到代理服务器
 
 | -      | 说明                          |
@@ -752,11 +655,9 @@ server {
 
 ```nginx
 proxy_set_header test1 $remote_addr;
-proxy_set_header Host $proxy_host; 
+proxy_set_header Host $proxy_host;
 proxy_set_header Connection close;
 ```
-
-
 
 ### proxy_pass_request_body 设置是否传递请求体到代理服务器
 
@@ -774,25 +675,21 @@ proxy_set_header Connection close;
 | 默认   | proxy_pass_request_headers on;            |
 | 上下文 | http、server、location                    |
 
-
-
 ### ngx_http_proxy_module 模块支持内嵌变量
 
-- `$proxy_host`
+-   `$proxy_host`
 
 `proxy_pass` 指令中指定的代理服务器的名称和端口
 
-- `$proxy_port`
+-   `$proxy_port`
 
-proxy_pass 指令中指定的代理服务器的端口或协议的默认端口 
+proxy_pass 指令中指定的代理服务器的端口或协议的默认端口
 
-- `$proxy_add_x_forwarded_for`
+-   `$proxy_add_x_forwarded_for`
 
 **X-Forwarded-For** 客户端请求头字段，其中附加了 $remote_addr 变量，以逗号分割。
 
 如果客户端请求头中不存在 **X-Forwarded-For** 字段，则变量等于 $remote_addr 变量。
-
-
 
 ### 总结
 
@@ -813,14 +710,11 @@ proxy_temp_file_write_size 16k;
 proxy_temp_path            /var/nginx/proxy_temp;
 ```
 
-
 ## 获取用户真实 ip
 
 当我们访问一个资源的时候，可以使用命令 `traceroute mflyyou.cn` 查看经过了哪些网关。网络运营商不会为每一个用户分配`公网 ip`，会有一个内网路由将一部分用户的请求分发到一个`公网 ip` 上去。我们能获取到的就是这个 `公网 ip`。
 
 有的时候我们不单单要知道用户从哪个 ip 访问的，还想知道，中间经过了哪些代理 ip。
-
-
 
 我使用了两个 `nginx` 和一个 java 后端服务。
 
@@ -840,8 +734,6 @@ server {
 }
 ```
 
-
-
 公网 nginx 配置
 
 ```nginx
@@ -853,8 +745,6 @@ server {
 
 	}
 ```
-
-
 
 后端 java 服务
 
@@ -870,15 +760,11 @@ public IpData getIPData(HttpServletRequest request){
 }
 ```
 
-
-
 当我本地访问 `http://localhost:9092/test/api/ip`
 
 ```json
-{"xforwardFor":"127.0.0.1, 155.10.116.110","xrealIp":"155.10.116.110"}
+{ "xforwardFor": "127.0.0.1, 155.10.116.110", "xrealIp": "155.10.116.110" }
 ```
-
-
 
 ## 基于代理的负载均衡
 
@@ -886,9 +772,9 @@ public IpData getIPData(HttpServletRequest request){
 
 nginx 支付的负载均衡策略有：
 
-- 轮询(**round-robin**) - 发送给应用服务器的请求以轮询的方式分发 
-- 最少连接(`least_conn`) - 下一个请求被分配给具有最少数量活动连接的服务器
--  **ip** 哈希(`ip_hash`) - 使用哈希函数确定下一个请求应该选择哪一个服务器(基于客户端 的 IP 地址)
+-   轮询(**round-robin**) - 发送给应用服务器的请求以轮询的方式分发
+-   最少连接(`least_conn`) - 下一个请求被分配给具有最少数量活动连接的服务器
+-   **ip** 哈希(`ip_hash`) - 使用哈希函数确定下一个请求应该选择哪一个服务器(基于客户端 的 IP 地址)
 
 默认轮训策略。
 
@@ -937,8 +823,6 @@ server {
 }
 ```
 
-
-
 ### server
 
 | -      | 说明                             |
@@ -973,7 +857,7 @@ upstream passserver2 {
 }
 ```
 
-#### max_fails 配置允许的失败次数 
+#### max_fails 配置允许的失败次数
 
 max_fails=number
 
@@ -1001,8 +885,6 @@ upstream passserver2 {
 }
 ```
 
-
-
 ### backup 设置备用机
 
 当别的服务器都挂了之后才会启动服务。
@@ -1017,8 +899,6 @@ upstream passserver2 {
 }
 ```
 
-
-
 #### max_conns 限定服务器的最大连接数
 
 max_conns=number
@@ -1032,4 +912,3 @@ upstream passserver2 {
     server 127.0.0.1:8083 backup;
 }
 ```
-

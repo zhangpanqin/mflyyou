@@ -1,15 +1,5 @@
 ---
 title: JUC之ThreadPoolExecutor
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-11-14 17:26:29
-password:
-summary: 线程池
-tags: juc
-categories: juc
-img:
 ---
 
 ## 前言
@@ -21,8 +11,6 @@ jdk 1.8 的源码看的差不多了，计划记录一下有点难度的源码理
 ```txt
 https://github.com/zhangpanqin/fly-jdk8
 ```
-
-
 
 看源码仁者见仁智者见智，看源码确实可以学到很多东西，不管是理论还是实践。不看源码也不一定什么都不懂。
 
@@ -61,8 +49,6 @@ public class ThreadPoolExecutor2 {
 }
 ```
 
-
-
 ### 线程池使用
 
 `jdk` 提供的线程池实现 `ThreadPoolExecutor` ，我们日常开发使用最多的也是这个。
@@ -76,17 +62,17 @@ public ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,
 }
 ```
 
-- `corePoolSize` 线程池中核心线程数
+-   `corePoolSize` 线程池中核心线程数
 
 核心线程是指，当线程空闲一段时间不会被回收的线程数量。也可以配置参数，让核心线程空闲也别回收 `ThreadPoolExecutor.allowCoreThreadTimeOut`
 
-- `maximumPoolSize` 线程池中最大线程数量
+-   `maximumPoolSize` 线程池中最大线程数量
 
 超过核心线程数量之后，当线程空闲一段时间会被回收
 
-- `long keepAliveTime,TimeUnit unit` 线程空闲多长时间会被回收
-- `workQueue` 阻塞队列，接受到的任务会储存在这里面，为了避免 oom ,一定要设置队列的大小
-- `threadFactory` 创建线程的工厂
+-   `long keepAliveTime,TimeUnit unit` 线程空闲多长时间会被回收
+-   `workQueue` 阻塞队列，接受到的任务会储存在这里面，为了避免 oom ,一定要设置队列的大小
+-   `threadFactory` 创建线程的工厂
 
 ```java
 // 我们可以在线程工厂中定义线程名称的前缀，方便判断是哪个业务的线程池有问题
@@ -105,9 +91,10 @@ private static ThreadFactory getThreadFactory() {
 }
 ```
 
-- handler 任务不能被线程池接受处理时的拒绝策略
+-   handler 任务不能被线程池接受处理时的拒绝策略
 
 队列中的任务需要内存，由于内存有限，我们不能无限制接受任务，当任务不能被线程池接受时，需要根据策略来执行应该怎么拒绝这个任务或者执行这个任务。
+
 ```txt
 AbortPolicy: 调用 execute 时抛出异常
 CallerRunsPolicy: 在调用者线程中执行这个任务。就是同步调用 execute 时，实际执行这个 Runable 的 run 方法。
@@ -116,10 +103,6 @@ DiscardPolicy: 不处理，丢弃掉这个任务。调用者感知不到
 ```
 
 ![531605003712_.pic_hd](http://oss.mflyyou.cn/blog/20201114210852.jpg?author=zhangpanqin)
-
-
-
-
 
 ## 线程池源码
 
@@ -166,7 +149,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * 前三位为 011
      */
     private static final int TERMINATED = 3 << COUNT_BITS;
-    
+
    /**
      * 获取线程池的状态
      */
@@ -183,13 +166,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 }
 ```
 
-
-
-
-
 ![image-20201114230504012](http://oss.mflyyou.cn/blog/20201114230504.png?author=zhangpanqin)
-
-
 
 打断线程其实就是调用了线程的 `Thread.interrupt()`，只是标记了线程被打断，不会影响程序运行，打断的线程调用 `Thread.isInterrupted()` 返回 true。当线程阻塞等待时被打断，会抛出异常 `InterruptedException` ，在线程 run 方法中如果捕获处理这个异常，线程就会退出。
 
@@ -217,8 +194,6 @@ public static void main2(String[] args) {
     THREAD_POOL_EXECUTOR.shutdownNow();
 }
 ```
-
-
 
 ### execute
 
@@ -340,8 +315,6 @@ private boolean addWorker(Runnable firstTask, boolean core) {
     }
 ```
 
-
-
 ### Worker.run
 
 ```java
@@ -350,8 +323,6 @@ public void run() {
     runWorker(this);
 }
 ```
-
-
 
 ```java
 final void runWorker(Worker w) {
@@ -406,8 +377,6 @@ final void runWorker(Worker w) {
 }
 ```
 
-
-
 ### tryTerminate
 
 `tryTerminate` 尝试关闭线程池。
@@ -453,12 +422,3 @@ final void runWorker(Worker w) {
         }
     }
 ```
-
-
-
-
-
-
-
-
-

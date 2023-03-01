@@ -1,15 +1,5 @@
 ---
 title: java中强软弱虚引用的妙用
-top: true
-cover: false
-toc: true
-mathjax: true
-date: 2020-06-25 20:36:10
-password:
-summary: java中强软弱虚引用的妙用
-tags: Java-Reference
-categories: Java
-img:
 ---
 
 ## 前言
@@ -18,13 +8,11 @@ img:
 
 本文内容概要
 
-- 强引用：Object o = new Object()
-- 软引用：new SoftReference(o);
-- 弱引用：new WeakReference(o);
-- 虚引用：new PhantomReference(o);
-- ThreadLocal 的使用，及使用不当发生内存泄漏的原因
-
-
+-   强引用：Object o = new Object()
+-   软引用：new SoftReference(o);
+-   弱引用：new WeakReference(o);
+-   虚引用：new PhantomReference(o);
+-   ThreadLocal 的使用，及使用不当发生内存泄漏的原因
 
 Jdk 1.2 增加了抽象类 `Reference` 和 `SoftReference`、`WeakReference`、`PhantomReference`，扩展了引用类型分类，达到对内存更细粒度的控制。
 
@@ -38,8 +26,6 @@ Jdk 1.2 增加了抽象类 `Reference` 和 `SoftReference`、`WeakReference`、`
 | 软引用：SoftReference    | 软引用对象，GC root 中，只有软引用可以到达某个对象 a，在 oom 之前，垃圾回收会回收对象 a                        |     |
 | 弱引用：WeakReference    | 弱引用，GC root 中，只有弱引用可以到达某个对象 c，发生 gc 就会被回收掉 c                                       |     |
 | 虚引用：PhantomReference | 虚引用，必须配合 ReferenceQueue 使用，什么时候回收不知道，但回收之后，可以操作 ReferenceQueue 获取被回收的引用 |     |
-
-
 
 ## 强引用
 
@@ -91,15 +77,11 @@ Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 	at com.fly.blog.ref.SoftReferenceDemo.main(SoftReferenceDemo.java:25)
 ```
 
-
-
 但是有的业务场景，需要我们在内存不够用，可以释放掉一些不必要的数据。比如我们在缓存中存的用户信息。
-
-
 
 ## 软引用
 
-jdk 从 1.2 开始加入了 `Reference` ,`SoftReference` 是其中一个分类，它的作用是，通过 GC root 到达对象 a，仅有 `SoftReference` ，对象 a 将会在jvm oom 之前，被 jvm gc 释放掉。
+jdk 从 1.2 开始加入了 `Reference` ,`SoftReference` 是其中一个分类，它的作用是，通过 GC root 到达对象 a，仅有 `SoftReference` ，对象 a 将会在 jvm oom 之前，被 jvm gc 释放掉。
 
 无限循环往 `List` 添加 `10m` 左右大小的数据（SoftReference），发现没有出现 oom。
 
@@ -140,15 +122,11 @@ public class SoftReferenceDemo {
 
 ![image-20200625213429845](http://oss.mflyyou.cn/blog/20200625213429.png?author=zhangpanqin)
 
-
-
 通过 `jvisualvm` 查看 jvm 堆的使用，可以看到堆在要溢出的时候就会回收掉，空闲的内存很大的时候，你主动执行 `执行垃圾回收`，内存是不会回收的。
-
-
 
 ## 弱引用
 
-对象 demo 的引用只有 `WeakReference`  可达时，会在 gc 之后回收 demo 释放掉内存。
+对象 demo 的引用只有 `WeakReference` 可达时，会在 gc 之后回收 demo 释放掉内存。
 
 以下程序也会一直不停的运行，只是内存释放的时机不同而已
 
@@ -188,16 +166,14 @@ public class WeakReferenceDemo {
 }
 ```
 
-运行结果，`SoftReference`  可用内存在快用尽的时候就会释放掉内存，而 `WeakReference` 每次可用内存达到 `360m` 左右会进行垃圾，而释放掉内存
+运行结果，`SoftReference` 可用内存在快用尽的时候就会释放掉内存，而 `WeakReference` 每次可用内存达到 `360m` 左右会进行垃圾，而释放掉内存
 
 ```txt
-[GC (Allocation Failure) [PSYoungGen: 129159K->1088K(153088K)] 129175K->1104K(502784K), 0.0007990 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC (Allocation Failure) [PSYoungGen: 129159K->1088K(153088K)] 129175K->1104K(502784K), 0.0007990 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 jvm 空闲内存364 m
 36
 jvm 空闲内存477 m
 ```
-
-
 
 ## 虚引用
 
@@ -256,9 +232,7 @@ public class PhantomReferenceDemo {
 }
 ```
 
-
-
-## ThreadLocal  
+## ThreadLocal
 
 `ThreadLocal` 在我们实际开发中，用的还是比较多的。那它到底是个什么东东呢（线程本地变量），我们知道 `局部变量` （方法内定义的变量）和 `成员变量` (类的属性)。
 
@@ -334,11 +308,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-
-
 ### InheritableThreadLocal
 
-有的时候，我们希望当前线程的局部变量的生命周期可以延伸到`子线程` 中，父线程设置的变量，在子线程拿到。  `InheritableThreadLocal` 就是提供了这个能力。
+有的时候，我们希望当前线程的局部变量的生命周期可以延伸到`子线程` 中，父线程设置的变量，在子线程拿到。 `InheritableThreadLocal` 就是提供了这个能力。
 
 ```java
 /**
@@ -374,7 +346,7 @@ public class ThreadLocal<T> {
     public T get() {
         // 获取运行在那个线程中
         Thread t = Thread.currentThread();
-        // 从 Thread 拿 Map 
+        // 从 Thread 拿 Map
         ThreadLocalMap map = getMap(t);
         if (map != null) {
             // 使用 ThreadLocal 实例从 Map 获取值
@@ -391,8 +363,6 @@ public class ThreadLocal<T> {
 }
 ```
 
-
-
 ### InheritableThreadLocal 获取父线程设置的数据分析
 
 每个 Thread 还有一个 Map 属性为 inheritableThreadLocals，用于保存从父线程复制过来的 value 。
@@ -401,19 +371,19 @@ public class ThreadLocal<T> {
 
 ```java
 public class Thread{
-    
+
 	// 维护线程本地变量
     ThreadLocal.ThreadLocalMap threadLocals = null;
 
     // 维护可以子线程可以继承的父线程的数据
     ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
-    
+
    // 线程初始化
     public Thread(ThreadGroup group, Runnable target, String name,
                   long stackSize) {
         init(group, target, name, stackSize);
     }
-    
+
     private void init(ThreadGroup g, Runnable target, String name,
                       long stackSize, AccessControlContext acc,
                       boolean inheritThreadLocals) {
@@ -455,20 +425,14 @@ public class TheadLocal{
             }
         }
     }
-} 
+}
 ```
-
-
 
 demo 验证，以上分析
 
 ![image-20200627232351534](http://oss.mflyyou.cn/blog/20200627232351.png?author=zhangpanqin)
 
-
-
 ![image-20200627225502636](http://oss.mflyyou.cn/blog/20200627225502.png?author=zhangpanqin)
-
-
 
 ### 内存泄漏原因
 
@@ -513,19 +477,11 @@ public class ThreadLocalDemo {
 
 ![image-20200628020439866](http://oss.mflyyou.cn/blog/20200628020439.png?author=zhangpanqin)
 
-
-
 ![image-20200628020512394](http://oss.mflyyou.cn/blog/20200628020512.png?author=zhangpanqin)
-
-
 
 在 `Java VisualVM` 中我们 `执行垃圾回收`，回收之后的内存分布，这个 20 个 `ThreadLocalDemo$Demo[]` 是回收不了的，这就是内存泄漏。
 
 ![image-20200628020811328](http://oss.mflyyou.cn/blog/20200628020811.png?author=zhangpanqin)
-
-
-
-
 
 程序循环 50 次创建了 50 个 `Demo` ，程序运行期间是不会触发垃圾回收（设置 jvm 参数保证的），所以 `ThreadLocalDemo$Demo[]` 存活的实例数为 `50`。
 
@@ -533,19 +489,12 @@ public class ThreadLocalDemo {
 
 为什么发生了内存泄漏呢？
 
-因为每个线程对应一个` Thread`，线程池大小为 20 个。`Thread` 中有 `ThreadLocal.ThreadLocalMap threadLocals = null;` 
+因为每个线程对应一个` Thread`，线程池大小为 20 个。`Thread` 中有 `ThreadLocal.ThreadLocalMap threadLocals = null;`
 
-`ThreadLocalMap` 中有 `Entry[] tables`，k 为弱引用。当我们将 threadLocal 置为 null 的时候，GC ROOT 到 ``ThreadLocalDemo$Demo[]`` 引用链还是存在的，只是 k 回收掉了，value 依然存在的，tables 长度是不会变的，是不会被回收的。
+`ThreadLocalMap` 中有 `Entry[] tables`，k 为弱引用。当我们将 threadLocal 置为 null 的时候，GC ROOT 到 `ThreadLocalDemo$Demo[]` 引用链还是存在的，只是 k 回收掉了，value 依然存在的，tables 长度是不会变的，是不会被回收的。
 
 ![image-20200628023936332](http://oss.mflyyou.cn/blog/20200628023936.png?author=zhangpanqin)
 
-
-
 ThreadLocal 在`set` 和 `get` 的时候，针对 k 为 null 的情况做了优化，会将对应的 tables[i] 设置为 null。这样单个 Entry 就可以被回收了。但是我们将 ThreadLocal 置为 null 之后，不能操作方法调用了。只能等到 Thread 再次调用别的 `ThreadLocal` 时操作 `ThreadLocalMap` 时根据条件判断，进行 Map 的 rehash,将 k 为 null 的 Entry 删除掉。
 
-
-
 上述问题解决也比较方便，线程使用完 `线程局部变量`，调用 `remove` 主动清除 `Entry` 就可以了。
-
-
-

@@ -1,15 +1,5 @@
 ---
 title: java 异步编程
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-11-08 11:20:25
-password:
-summary:
-tags: juc
-categories: juc
-img:
 ---
 
 ## 前言
@@ -26,10 +16,10 @@ js 也存在异步编程，当你理解了用同步的思维编写异步的代�
 
 ### 本文内容
 
-- js 中 Promise 和 async await 的一个列子
-- SpringBoot 中异步编程
-- Future 
-- CompletableFuture
+-   js 中 Promise 和 async await 的一个列子
+-   SpringBoot 中异步编程
+-   Future
+-   CompletableFuture
 
 ## js 异步编程
 
@@ -37,24 +27,24 @@ js 也存在异步编程，当你理解了用同步的思维编写异步的代�
 
 ```js
 const awaitFunc = function _awaitFunc() {
-    return Promise.resolve('awaitFunc').then(data => {
+    return Promise.resolve("awaitFunc").then((data) => {
         console.log(data);
-        return 'awaitFunc-then-return-data';
+        return "awaitFunc-then-return-data";
     });
 };
 
 const async = async function _async() {
     setTimeout(() => {
-        console.log('验证加入了宏任务队列---1');
+        console.log("验证加入了宏任务队列---1");
     }, 0);
     // 加不加 await 有什么区别？
-    await awaitFunc().then(data => {
+    await awaitFunc().then((data) => {
         console.log(data);
         setTimeout(() => {
-            console.log('验证加入了宏任务队列---2');
+            console.log("验证加入了宏任务队列---2");
         }, 0);
     });
-    console.log('awaitFunc 执行完在打印');
+    console.log("awaitFunc 执行完在打印");
 };
 async();
 ```
@@ -111,8 +101,6 @@ public class IMakeTeaServiceImpl implements IMakeTeaService {
 
 `AsyncResult` 是 `Future` 的实现类，当调用 `Future.get` 会阻塞等待结果的返回。`@Async` 也可以指定在那个线程池中执行任务。
 
-
-
 ```java
 final Future asyncResult = makeTeaService.boilWater();
 final Future asyncResult1 = makeTeaService.washTeaCup();
@@ -121,10 +109,6 @@ asyncResult1.get();
 ```
 
 这个 Demo 的实现，需要调用两次 Furute.get() 算是个不优雅的实现。
-
-
-
-
 
 ```java
 @Override
@@ -171,8 +155,6 @@ public RetUtil makeTeaAsync2() throws InterruptedException, ExecutionException {
 
 使用 `CountDownLatch` 将异步代码转换为同步返回，这只是另一个实现
 
- 
-
 ## Future
 
 ```java
@@ -185,7 +167,7 @@ public interface Future<V> {
      * 如果任务已经执行了, mayInterruptIfRunning 标志是否中断执行任务的线程.
      * mayInterruptIfRunning 为 true 会触发线程的中断(当线程睡眠,会抛出异常 InterruptedException),
      * 为 false 时不中断任务执行,只改变 Future 的状态
-     * 
+     *
      * 调用了 cancel 方法,调用 get 方法会抛出异常
      */
     boolean cancel(boolean mayInterruptIfRunning);
@@ -215,8 +197,6 @@ public interface Future<V> {
     V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
 }
 ```
-
-
 
 `Future.cancel(true)` 会触发线程休眠的中断，即 ` TimeUnit.SECONDS.sleep(10);` 会抛出异常。
 
@@ -252,10 +232,6 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
 
 JDK 提供 `Future` 的实现 `FutureTask` 源码相对较简单，不再展开。
 
-
-
-
-
 ## CompletableFuture
 
 由于 `Future` 使用的局限性：不能链式调用、多个异步计算的结果不能传递下一个异步任务（可以做到，但是编程稍微复杂），异步执行异常的捕获处理
@@ -271,8 +247,6 @@ CompletableFuture 可以做到
 总之，`CompletableFuture` 很想。
 
 `CompletableFuture` 实现比较复杂，有的地方不是那么容易理解，当你理解其实现思想，你也算是一只脚迈入了响应式编程中去了。
-
-
 
 ### 开胃小菜
 
@@ -292,9 +266,9 @@ public class CompletableFutureBlog1 {
             }
             return "洗水壶 -> 烧水";
         });
-        
+
         // 洗茶壶,洗茶杯 -> 拿茶叶
-        CompletableFuture<String> completableFuture2 = 
+        CompletableFuture<String> completableFuture2 =
                 CompletableFuture.supplyAsync(() -> {
                 System.out.println("洗茶壶");
                 System.out.println("洗茶杯");
@@ -306,7 +280,7 @@ public class CompletableFutureBlog1 {
                 }
                 return "洗茶壶,洗茶杯 -> 拿茶叶";
             });
-        
+
         // 组合二者异步运算的结果,传递给方法计算
         final CompletableFuture<String> completableFuture = completableFuture2.thenCombine(completableFuture1, (result2, result1) -> {
 
@@ -322,8 +296,6 @@ public class CompletableFutureBlog1 {
     }
 }
 ```
-
-
 
 ### runAsync 和 supplyAsync 的区别
 
@@ -352,19 +324,17 @@ public class CompletableFutureBlog2 {
 }
 ```
 
-
-
 ### `thenApplyAsync` 、`thenAcceptAsync` 和 `thenRunAsync`
 
 `thenXX` 都是为了在上一个异步计算的结束之后执行。
 
 我们对异步计算的结果分为以下几个情况：
 
-- 需要依赖异步计算的结果，并且依赖异步计算的结果计算返回另个一个结果 `thenApplyAsync`
+-   需要依赖异步计算的结果，并且依赖异步计算的结果计算返回另个一个结果 `thenApplyAsync`
 
-- 依赖异步计算的结果，但是不会产生新的结果，`thenAcceptAsync`
+-   依赖异步计算的结果，但是不会产生新的结果，`thenAcceptAsync`
 
-- 不依赖计算计算的结果，并且没有返回值 `thenRunAsync` 
+-   不依赖计算计算的结果，并且没有返回值 `thenRunAsync`
 
 ```java
 public class CompletableFutureBlog3 {
@@ -398,8 +368,6 @@ public class CompletableFutureBlog3 {
 }
 ```
 
-
-
 ### `thenCombineAsync`
 
 结合另一个 `CompletableFuture` 异步计算，当两个异步计算执行完了，执行回调。
@@ -432,7 +400,7 @@ public class CompletableFutureBlog4 {
 
         final CompletableFuture<Integer> integerCompletableFuture = ret2.thenCombineAsync(ret1, (result1, result2) -> result1 + result2);
         final Integer result = integerCompletableFuture.get();
-        
+
         System.out.println(StrUtil.format("异步执行的结果: {}", result));
 
         System.out.println("执行时间: " + started.elapsed(TimeUnit.SECONDS));
@@ -440,17 +408,15 @@ public class CompletableFutureBlog4 {
 }
 ```
 
-
-
 ### `allOf` 和 `anyOf`
 
 可以组合多个 `CompletableFuture` ，当每个 `CompletableFuture` 都执行完，执行后续逻辑。
 
- ```java
+```java
 public static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs) {
-    return andTree(cfs, 0, cfs.length - 1);
+   return andTree(cfs, 0, cfs.length - 1);
 }
- ```
+```
 
 可以组合多个 `CompletableFuture` ，当任何一个 `CompletableFuture` 都执行完，执行后续逻辑。
 
@@ -501,17 +467,8 @@ public class CompletableFutureBlog5 {
 }
 ```
 
-
-
 将上述 demo 中 allOf 替换为 anyOf，当任一 CompletableFuture 执行完毕，`future1.get();` 就会返回结果。
-
-
 
 别的方法看参数和注释就学会了。就不再一一列举了。
 
-
-
 当使用的时候，先考虑要不要依赖异步计算的结果，要不要处理异常，要不要返回新的异步计算结果，从这几个方面就可以知道选择哪个 api 了。
-
-
-

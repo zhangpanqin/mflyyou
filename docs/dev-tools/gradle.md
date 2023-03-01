@@ -1,18 +1,6 @@
 ---
 title: 你确定 Gradle 相关的东西全部了解吗
-top: true
-cover: true
-toc: true
-mathjax: true
-date: 2021-07-05 20:28:25
-password:
-summary:
-tags: gradle
-categories: gradle
-img:![336-3367685_gradle-logo-gradle-build-tool-clipart](http://oss.mflyyou.cn/blog/20210705203206.png?author=zhangpanqin)
 ---
-
-
 
 ## 前言
 
@@ -28,24 +16,16 @@ img:![336-3367685_gradle-logo-gradle-build-tool-clipart](http://oss.mflyyou.cn/b
 
 我看了 《Andriod Gradle》(比较基础)，《实战 Gradle》(这个还行)，《Gradle 进阶》。
 
-
-
 学习的 Gradle 建议，直接看官方教程就行，看书意义不是很大，遇到棘手的问题 Google 即可。
-
-
 
 ### 环境介绍
 
-- JDK 11
-- Gradle 6.7.1
-
-
+-   JDK 11
+-   Gradle 6.7.1
 
 ## Gradle 项目下文件介绍
 
 ![image-20210705205617504](http://oss.mflyyou.cn/blog/20210705205617.png?author=zhangpanqin)
-
-
 
 ### wrapper 介绍
 
@@ -73,11 +53,9 @@ include 'lib-b'
 
 `settings.gradle` 主要用于配置项目名称，和包含哪些子项目，include 是可以传入字符串数组的。
 
-
-
 <img src="http://oss.mflyyou.cn/blog/20210705211220.png?author=zhangpanqin" alt="image-20210705211220522" style="zoom:50%;" />
 
-### 
+###
 
 ### build.gradle
 
@@ -85,15 +63,11 @@ include 'lib-b'
 
 gradle 使用的是 groovy 语言编写，所以相对 xml ，自由度更高。
 
-
-
 ### gradlew 和 gradlew.bat
 
 `gradlew` 是 macos 和 linux 系统下，gradle 的执行命令。
 
 `gradlew.bat` 是 windows 系统下使用的。
-
-
 
 ### Maven 私服配置
 
@@ -135,37 +109,33 @@ credentials 配置账号密码，当私服不需要权限下载的时候可以�
 
 `Gradle` 会按照配置的仓库顺序查询 jar 下载。
 
-
-
 ### 依赖管理
 
 `Gradle` classpath 有以下几种：
 
-- compileClasspath
-- runtimeClasspath
-- testComplileClasspath
-- testRuntimeClasspath
+-   compileClasspath
+-   runtimeClasspath
+-   testComplileClasspath
+-   testRuntimeClasspath
 
-|                    | 插件 |      |
-| ------------------ | ---- | ---- |
-| compileOnly        |      |      |
-| implementation     |      |      |
-| runtimeOnly        |      |      |
-| testCompileOnly    |      |      |
-| testImplementation |      |      |
-| testRuntimeOnly    |      |      |
-| api                |      |      |
-
-
+|                    | 插件 |     |
+| ------------------ | ---- | --- |
+| compileOnly        |      |     |
+| implementation     |      |     |
+| runtimeOnly        |      |     |
+| testCompileOnly    |      |     |
+| testImplementation |      |     |
+| testRuntimeOnly    |      |     |
+| api                |      |     |
 
 ### Plugin
 
-- java
-- java-lib
-- application
-- Java Platforms
-- maven publish
-- distribution
+-   java
+-   java-lib
+-   application
+-   Java Platforms
+-   maven publish
+-   distribution
 
 ### Task
 
@@ -179,13 +149,10 @@ taskhello{
 hello.onlyIf{!project.hasProperty('skipHello')}
 ```
 
-
-
 ```shell
 gradle build
-gradle run 
+gradle run
 # 所有的验证 task，包括测试
 gradle check
 gradle clean
 ```
-

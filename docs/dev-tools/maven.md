@@ -1,15 +1,5 @@
 ---
 title: 你确定 Maven 相关的东西全部了解吗
-top: true
-cover: false
-toc: true
-mathjax: true
-date: 2020-06-07 13:40:59
-password:
-summary: Maven 生命周期,打包,构建,安装,发布,聚合,继承特性
-tags: Maven
-categories: Maven
-img: http://oss.mflyyou.cn/blog/20200607134237.jpeg?author=zhangpanqin
 ---
 
 ## 前言
@@ -27,18 +17,16 @@ img: http://oss.mflyyou.cn/blog/20200607134237.jpeg?author=zhangpanqin
 </dependencies>
 ```
 
-- maven 包的依赖关系、依赖传递及依赖传递遵循的规则
-- 依赖包的作用域
-- 怎么解决 jar 包冲突
-- 项目继承和聚合
-- maven 生命周期
-- maven 插件使用及常用命令
-- maven 私服的使用
-- 怎么发布 jar 
-- maven 定义不同的配置环境
--  maven-assembly-plugin 打包
-
-
+-   maven 包的依赖关系、依赖传递及依赖传递遵循的规则
+-   依赖包的作用域
+-   怎么解决 jar 包冲突
+-   项目继承和聚合
+-   maven 生命周期
+-   maven 插件使用及常用命令
+-   maven 私服的使用
+-   怎么发布 jar
+-   maven 定义不同的配置环境
+-   maven-assembly-plugin 打包
 
 ## Maven
 
@@ -52,11 +40,7 @@ img: http://oss.mflyyou.cn/blog/20200607134237.jpeg?author=zhangpanqin
 
 坐标信息：groupId，artifactId，version
 
-
-
 当我们在 `pom.xml` 引入某个 `a.jar` , `Maven` 会从本地仓库查找有没有 `a.jar`，没有就会去私服下载，私服没有会从中央仓库下载到私服，然后下载本地仓库。
-
-
 
 ![image-20200607151711515](http://oss.mflyyou.cn/blog/20200607151711.png?author=zhangpanqin)
 
@@ -66,15 +50,9 @@ img: http://oss.mflyyou.cn/blog/20200607134237.jpeg?author=zhangpanqin
 
 `maven-b.jar` 依赖 `maven-c.jar`
 
-
-
-`maven-client` 项目中引入 `maven-a.jar`，那么 `maven-b.jar` 和 `maven-c.jar` 都会引入进来。 
-
-
+`maven-client` 项目中引入 `maven-a.jar`，那么 `maven-b.jar` 和 `maven-c.jar` 都会引入进来。
 
 ![image-20200607154728583](http://oss.mflyyou.cn/blog/20200607154728.png?author=zhangpanqin)
-
-
 
 ### 依赖传递遵循的两个规则
 
@@ -100,8 +78,6 @@ a -> c(1.0)
 
 `maven-client` 项目最终使用 1.0 的 c 。
 
-
-
 #### 最先声明原则
 
 最短路径原则存在一个问题，当最短路径一样的时候怎么办，最先声明原则就是再最短路径相同的时候声效。
@@ -112,25 +88,19 @@ a -> c(1.0)
 
 `maven-a.jar` 只依赖 `maven-c.jar`(1.0)
 
-
-
 现在依赖的最短路径一样
 
-`maven-client` -> `maven-a` -> `maven-c(1.0)` 
+`maven-client` -> `maven-a` -> `maven-c(1.0)`
 
-`maven-client` -> `maven-b` -> `maven-c(2.0)` 
-
-
+`maven-client` -> `maven-b` -> `maven-c(2.0)`
 
 在 `maven-client` 先引入的 `maven-a` 那么 `maven-c 1.0` 声效
 
 在 `maven-client` 先引入的 `maven-b` 那么 `maven-c 2.0` 声效
 
-
-
 最先声明有点达不到我们的预期，我可以可以这样解决。
 
-- 第一种，打破最短依赖路径，直接在 `maven-client` 引入你想要的 `maven-c` 的版本。
+-   第一种，打破最短依赖路径，直接在 `maven-client` 引入你想要的 `maven-c` 的版本。
 
 ```xml
 <dependencies>
@@ -152,7 +122,7 @@ a -> c(1.0)
 </dependencies>
 ```
 
-- 第二种，排除 jar
+-   第二种，排除 jar
 
 这样排除掉 `maven-b` 传递过来的 `maven-c`。根据自己的需求
 
@@ -178,8 +148,6 @@ a -> c(1.0)
 </dependencies>
 ```
 
-
-
 ### 依赖作用域
 
 依赖的作用域定义了 jar 在什么时候生效，打包成 war 或者 jar 的时候是否打包进去。
@@ -191,8 +159,6 @@ a -> c(1.0)
     <scope>runtime</scope>
 </dependency>
 ```
-
-
 
 `scope` 取值不同，意义不一样。
 
@@ -316,15 +282,11 @@ a -> c(1.0)
 
 继承用于消除冗余配置，比如一些配置打包配置，配置的变量，项目依赖和插件依赖版本管理
 
-
-
 聚合用于快速构建项目。
 
 聚合之前打包 a,b,c,d,clent 需要分别运行 mvn package。
 
 聚合之后，我咱们只需要在 maven-demo 下运行 mvn package。
-
-
 
 ### 生命周期
 
@@ -332,19 +294,15 @@ maven 内部有三个构建周期。clean ,default,site。
 
 其中 default 是我们经常使用的生命周期。
 
-
-
 #### clean 生命周期
 
 只干一件事情，将编译生成的东西删除干净。
-
-
 
 #### default 生命周期
 
 默认生命周期大致由下面几个阶段组成。
 
-`resources `  ->   `compile`  -> `testResources`  ->  `testCompile`  ->  `test` -> `package` -> `install` -> `deploy`
+`resources ` -> `compile` -> `testResources` -> `testCompile` -> `test` -> `package` -> `install` -> `deploy`
 
 介绍下我们常用的。
 
@@ -362,11 +320,7 @@ install：安装 jar 到本地仓库
 
 deploy: 发布 jar 到远程仓库或私有仓库
 
-
-
 ![image-20200607175812514](http://oss.mflyyou.cn/blog/20200607175812.png?author=zhangpanqin)
-
-
 
 ### 自定义操作到生命周期某个阶段
 
@@ -391,21 +345,17 @@ deploy: 发布 jar 到远程仓库或私有仓库
 </plugin>
 ```
 
-
-
 #### 不同的生命周期一起运行。
 
 mvn clean package
 
 限制性 `clean` 生命周期，再执行 `default` 生命周期到 `package` 阶段。
 
-
-
 ### 私服和镜像的使用
 
 #### 配置镜像
 
-mirrorOf 指定代理那个仓库 settings.xml配置镜像
+mirrorOf 指定代理那个仓库 settings.xml 配置镜像
 
 ```xml
 <localRepository>
@@ -438,8 +388,6 @@ mirrorOf 指定代理那个仓库 settings.xml配置镜像
     </repository>
 </repositories>
 ```
-
-
 
 ### 定义不同的配置环境
 
@@ -520,8 +468,6 @@ settings.xml 配置。
     </profile>
 </profiles>
 ```
-
-
 
 ### maven-assembly-plugin 打包
 
@@ -616,8 +562,6 @@ package.xml
 </assembly>
 ```
 
-
-
 打包如下图 ![image-20200607182606397](http://oss.mflyyou.cn/blog/20200607182606.png?author=zhangpanqin)
 
 #### 配合 SpringBoot 使用
@@ -632,21 +576,12 @@ spring:
     active:  @profileActive@
 ```
 
-
-
 图形化界面切换开发环境，再也不用不停修改配置文件了
-
-
 
 `*-local.yml` 在 `.gitignore` 忽略掉，本地开发环境各个之间互不影响。
 
-
-
 ![image-20200607182749440](http://oss.mflyyou.cn/blog/20200607182749.png?author=zhangpanqin)
-
-
 
 自动构建的时候使用下面命令，打包开发环境
 
 mvn clean package -Ddev
-

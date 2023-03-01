@@ -1,37 +1,24 @@
 ---
 title: Java-中读取文件内容的-n-中方式
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-04-19 17:38:51
-password:
-summary:
-tags: Java-IO
-categories: Java
-img:
 ---
+
 ## 前言
 
 刚接触 `java` 的时候很困惑一个事情 `File`相对路径，以哪个目录为参照物。
 
-随着 io 模型的发展，java 1.7 的  `nio`，使用 `Path`、`Paths` 和 `Files` 等来方便 io 的操作。
+随着 io 模型的发展，java 1.7 的 `nio`，使用 `Path`、`Paths` 和 `Files` 等来方便 io 的操作。
 
 `ClassLoader` 用于获取`class 文件` 的 io，我们也可以用于获取文件的 io，以便于我们读取文件内容。
 
 ### 本文设计内容
 
-- File ，ZipFile，JarFile 读取相对路径和绝对路径文件内容。
-- System.getProperty("user.dir”) 是怎么来的。
-- Paths、Path、Files 读取文件内容。
-- 类加载器获取文件内容，Class.getResourceAsStream 和 ClassLoader.getResourceAsStream。
-- 介绍类加载器的双亲委派模型，及在代码中找到对应的加载逻辑。
-
-
+-   File ，ZipFile，JarFile 读取相对路径和绝对路径文件内容。
+-   System.getProperty("user.dir”) 是怎么来的。
+-   Paths、Path、Files 读取文件内容。
+-   类加载器获取文件内容，Class.getResourceAsStream 和 ClassLoader.getResourceAsStream。
+-   介绍类加载器的双亲委派模型，及在代码中找到对应的加载逻辑。
 
 <font color=red>代码基于 `Mac 10.15.4`，JDK 1.8。</font>
-
-
 
 ## 基于 File 获取文件内容
 
@@ -73,11 +60,9 @@ class UnixFileSystem extends FileSystem {
 }
 ```
 
-只要我们弄清楚  `System.getProperty("user.dir")`，问题就迎刃而解。[Java System Properties](https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html) 中介绍 `user.dir` 是用户的工作目录。
+只要我们弄清楚 `System.getProperty("user.dir")`，问题就迎刃而解。[Java System Properties](https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html) 中介绍 `user.dir` 是用户的工作目录。
 
 ![image-20200418232813977](http://oss.mflyyou.cn/blog/20200418232814.png?author=zhangpanqin)
-
-
 
 <font color=red>什么是用户工作目录呢？就是执行 java 命令的目录。</font>在那个目录下执行命令，usr.dir 就会被 java 虚拟机赋值为执行命令的路径。我在 `/Users/zhangpanqin/github/fly-java/test` 目录下运行编译的 `class` 文件。`-cp` 指定 classpath 路径。
 
@@ -85,18 +70,18 @@ class UnixFileSystem extends FileSystem {
 
 ## nio 读取文件内容
 
-`Path` 可以类比 `File` 理解使用。然后工具类 `Paths` 可以获得 `Path`，`Files` 更是提供了丰富的 api 用于crud 操作文件 `Path`。
+`Path` 可以类比 `File` 理解使用。然后工具类 `Paths` 可以获得 `Path`，`Files` 更是提供了丰富的 api 用于 crud 操作文件 `Path`。
 
 ### 获取绝对路径内容
 
- ```java
+```java
 @Test
 public void run33() throws IOException {
-    final Path path = Paths.get("/Users/zhangpanqin/github/fly-java/demo.txt");
-    final byte[] bytes = Files.readAllBytes(path);
-    System.out.println(new String(bytes,StandardCharsets.UTF_8));
+   final Path path = Paths.get("/Users/zhangpanqin/github/fly-java/demo.txt");
+   final byte[] bytes = Files.readAllBytes(path);
+   System.out.println(new String(bytes,StandardCharsets.UTF_8));
 }
- ```
+```
 
 ### 获取相对路径内容
 
@@ -126,8 +111,6 @@ public InputStream getResourceAsStream(String name) {
     }
 }
 ```
-
-
 
 从代码可以看到主要逻辑还是集中在 `getResource` 。
 
@@ -160,8 +143,6 @@ System.out.println(resource);
 ```bash
 jar:file:/Users/zhangpanqin/.m2/repository/com/alibaba/fastjson/1.2.62/fastjson-1.2.62.jar!/com/alibaba/fastjson/JSONArray.class
 ```
-
-
 
 我们还可以获取一个路径的 `inputstream`
 
@@ -199,7 +180,7 @@ public void run555(){
 
 实际查找的资源为 `com.fly.study.java.classloader.name`。相对于当前类所在包的资源。
 
-### 
+###
 
 ## 类加载器
 
@@ -207,19 +188,11 @@ public void run555(){
 
 ![img](http://oss.mflyyou.cn/blog/20200419163544.png?author=zhangpanqin)
 
-
-
 去哪里可以看到这些类加载呢。
-
-
 
 `启动类加载器` 不是 java 代码实现的我们看不到源码。
 
-
-
-sun.misc.Launcher 类中有我们知道的 `扩展类加载器 sun.misc.Launcher.ExtClassLoader`  和 `应用类加载器 sun.misc.Launcher.AppClassLoader` 。
-
-
+sun.misc.Launcher 类中有我们知道的 `扩展类加载器 sun.misc.Launcher.ExtClassLoader` 和 `应用类加载器 sun.misc.Launcher.AppClassLoader` 。
 
 `java.lang.ClassLoader#getSystemClassLoader` 代码看的话，实际返回的应用类加载器。
 
@@ -246,8 +219,6 @@ private static synchronized void initSystemClassLoader() {
 }
 ```
 
-
-
 运行代码测试，返回的是应用类加载器。
 
 ```bash
@@ -257,8 +228,6 @@ public void run66(){
 	System.out.println(ClassLoader.getSystemClassLoader());
 }
 ```
-
-
 
 这三个类加载器负责不同路径下的类加载。
 
@@ -278,8 +247,6 @@ public void run66(){
 /Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/jre/lib/jfr.jar
 /Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/jre/classes
 ```
-
-
 
 ```java
 @Test
@@ -322,6 +289,6 @@ public void run99() {
 
 ```bash
 # -cp 指定 classpath 路径，多个路径可以使用 : 分开（linux 下为 :,window 下为 ;），
-java -cp /Users/zhangpanqin/github/fly-java/target/classes com.fly.study.java.classloader.Test2 
+java -cp /Users/zhangpanqin/github/fly-java/target/classes com.fly.study.java.classloader.Test2
 
 ```

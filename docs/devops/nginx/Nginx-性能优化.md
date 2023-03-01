@@ -1,15 +1,5 @@
 ---
 title: Nginx-性能优化
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-04-12 16:57:24
-password:
-summary:
-tags: Nginx
-categories: Nginx
-img: http://oss.mflyyou.cn/blog/20200328203106.png?author=zhangpanqin
 ---
 
 ## 前言
@@ -18,39 +8,31 @@ img: http://oss.mflyyou.cn/blog/20200328203106.png?author=zhangpanqin
 
 `Nginx` 性能优化，主要是减少`磁盘 io`。
 
-- 请求头、请求体、响应体都在缓冲区操作。
-- 文件信息的读取
+-   请求头、请求体、响应体都在缓冲区操作。
+-   文件信息的读取
 
 减少网络 io。
 
-- gzip 压缩。前端资源也可以提前进行 `gzip` 压缩，这样请求的时候就不用再压缩了，减少对 `cpu` 的损耗。
-- 强缓存。减少对后端的静态资源的请求。
+-   gzip 压缩。前端资源也可以提前进行 `gzip` 压缩，这样请求的时候就不用再压缩了，减少对 `cpu` 的损耗。
+-   强缓存。减少对后端的静态资源的请求。
 
 `http` 链接的尽快释放，减少请求的堆积。
 
 `linux` 内核优化。这部分主要是查阅资料加上自己的理解。内容来自 《深入理解 Nginx 模块开发与架构设计》。
 
-
-
 调账参数之后可以使用 `ab` 和 `jmeter` 进行压测，根据实际效果来进行调优。
-
-
 
 `Nginx` 一定要在安全的情况下做性能优化。不然 tcp 攻击就能给你服务器搞挂了，能用才是王道。安全访问第一，性能第二。
 
-
-
 调优之后，一定记得要做限流哦。
-
-
 
 下个系列准备写 `Mysql` 相关，已经在做准备了。
 
 ## linux 内核优化
 
-可以修改  `/etc/sysctl.conf` 来修改内核参数。<font color=red>这部分优化慎重</font>
+可以修改 `/etc/sysctl.conf` 来修改内核参数。<font color=red>这部分优化慎重</font>
 
-- 查看 tcp 相关系统参数
+-   查看 tcp 相关系统参数
 
 ```bash
  sysctl -a | grep 'net.ipv4.tcp' | grep -v grep
@@ -65,13 +47,13 @@ net.ipv4.tcp_max_tw_buckets = 5000
 net.ipv4.ip_local_port_range = 1024 65000
 net.ipv4.tcp_rmem = 4096 32768 262144
 net.ipv4.tcp_wmem = 4096 32768 262144
-net.ipv4.tcp_max_orphans = 262144 
+net.ipv4.tcp_max_orphans = 262144
 net.core.netdev_max_backlog = 262144
 net.core.rmem_default = 262144
 net.core.wmem_default = 262144
 net.core.rmem_max = 2097152
 net.core.wmem_max = 2097152
-net.core.somaxconn = 262144 
+net.core.somaxconn = 262144
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_max_syn_backlog=262144
 ```
@@ -82,87 +64,85 @@ net.ipv4.tcp_max_syn_backlog=262144
 sysctl -p
 ```
 
-上面的参数意义解释如下： 
+上面的参数意义解释如下：
 
-- fs.file-max：999999
+-   fs.file-max：999999
 
-    >  这个参数表示进程（比如一个worker进程）可以同时打开的最大句柄数，这 个参数直接限制最大并发连接数，需根据实际情况配置。 
+    > 这个参数表示进程（比如一个 worker 进程）可以同时打开的最大句柄数，这 个参数直接限制最大并发连接数，需根据实际情况配置。
 
-- net.ipv4.tcp_tw_reuse：
+-   net.ipv4.tcp_tw_reuse：
 
-    > 这个参数设置为1，表示允许将TIME-WAIT状态的socket重新用于新的 TCP连接，这对于服务器来说很有意义，因为服务器上总会有大量TIME-WAIT状态的连接。 
+    > 这个参数设置为 1，表示允许将 TIME-WAIT 状态的 socket 重新用于新的 TCP 连接，这对于服务器来说很有意义，因为服务器上总会有大量 TIME-WAIT 状态的连接。
 
-- net.ipv4.tcp_keepalive_time：
+-   net.ipv4.tcp_keepalive_time：
 
-    > 这个参数表示当keepalive启用时，TCP发送keepalive消息的频度。 默认是2小时，若将其设置得小一些，可以更快地清理无效的连接。 
+    > 这个参数表示当 keepalive 启用时，TCP 发送 keepalive 消息的频度。 默认是 2 小时，若将其设置得小一些，可以更快地清理无效的连接。
 
-- net.ipv4.tcp_fin_timeout：
+-   net.ipv4.tcp_fin_timeout：
 
-    > 这个参数表示当服务器主动关闭连接时，socket保持在FIN-WAIT-2状态的最大时间。 
+    > 这个参数表示当服务器主动关闭连接时，socket 保持在 FIN-WAIT-2 状态的最大时间。
 
-- net.ipv4.tcp_max_tw_buckets：
+-   net.ipv4.tcp_max_tw_buckets：
 
-    > 这个参数表示操作系统允许TIME_WAIT套接字数量的最大值， 如果超过这个数字，TIME_WAIT套接字将立刻被清除并打印警告信息。该参数默认为 180000，过多的TIME_WAIT套接字会使Web服务器变慢。 
+    > 这个参数表示操作系统允许 TIME_WAIT 套接字数量的最大值， 如果超过这个数字，TIME_WAIT 套接字将立刻被清除并打印警告信息。该参数默认为 180000，过多的 TIME_WAIT 套接字会使 Web 服务器变慢。
 
-- net.ipv4.ip_local_port_range：
+-   net.ipv4.ip_local_port_range：
 
-    > 这个参数定义了在UDP和TCP连接中本地（不包括连接的远端） 端口的取值范围。 
+    > 这个参数定义了在 UDP 和 TCP 连接中本地（不包括连接的远端） 端口的取值范围。
 
-- net.ipv4.tcp_rmem：
+-   net.ipv4.tcp_rmem：
 
-    > 这个参数定义了TCP接收缓存（用于TCP接收滑动窗口）的最小 值、默认值、最大值。 
+    > 这个参数定义了 TCP 接收缓存（用于 TCP 接收滑动窗口）的最小 值、默认值、最大值。
 
-- net.ipv4.tcp_wmem：
+-   net.ipv4.tcp_wmem：
 
-    > 这个参数定义了TCP发送缓存（用于TCP发送滑动窗口）的最小 值、默认值、最大值。 
+    > 这个参数定义了 TCP 发送缓存（用于 TCP 发送滑动窗口）的最小 值、默认值、最大值。
 
-- net.ipv4.tcp_max_orphans
+-   net.ipv4.tcp_max_orphans
 
-    > 选项用于记录那些尚未收到客户端确认信息的连接请求的最大值。对于有128MB内存的系统而言，此参数的默认值是1024，对小内存的系统则是128。
+    > 选项用于记录那些尚未收到客户端确认信息的连接请求的最大值。对于有 128MB 内存的系统而言，此参数的默认值是 1024，对小内存的系统则是 128。
 
-- net.core.netdev_max_backlog：
+-   net.core.netdev_max_backlog：
 
-    > 当网卡接收数据包的速度大于内核处理的速度时，会有一个队列 保存这些数据包。这个参数表示该队列的最大值。 
+    > 当网卡接收数据包的速度大于内核处理的速度时，会有一个队列 保存这些数据包。这个参数表示该队列的最大值。
 
-- net.core.net.core.rmem_default：
+-   net.core.net.core.rmem_default：
 
-    > 这个参数表示内核套接字接收缓存区默认的大小。 
+    > 这个参数表示内核套接字接收缓存区默认的大小。
 
-- net.core.wmem_default：
+-   net.core.wmem_default：
 
     > 这个参数表示内核套接字发送缓存区默认的大小。
 
-- net.core.rmem_max：
+-   net.core.rmem_max：
 
-    > 这个参数表示内核套接字接收缓存区的最大大小。 
+    > 这个参数表示内核套接字接收缓存区的最大大小。
 
-- net.core.wmem_max：
+-   net.core.wmem_max：
 
-    > 这个参数表示内核套接字发送缓存区的最大大小。 
+    > 这个参数表示内核套接字发送缓存区的最大大小。
 
 滑动窗口的大小与套接字缓存区会在一定程度上影响并发连接的数目。
 
-每个 TCP连接都会为维护TCP滑动窗口而消耗内存，这个窗口会根据服务器的处理速度收缩或扩 张。
+每个 TCP 连接都会为维护 TCP 滑动窗口而消耗内存，这个窗口会根据服务器的处理速度收缩或扩 张。
 
- 参数wmem_max的设置，需要平衡物理内存的总大小、Nginx并发处理的最大连接数量 （由nginx.conf中的worker_processes和worker_connections参数决定）而确定。
+参数 wmem_max 的设置，需要平衡物理内存的总大小、Nginx 并发处理的最大连接数量 （由 nginx.conf 中的 worker_processes 和 worker_connections 参数决定）而确定。
 
-当然，如果仅仅 为了提高并发量使服务器不出现Out Of Memory问题而去降低滑动窗口大小，那么并不合 适，因为滑动窗口过小会影响大数据量的传输速度。
+当然，如果仅仅 为了提高并发量使服务器不出现 Out Of Memory 问题而去降低滑动窗口大小，那么并不合 适，因为滑动窗口过小会影响大数据量的传输速度。
 
-rmem_default、wmem_default、 rmem_max、wmem_max这4个参数的设置需要根据我们的业务特性以及实际的硬件成本来综 合考虑。 
+rmem_default、wmem_default、 rmem_max、wmem_max 这 4 个参数的设置需要根据我们的业务特性以及实际的硬件成本来综 合考虑。
 
-- net.core.somaxconn
+-   net.core.somaxconn
 
     > 选项表示当每个网络接口接收数据包的速率比内核处理这些包的速率快时，允许发送到队列的数据包的最大数目。
 
-- net.ipv4.tcp_syncookies：
+-   net.ipv4.tcp_syncookies：
 
-    > 设置为 1。该参数与性能无关，用于解决TCP的SYN攻击。
+    > 设置为 1。该参数与性能无关，用于解决 TCP 的 SYN 攻击。
 
-- net.ipv4.tcp_max_syn_backlog：
+-   net.ipv4.tcp_max_syn_backlog：
 
-    >  这个参数表示TCP三次握手建立阶段接收SYN请求队列的最大 长度，默认为1024，将其设置得大一些可以使出现Nginx繁忙来不及accept新连接的情况时， Linux不至于丢失客户端发起的连接请求。 
-
-
+    > 这个参数表示 TCP 三次握手建立阶段接收 SYN 请求队列的最大 长度，默认为 1024，将其设置得大一些可以使出现 Nginx 繁忙来不及 accept 新连接的情况时， Linux 不至于丢失客户端发起的连接请求。
 
 ## 内存及磁盘资料优化
 
@@ -180,7 +160,7 @@ rmem_default、wmem_default、 rmem_max、wmem_max这4个参数的设置需要�
 
 ### client_body_in_single_buffer
 
-设置为 on，http 包一律写入到内存 buffer 中，如果包体超过  `client_body_buffer_size`  的大小，还是会写入到磁盘文件中。
+设置为 on，http 包一律写入到内存 buffer 中，如果包体超过 `client_body_buffer_size` 的大小，还是会写入到磁盘文件中。
 
 ### client_body_buffer_size
 
@@ -194,7 +174,7 @@ x64 默认 16K。定义接受请求体内存缓冲区大小，请求先写入到
 
 文件内容读取减少了内核态到用户态的拷贝，直接从内核态到网卡设备，提高了发送效率。
 
-### open_file_cache 
+### open_file_cache
 
 缓存文件的存储信息。max 表示最大存储数量，超过这个数量，采用 LRU 淘汰
 
@@ -210,9 +190,9 @@ open_file_cache max=65535 inactive=20s;
 
 `linux` 一切皆文件，但是进程打开的文件数会有限制。可针对用户和进程来限制文件句柄数。
 
-- 文件句柄，可以针对用户，进程设置
+-   文件句柄，可以针对用户，进程设置
 
-    - 全局设置 /etc/security/limits.conf
+    -   全局设置 /etc/security/limits.conf
 
 ```nginx
 * hard nofile 65535

@@ -1,15 +1,5 @@
 ---
 title: Mysql用户权限管理
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-11-21 11:21:49
-password:
-summary: mysql 权限管理
-tags: Mysql
-categories: Mysql
-img:
 ---
 
 ## 前言
@@ -18,9 +8,9 @@ img:
 
 ### 机器环境
 
-- mysql 8.0.21 x86_64 MySQL Community Serve
+-   mysql 8.0.21 x86_64 MySQL Community Serve
 
-- centos 7
+-   centos 7
 
 ## Mysql 权限管理
 
@@ -33,7 +23,7 @@ Mysql 8.0 可以创建角色，然后将操作数据库、表、索引等的权�
 #### 创建用户
 
 ```sql
--- 用户名称是由 用户名和登录用户的 ip 一同组成的，% 代表任意 ip 
+-- 用户名称是由 用户名和登录用户的 ip 一同组成的，% 代表任意 ip
 CREATE USER 'db_dev'@'localhost' IDENTIFIED BY 'Mysql@12345678';
 ```
 
@@ -72,9 +62,9 @@ ALTER USER 'db_dev1'@'localhost' ACCOUNT UNLOCK;
 | ALTER                   | 修改表结构，[`ALTER TABLE`](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)                                                                                                                             |
 | CREATE                  | 创建数据库和表                                                                                                                                                                                                    |
 | DROP                    | 删除数据库、表、视图                                                                                                                                                                                              |
-| GRANT OPTION            | GRANT权限允许你把你自己拥有的那些权限授给其他的用户。可以用于数据库、表和保存的程序。                                                                                                                             |
+| GRANT OPTION            | GRANT 权限允许你把你自己拥有的那些权限授给其他的用户。可以用于数据库、表和保存的程序。                                                                                                                            |
 | DELETE                  | 删除表数据                                                                                                                                                                                                        |
-| INDEX                   | INDEX权限允许你创建或删除索引。                                                                                                                                                                                   |
+| INDEX                   | INDEX 权限允许你创建或删除索引。                                                                                                                                                                                  |
 | INSERT                  | 插入表数据                                                                                                                                                                                                        |
 | SELECT                  | 查询表数据                                                                                                                                                                                                        |
 | UPDATE                  | 更新表数据                                                                                                                                                                                                        |
@@ -102,7 +92,7 @@ FLUSH PRIVILEGES;
 #### 回收权限
 
 ```sql
--- ON 指定数据库.表 
+-- ON 指定数据库.表
 -- FROM 指定用户
 REVOKE SHOW DATABASES,SELECT ON *.* FROM 'db_dev'@'localhost';
 -- 刷新权限信息
@@ -142,7 +132,7 @@ DROP ROLE 'db', 'app_run';
 
 #### 给角色分配权限
 
-- 开发
+-   开发
 
 开发一般会，创建数据库和表，crud，操作索引，修改表结构
 
@@ -153,7 +143,7 @@ drop 权限我建议不要给
 GRANT SELECT, INSERT, UPDATE, DELETE,CREATE,CREATE VIEW,ALTER,SHOW DATABASES,SHOW VIEW,ALTER,INDEX,PROCESS,RELOAD,LOCK TABLES ON *.* TO 'dev';
 ```
 
-- db
+-   db
 
 db 一般拥有所有权限
 
@@ -162,7 +152,7 @@ db 一般拥有所有权限
 GRANT ALL PRIVILEGES ON *.* TO 'db' WITH GRANT OPTION;
 ```
 
-- 运营相关
+-   运营相关
 
 基本都是查询语句
 
@@ -171,7 +161,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'db' WITH GRANT OPTION;
 GRANT SELECT,SHOW DATABASES,SHOW VIEW ON *.* TO 'ops';
 ```
 
-- 程序运行相关
+-   程序运行相关
 
 为了使用 flyway 这种可以修改表结构和索引的组件。对权限赋予 CREATE,INDEX,ALTER.
 
@@ -212,12 +202,9 @@ SHOW GRANTS FOR 'root'@'%';
 SHOW GRANTS FOR 'read_user1'@'localhost' USING 'ops';
 ```
 
-
-
 ## SSL 访问 Mysql
 
 ### 查看链接是否是安全的
-
 
 ```sql
 -- 如果未使用 SSL 则 Ssl_cipher 为空
@@ -235,17 +222,9 @@ CREATE USER 'ssl_test'@'%' IDENTIFIED BY 'Mysql@12345678' REQUIRE X509;
 
 文件都在数据目录下 `SHOW VARIABLES LIKE '%datadir`
 
-
-
-
 ![image-20201123235514374](http://oss.mflyyou.cn/blog/20201123235514.png?author=zhangpanqin)
-
-
 
 ```shell
 ## 安全方式登录 Mysql
 mysql  --ssl-cert=/Users/zhangpanqin/Desktop/client-cert.pem --ssl-key=/Users/zhangpanqin/Desktop/client-key.pem -u ssl_test -h 10.211.55.8 -p
 ```
-
-
-

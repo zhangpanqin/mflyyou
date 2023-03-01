@@ -1,26 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [推荐实践](#%E6%8E%A8%E8%8D%90%E5%AE%9E%E8%B7%B5)
-- [基础操作](#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C)
-  - [jq，操作 json 文件](#jq%E6%93%8D%E4%BD%9C-json-%E6%96%87%E4%BB%B6)
-  - [年月日](#%E5%B9%B4%E6%9C%88%E6%97%A5)
-  - [添加多行到文件](#%E6%B7%BB%E5%8A%A0%E5%A4%9A%E8%A1%8C%E5%88%B0%E6%96%87%E4%BB%B6)
-  - [多行赋值变量](#%E5%A4%9A%E8%A1%8C%E8%B5%8B%E5%80%BC%E5%8F%98%E9%87%8F)
-  - [软连接](#%E8%BD%AF%E8%BF%9E%E6%8E%A5)
-  - [当前目录](#%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95)
-  - [获取脚本所在项目根目录](#%E8%8E%B7%E5%8F%96%E8%84%9A%E6%9C%AC%E6%89%80%E5%9C%A8%E9%A1%B9%E7%9B%AE%E6%A0%B9%E7%9B%AE%E5%BD%95)
-- [远程执行命令](#%E8%BF%9C%E7%A8%8B%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4)
-- [有趣命令](#%E6%9C%89%E8%B6%A3%E5%91%BD%E4%BB%A4)
-  - [判断程序是否安装](#%E5%88%A4%E6%96%AD%E7%A8%8B%E5%BA%8F%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85)
-  - [使用管理员权限运行](#%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90%E8%BF%90%E8%A1%8C)
-  - [提示输入值操作](#%E6%8F%90%E7%A4%BA%E8%BE%93%E5%85%A5%E5%80%BC%E6%93%8D%E4%BD%9C)
-  - [判断数据是否包含](#%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E6%98%AF%E5%90%A6%E5%8C%85%E5%90%AB)
-  - [遍历 json](#%E9%81%8D%E5%8E%86-json)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 ## 推荐实践
 
 ```shell

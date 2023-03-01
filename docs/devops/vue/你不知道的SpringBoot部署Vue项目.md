@@ -1,22 +1,6 @@
 ---
 title: 你不知道的SpringBoot与Vue部署解决方案
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-07-27 19:54:19
-password:
-summary: SpringBoot 作为 Web 容器部署 Vue
-tags:
-- vue
-- SpringBoot
-categories:
-- Vue
-- SpringBoot
-img:
 ---
-
-
 
 ### 前言
 
@@ -25,8 +9,6 @@ img:
 最近又做了一个项目，考虑到用户的体验，减少部署的复杂性，我想了一个办法用 SpringBoot 做 web 服务器映射前端资源为 web 资源 。
 
 <font color=red>条件允许或者对性能要求比较高，推荐是前后端分离部署，nginx 做 web 服务器，后端只提供接口服务</font>
-
-
 
 以前部署的项目 A 外网访问地址是 `http://ip1:8080`，外网映射后只能访问 `http://ip/app1` ，以前项目 B 外网访问地址是 `http://ip1:8081` ，项目访问地址是 `http://ip/app2` 。这也算是一个不大不小的变动，但是切换之后遇到的第一个问题就是静态资源转发导致 `404`。
 
@@ -39,46 +21,36 @@ img:
 ```html
 <!-- index.html -->
 <!-- 原来部署环境写法 -->
-<link href="/index.css" rel="stylesheet">
+<link href="/index.css" rel="stylesheet" />
 ```
 
 以前访问 `index.css` 地址是 `http://ip1:8080/index.css` ，但是现在变成访问了 `http://ip/index.css` 导致 404，实际 index.css 地址为 `http://ip/app1/index.css`
-
-
 
 前端使用 `vue` 编写，html 中的静态资源路径可以很好解决，修改 webpack 打包即可。
 
 ```html
 <!-- 原来部署环境写法 -->
-<link href="/index.css" rel="stylesheet">
+<link href="/index.css" rel="stylesheet" />
 
 <!-- 写成相对路径 -->
-<link href="./index.css" rel="stylesheet">
+<link href="./index.css" rel="stylesheet" />
 
 <!-- 结合 webpack 打包时进行路径补充 -->
-<link href="<%= BASE_URL %>index.css" rel="stylesheet">
+<link href="<%= BASE_URL %>index.css" rel="stylesheet" />
 ```
-
-
 
 但是项目中有一些组件的请求没有办法统一处理，只能改代码。但我不想动代码，webpack 打包都不想动，基于这些需求想了一个办法来解决。
 
-
-
 ### 本文内容
 
-- Nginx 部署 vue 项目，怎么能友好处理静态资源的丢失
-- SpringBoot 提供 web 服务器的功能映射 vue 项目为 web 资源，并处理 vue 路由转发 index.html 问题。
-
-
+-   Nginx 部署 vue 项目，怎么能友好处理静态资源的丢失
+-   SpringBoot 提供 web 服务器的功能映射 vue 项目为 web 资源，并处理 vue 路由转发 index.html 问题。
 
 [演示代码地址](https://github.com/zhangpanqin/vue-springboot)
 
 ```txt
 https://github.com/zhangpanqin/vue-springboot
 ```
-
-
 
 ## Nginx 部署 Vue 项目
 
@@ -102,62 +74,54 @@ server {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- 也可以改成类似的地址  BASE_URL 等于 vue.config.js 配置的 publicPath-->
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-	<!-- 部署之后，访问不到 index.css -->
-    <link href="/index.css" rel="stylesheet">
-</head>
+    <head>
+        <!-- 也可以改成类似的地址  BASE_URL 等于 vue.config.js 配置的 publicPath-->
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+        <!-- 部署之后，访问不到 index.css -->
+        <link href="/index.css" rel="stylesheet" />
+    </head>
 </html>
 ```
-
-
 
 为了可以在浏览器输入 vue 的路由 `/app/blog` 也可以访问页面，需要添加 `vue-router` 中的 base 属性。
 
 ```js
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
 const routes = [
     {
-        path: '/',
-        name: 'Home',
-        component: () => import('@/views/Home.vue'),
+        path: "/",
+        name: "Home",
+        component: () => import("@/views/Home.vue"),
     },
     {
-        path: '/blog',
-        name: 'Blog',
-        component: () => import('@/views/Blog.vue'),
+        path: "/blog",
+        name: "Blog",
+        component: () => import("@/views/Blog.vue"),
     },
     {
         // 匹配不到路由的时候跳转到这里
-        path: '*',
-        name: 'Error404',
-        component: () => import('@/views/Error404.vue'),
-    }
+        path: "*",
+        name: "Error404",
+        component: () => import("@/views/Error404.vue"),
+    },
 ];
 const router = new VueRouter({
-	// 主要是修改这里，可以根据 vue mode 环境来取值。
+    // 主要是修改这里，可以根据 vue mode 环境来取值。
     // https://cli.vuejs.org/zh/guide/mode-and-env.html
     // https://router.vuejs.org/zh/api/#base
     base: process.env.VUE_APP_DEPLOY_PATH,
-    mode: 'history',
+    mode: "history",
     routes,
 });
 
 export default router;
 ```
 
-
-
-
-
 <img src="http://oss.mflyyou.cn/blog/20200727234702.png?author=zhangpanqin" alt="image-20200727234702928" style="zoom: 25%;" />
-
-
 
 `http://localhost:8087/app/index.css` 为 css 的真实地址。所以想办法为这些不以 `/app` 开头的资源加上 `/app` 就可以了，想了想只有 cookie 能做到。
 
@@ -194,8 +158,6 @@ server {
 
 ![image-20200728014849158](http://oss.mflyyou.cn/blog/20200728014849.png?author=zhangpanqin)
 
-
-
 下面这个是重定向的配置
 
 ```nginx
@@ -222,23 +184,11 @@ server {
 
 ![image-20200728014654144](http://oss.mflyyou.cn/blog/20200728014654.png?author=zhangpanqin)
 
-
-
-
-
-
-
-
-
 根据这个思路就可以把所有的资源进行转发了，不用改业务代码，只需给 `vue-router` 加上一个 `base` 基础路由。
 
 ## SpringBoot 部署 Vue 项目
 
-
-
 `Nginx` 走通了，SpringBoot 依葫芦画瓢就行了，还是 java 写的舒服，能 debug，哈哈。
-
-
 
 ### SpringBoot 映射静态资源
 
@@ -258,11 +208,11 @@ public class VueWebConfig implements WebMvcConfigurer {
         CacheControl cacheControl = CacheControl.maxAge(5, TimeUnit.HOURS).cachePublic();
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS).setCacheControl(cacheControl);
     }
-	
-   
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 配置要拦截的资源,主要用于 添加 cookie 
+        // 配置要拦截的资源,主要用于 添加 cookie
         registry.addInterceptor(new VueCookieInterceptor()).addPathPatterns("/test/**");
     }
 
@@ -274,7 +224,7 @@ public class VueWebConfig implements WebMvcConfigurer {
 }
 ```
 
-### 项目静态资源路径添加 cookie 
+### 项目静态资源路径添加 cookie
 
 ```java
 public class VueCookieInterceptor implements HandlerInterceptor {
@@ -314,11 +264,9 @@ public class VueCookieInterceptor implements HandlerInterceptor {
 }
 ```
 
-
-
 ### 请求出现错误做资源的转发
 
-访问错误的跳转要分清楚 接口请求和静态资源的请求，通过 accept 可以判断。 
+访问错误的跳转要分清楚 接口请求和静态资源的请求，通过 accept 可以判断。
 
 ```java
 @RequestMapping("/error")
@@ -336,7 +284,7 @@ public class VueErrorController extends AbstractErrorController {
     public String getErrorPath() {
         return "/error";
     }
-	
+
     @RequestMapping
     public ModelAndView errorHtml(HttpServletRequest httpServletRequest, HttpServletResponse response, @CookieValue(name = ONLINE_SAIL, required = false, defaultValue = "") String cookie) {
         final Object attribute = httpServletRequest.getAttribute(ERROR_BEFORE_PATH);
@@ -358,7 +306,7 @@ public class VueErrorController extends AbstractErrorController {
         modelAndView.setViewName("forward:/test/index.html");
         return modelAndView;
     }
-    
+
     // 处理请求头为 accept 为 application/json 的请求，就是接口请求返回json 数据
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
@@ -372,8 +320,6 @@ public class VueErrorController extends AbstractErrorController {
 
 ```
 
-
-
 ### 首页跳转
 
 ```java
@@ -385,8 +331,3 @@ public class IndexController {
     }
 }
 ```
-
-
-
-
-

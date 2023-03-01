@@ -1,46 +1,30 @@
 ---
 title: 从Linux内核理解Java中的IO
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-07-04 20:29:41
-password:
-summary: linux kernel java io
-tags: 
-    - Java-IO
-    - Java
-categories: Java
-img:
 ---
 
 ## 前言
 
-刚接触 Java  `IO` 的时候，  一直有一个 困惑：为什么 `BufferedInputStream` 比 `FileInputStream` 快? 随着对 `Linux` 了解，这个问题也得到解决。最近也在看 `Linux 内核` 方面的书，想了解程序在 `Linux` 上运行的过程，感觉收获还是很多的。
+刚接触 Java `IO` 的时候， 一直有一个 困惑：为什么 `BufferedInputStream` 比 `FileInputStream` 快? 随着对 `Linux` 了解，这个问题也得到解决。最近也在看 `Linux 内核` 方面的书，想了解程序在 `Linux` 上运行的过程，感觉收获还是很多的。
 
-基于安全考虑，只有  `Linux内核` 才能权限去访问计算机的硬件，`Linux内核`会提供一些接口（系统调用）让我们可以和硬件交互。不过数据一般都是从`硬件` 到`内核态` ,再从 `Linux内核` 复制到 `用户态` 进程的内存空间中，这样进程才能对读取的数据进行处理。
+基于安全考虑，只有 `Linux内核` 才能权限去访问计算机的硬件，`Linux内核`会提供一些接口（系统调用）让我们可以和硬件交互。不过数据一般都是从`硬件` 到`内核态` ,再从 `Linux内核` 复制到 `用户态` 进程的内存空间中，这样进程才能对读取的数据进行处理。
 
 ![image-20200704231239764](http://oss.mflyyou.cn/blog/20200704231239.png?author=zhangpanqin)
 
 本文内容：
 
-- Linux 中的虚拟文件系统介绍
-- Page Cache 和 Dirty Page
-- Java api 写入的数据，什么时候会被刷新到磁盘中
-
-
+-   Linux 中的虚拟文件系统介绍
+-   Page Cache 和 Dirty Page
+-   Java api 写入的数据，什么时候会被刷新到磁盘中
 
 ## Linux 中 虚拟文件系统（VFS）
 
-虚拟文件系统（Virtual File System，简称VFS）是Linux内核的子系统之一，它为操作文件（普通文件，socket 等）提供了统一的接口，屏蔽不同的硬件差异和操作细节。我们只需调用 `open` 、`read`、`write` 、`close`、`fsync` 这些系统调用，达到操作文件的目的。
+虚拟文件系统（Virtual File System，简称 VFS）是 Linux 内核的子系统之一，它为操作文件（普通文件，socket 等）提供了统一的接口，屏蔽不同的硬件差异和操作细节。我们只需调用 `open` 、`read`、`write` 、`close`、`fsync` 这些系统调用，达到操作文件的目的。
 
-我们实际看到的 linux的目录，实际就是 VFS 中的路径，我们可以通过将硬盘中的分区挂载到 `linux` 中的路径下，访问虚拟文件系统中的路径既可以访问硬盘中的内容。
+我们实际看到的 linux 的目录，实际就是 VFS 中的路径，我们可以通过将硬盘中的分区挂载到 `linux` 中的路径下，访问虚拟文件系统中的路径既可以访问硬盘中的内容。
 
 `df -i` 可以看到 VFS 中路径挂载的分区。
 
 ![image-20200704233624173](http://oss.mflyyou.cn/blog/20200704233642.png?author=zhangpanqin)
-
-
 
 ```bash
 # 将分区挂载到虚拟文件系统的 /boot 目录下
@@ -50,11 +34,9 @@ mount /dev/sda1 /boot
 umount /boot
 ```
 
-
-
 操作系统会将硬盘分成两个区域，一个是数据区，用于保存文件的数据；还有一个 `Inode` 区用于保存文件的元数据（文件创建者，文件创建时间，文件权限，文件大小，块位置等）。
 
-硬盘的最小存储单位叫做"扇区"（Sector）,每个扇区储存512字节（相当于0.5KB）。`Linux 内核` 从硬盘读取内容时，不会一个扇区一个扇区读，而是一次性读取多个扇区，即一次性读取一个 `块（Block）`。文件的数据内容储存在 `块` 中。
+硬盘的最小存储单位叫做"扇区"（Sector）,每个扇区储存 512 字节（相当于 0.5KB）。`Linux 内核` 从硬盘读取内容时，不会一个扇区一个扇区读，而是一次性读取多个扇区，即一次性读取一个 `块（Block）`。文件的数据内容储存在 `块` 中。
 
 基于以上介绍，可以知道，实际一个文件必须占有一个 `Inode` 和 至少一个 `block`。
 
@@ -63,8 +45,6 @@ umount /boot
 查看文件的 `Inode`及 `块` 的基本大小（一般 4KB）
 
 ![image-20200705002110818](http://oss.mflyyou.cn/blog/20200705002110.png?author=zhangpanqin)
-
-
 
 当应用程序调用系统调用 `open`，会返回一个文件描述符 （简称 FD，File Decsriptor）。我们可以把 `FD` 理解为文件的指针，这个指针会指向一个`Inode` 。多个 `FD` 可以指向同一个 `Inode`，FD 会维护一个对文件内容操作的偏移量（读写到什么地方了）。`FD` 是上层应用程序使用的，`Inode` 是内核维护使用的。
 
@@ -88,13 +68,9 @@ public class ErrorOpenFile {
 }
 ```
 
-
-
 `/proc/pid/fd` 下可以看到一个进程打开的 `FD`,其中的 `0、1、2` 是默认输入(System.in)，输出(System.out)，错误输出(System.err)，每个程序都会有。
 
 ![image-20200705004254331](http://oss.mflyyou.cn/blog/20200705004254.png?author=zhangpanqin)
-
-
 
 ## 为什么 `BufferedInputStream` 比 `FileInputStream` 快?
 
@@ -117,7 +93,7 @@ public class IoOperation {
 
         }
     }
-    // 468 毫秒执行完 
+    // 468 毫秒执行完
     public static void testBasicFileIO() throws Exception {
         File file = new File(path);
         FileOutputStream out = new FileOutputStream(file);
@@ -129,7 +105,7 @@ public class IoOperation {
         System.out.println(System.currentTimeMillis() - start);
         out.close();
     }
-	// 3 毫秒执行完 
+	// 3 毫秒执行完
     public static void testBufferedFileIO() throws Exception {
         File file = new File(path);
         BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
@@ -143,8 +119,6 @@ public class IoOperation {
     }
 }
 ```
-
-
 
 `VFS` 抽象出来的系统调用（open,read,write,close）是让应用程序调用的。我们可以在 Linux 中使用 `man open(read/write/close)` 查看系统调用的意思
 
@@ -169,11 +143,9 @@ strace -ff -o /root/testfileio/out java com.fly.io.IoOperation $1
 
 `BufferedOutputStream` 有一个 `8192` 字节的缓冲区，当调用 `BufferedOutputStream.write` 会先写入这个缓冲区，在这个缓冲区满的时候，会将这个缓冲区的数据发起系统调用，这样减少了系统调用，所以用时比较少。
 
-
-
 ## Page Cache 和 Dirty Page
 
-文件数据的持久化，也被称为 `落盘`。`内存`  的速度是  `硬盘` N 倍，他俩不是一个量级的。 所以 `Linux` 引入  `Page Cache`  来作为数据的缓存，当 `Page Cache` 被修改之后变为了 `Dirty Page`，Linux 会在适当时机（可以通过参数调节），将脏页的数据，刷新到硬盘中。也可以调用系统调用（fsync），将脏页刷新到硬盘。
+文件数据的持久化，也被称为 `落盘`。`内存` 的速度是 `硬盘` N 倍，他俩不是一个量级的。 所以 `Linux` 引入 `Page Cache` 来作为数据的缓存，当 `Page Cache` 被修改之后变为了 `Dirty Page`，Linux 会在适当时机（可以通过参数调节），将脏页的数据，刷新到硬盘中。也可以调用系统调用（fsync），将脏页刷新到硬盘。
 
 当 `JAVA 程序` 调用 `FileOutputStream.write` 的时候，实际是将用户态的数据，写入到了内核态中的 `Page Cache` (一个 Page Cache 大小为 4KB 左右)，当我们调用 `FileOutputStream.close` 的时候，实际只是调用了系统调用 `close`，而没有落盘，这时对计算机断电，数据是没有持久化的。
 
@@ -204,10 +176,6 @@ vm.dirty_writeback_centisecs = 5000
 vm.dirty_expire_centisecs = 30000
 ```
 
-
-
-
-
 代码验证 `FileOutputStream.close` 不会引起数据的落盘。为避免 Linux Io 调度的影响，我修改了内核的配置参数，这样数据只要没有调用系统调用 `fsync` 就不会触发系统调用。
 
 ```bash
@@ -224,10 +192,6 @@ vm.dirty_ratio = 90
 vm.dirty_expire_centisecs = 300000
 vm.dirty_writeback_centisecs = 50000
 ```
-
-
-
-
 
 代码的逻辑为：往一个文件中写数据，然后关闭流，但是阻塞程序停止，程序停止，数据会刷新到磁盘中，然后模拟断电关闭虚拟机。
 
@@ -253,8 +217,6 @@ public class IoOperation1 {
 }
 ```
 
-
-
 当我们调用系统调用进行落盘的时候，断电重启虚拟机，发现 `out.txt` 是有数据的。
 
 ```java
@@ -278,12 +240,3 @@ public class IoOperation1 {
     }
 }
 ```
-
-
-
-
-
-
-
-
-

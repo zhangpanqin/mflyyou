@@ -1,45 +1,29 @@
 ---
 title: 从Linux内核理解JAVA的NIO
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-07-11 12:29:29
-password:
-summary: FileLock,FileChannel,mmap的原理
-tags: Java-NIO
-categories: Java
-img: http://oss.mflyyou.cn/blog/20200712170908.png?author=zhangpanqin
 ---
 
 ## 前言
 
 IO 可以简单分为`磁盘 IO` 和 `网络 IO` ,`磁盘 IO` 相对于`网络 IO` 速度会快一点，本文主要介绍 `磁盘 IO` ，`网络 IO` 下周写。
 
-JAVA 对  `NIO` 抽象为 `Channel` , `Channel` 又可以分为 `FileChannel` （磁盘 io）和 `SocketChannel` （网络 io）。
+JAVA 对 `NIO` 抽象为 `Channel` , `Channel` 又可以分为 `FileChannel` （磁盘 io）和 `SocketChannel` （网络 io）。
 
 如果你对 IO 的理解只是停留在 api 层面那是远远不够的，一定要了解 IO 在系统层面是怎么处理的。
 
 本文内容：
 
-- FileChannel 读写复制文件的用法。
-- ByteBuffer 的介绍
-- jvm 文件进程锁，FileLock
-- HeapByteBuffer ，DirectByteBuffer 和 mmap 谁的速度更快
-- 从 `Linux 内核` 中的 `虚拟内存` 、`系统调用`、`文件描述符`、`Inode`、`Page Cache` 、`缺页异常`讲述整个 IO 的过程
-- jvm 堆外的 DirectByteBuffer 的内存怎么回收
-
-
+-   FileChannel 读写复制文件的用法。
+-   ByteBuffer 的介绍
+-   jvm 文件进程锁，FileLock
+-   HeapByteBuffer ，DirectByteBuffer 和 mmap 谁的速度更快
+-   从 `Linux 内核` 中的 `虚拟内存` 、`系统调用`、`文件描述符`、`Inode`、`Page Cache` 、`缺页异常`讲述整个 IO 的过程
+-   jvm 堆外的 DirectByteBuffer 的内存怎么回收
 
 <img src="http://oss.mflyyou.cn/blog/20200711165857.png?author=zhangpanqin" alt="image-20200711165857889" style="zoom: 33%;" />
 
 > 本文计算机系统相关的图全部来自 《深入理解计算机系统》
 
-
-
 对 Linux 的了解都是来自书上和查阅资料，本文内容主要是我自己的理解和代码验证，有的描述不一定准确，重在理解过程即可。
-
-
 
 ## NIO
 
@@ -49,8 +33,6 @@ NIO 抽象为 `Channel` 是面向缓冲区的（操作的是一块数据），�
 
 `Channel` 只负责传输，数据由 `Buffer` 负责存储。
 
-
-
 ### Buffer
 
 `Buffer` 中的 `capacity`、`limit` 和 `position` 属性是比较重要的，这些弄不明白，读写文件会遇到很多坑。
@@ -59,7 +41,7 @@ NIO 抽象为 `Channel` 是面向缓冲区的（操作的是一块数据），�
 
 `limit` 为一个指针，标识当前数组可操作的数据的最大索引。
 
- `position` 表示为下一个读取数据时的索引
+`position` 表示为下一个读取数据时的索引
 
 <img src="http://oss.mflyyou.cn/blog/20200711202515.png?author=zhangpanqin" alt="image-20200711202515462" style="zoom:50%;" />
 
@@ -77,8 +59,6 @@ public void run1() {
 
 `DirectByteBuffer` 会分配 `Jvm 堆外`，不受 JVM 堆大小的限制，创建速度慢，读写快。`DirectByteBuffer` 内存在 Linux 中，属于进程的堆内。`DirectByteBuffer` 受 jvm 参数 `MaxDirectMemorySize` 的影响。
 
-
-
 设置 jvm 堆 100m，运行程序报错 `Exception in thread "main" java.lang.OutOfMemoryError: Java heap space`。因为指定了 jvm 堆为 100m，然后一些 class 文件也会放在 堆中的，实际堆内存时不足 100m,当申请 100m 堆内存只能报错了。
 
 ```java
@@ -92,8 +72,6 @@ public class BufferNio {
     }
 }
 ```
-
-
 
 设置 jvm 堆为 100m，MaxDirectMemorySize 为 1g，死循环创建 `DirectByteBuffer`，打印 10 次 `申请 directbuffer 成功`，报错 `Exception in thread "main" java.lang.OutOfMemoryError: Direct buffer memory`，后面再说这个堆外的 `DirectByteBuffer` 怎么进行回收。
 
@@ -114,8 +92,6 @@ public class BufferNio {
     }
 }
 ```
-
-
 
 ### FileChannel
 
@@ -139,8 +115,6 @@ public void read() throws IOException {
 }
 ```
 
-
-
 ### 写文件
 
 ```java
@@ -158,8 +132,6 @@ public void write() throws IOException {
 }
 ```
 
-
-
 ### 复制文件
 
 ```java
@@ -176,11 +148,9 @@ public void copy() throws IOException {
 }
 ```
 
-
-
 ### FileLock
 
-`FileLcok` 是 jvm 进程文件锁，在多个 jvm 进程间生效，进程享有文件的读写权限，有共享锁 和 独占锁。
+`FileLcok` 是 jvm 进程文件锁，在多个 jvm 进程间生效，进程享有文件的读写权限，有共享锁 和  独占锁。
 
 同一个进程不能锁同一个文件的重复区域，不重复是可以锁的。
 
@@ -213,9 +183,9 @@ public class FileLock {
         final FileChannel open = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.READ);
         final CountDownLatch countDownLatch = new CountDownLatch(2);
         new Thread(() -> {
-         
+
             try (final java.nio.channels.FileLock lock = open.lock(0, 3, false)) {
-             
+
                 System.out.println("获取到锁0-3,代码没有被阻塞");
                 Thread.sleep(10000);
                 final ByteBuffer wrap = ByteBuffer.wrap("aaa".getBytes());
@@ -251,8 +221,6 @@ public class FileLock {
 
 `Exception in thread "Thread-1" java.nio.channels.OverlappingFileLockException`
 
-
-
 ### HeapByteBuffer 和 DirectByteBuffer 谁的读写效率高？
 
 `FileChannel` 的实现类 `FileChannelImpl`，当读写 `ByteBuffer` 会判断是否是 `DirectBuffer`，不是的话，会创建一个 `DirectBuffer`，将原来的的 Buffer 数据 copy 到 `DirectBuffer` 中使用。所以读写效率上来说，DirectByteBuffer 读写更快。但是 `DirectByteBuffer` 创建相对来说耗时。
@@ -276,7 +244,7 @@ public class BufferNio {
 
 死循环创建的 `DirectByteBuffer` 没有 GC ROOT 到达，对象会被回收掉，回收掉的时候，也只是回收掉堆内啊，堆外的回收怎么做到的呢？
 
-从 `DirectByteBuffer` 源码着手，可以看到它有一个成员变量 `private final Cleaner cleaner;`，当触发 FullGC 的时候，因为 `cleaner` 没有 gc root 可达，导致 `cleaner` 会被回收，回收的时候会触发 `Cleaner.clean` (在 Reference.tryHandlePending 触发)方法的调用，thunk 就是 `DirectByteBuffer.Deallocator` 的示例，这个 run 方法中，调用了`Unsafe.freeMemory` 来释放掉了堆外内存。
+从 `DirectByteBuffer` 源码着手，可以看到它有一个成员变量 `private final Cleaner cleaner;`，当触发 FullGC 的时候，因为 `cleaner` 没有 gc root 可达，导致 `cleaner` 会被回收，回收的时候会触发 `Cleaner.clean` (在 Reference.tryHandlePending 触发)方法的调用，thunk 就是 `DirectByteBuffer.Deallocator` 的示例，这个 run 方法中，调用了`Unsafe.freeMemory` 来释放掉了堆外内存。
 
 ```java
 public class Cleaner extends PhantomReference<Object> {
@@ -303,10 +271,6 @@ public class Cleaner extends PhantomReference<Object> {
 }
 ```
 
-
-
-
-
 ## 内存映射
 
 <img src="http://oss.mflyyou.cn/blog/20200712125658.png?author=zhangpanqin" alt="image-20200712125657989" style="zoom:50%;" />
@@ -315,13 +279,9 @@ public class Cleaner extends PhantomReference<Object> {
 
 应用程序对一个文件写数据时，先将要写的数据 copy 到内核 的 page cache，然后调用 `fsync` 将数据从内核落盘到文件上（只要调用返回成功，数据就不会丢失）。或者不调用 `fsync` 落盘，应用程序的数据只要写入到 内核的 pagecache 上，写入操作就算完成了，数据的落盘交由 `内核` 的 Io 调度程序在适当的时机来落盘（突然断电会丢数据，MySQL 这样的程序都是自己维护数据的落盘的）。
 
-
-
 我们可以看到数据的读写总会经过从用户空间与内核空间的 copy ,如果能把这个 copy 去掉，效率就会高很多，这就是 mmap （内存映射）。将用户空间和内核空间的内存指向同一块物理内存。`内存映射` 英文为 `Memory Mapping` ,缩写 `mmap`。对应系统调用 [mmap](https://man7.org/linux/man-pages/man2/mmap.2.html)
 
 这样在用户空间读写数据，实际操作的也是内核空间的，减少了数据的 copy 。
-
-
 
 <img src="http://oss.mflyyou.cn/blog/20200712145306.png?author=zhangpanqin" alt="image-20200712145306814" style="zoom:50%;" />
 
@@ -333,7 +293,7 @@ public class Cleaner extends PhantomReference<Object> {
 
 计算机的主存可以看做是由 M 个连续字节组成的数组，每个字节都有一个唯一`物理地址` (`Physical Address`)。
 
-Cpu 使用的 `虚拟寻址`  （`VA`,`Virtual Address`） 来查找物理地址。
+Cpu 使用的 `虚拟寻址` （`VA`,`Virtual Address`） 来查找物理地址。
 
 <img src="http://oss.mflyyou.cn/blog/20200711171400.png?author=zhangpanqin" alt="image-20200711171400757" style="zoom:50%;" />
 
@@ -349,7 +309,7 @@ Cpu 使用的 `虚拟寻址`  （`VA`,`Virtual Address`） 来查找物理地址
 
 <img src="http://oss.mflyyou.cn/blog/20200711183510.png?author=zhangpanqin" alt="image-20200711183510194" style="zoom:50%;" />
 
-PTE 的有效为1时，标识数据在内存中，标识为 0 时，标识在磁盘上。
+PTE 的有效为 1 时，标识数据在内存中，标识为 0 时，标识在磁盘上。
 
 当访问的虚拟地址对应的数据不再物理内存上时，会有两种情况处理：
 
@@ -359,7 +319,7 @@ PTE 的有效为1时，标识数据在内存中，标识为 0 时，标识在磁
 
 ### 进程的虚拟内存
 
-`Linux`  会为每个进程分配一个单独的虚拟内存地址，
+`Linux` 会为每个进程分配一个单独的虚拟内存地址，
 
 <img src="http://oss.mflyyou.cn/blog/20200711174755.png?author=zhangpanqin" alt="image-20200711174755550" style="zoom: 50%;" />
 
@@ -378,8 +338,6 @@ PTE 的有效为1时，标识数据在内存中，标识为 0 时，标识在磁
 ```
 
 当执行程序的时候，系统会初始化当前程序的虚拟内存，然后运行 `main` 函数，当发现执行代码时，有的代码没有加载到内存，就会触发缺页异常，将根据虚拟页找到对应的 `Innoe` ，然后将磁盘中需要的数据加载到内存中，然后将虚拟页标记为已加载到内存，下次访问直接从内存中访问。
-
-
 
 ## Java 中的 mmap
 
@@ -402,8 +360,6 @@ public class MMapDemo {
 }
 ```
 
-
-
 尽管下面这个也是 `DirectByteBuffer` ，但是它和 mmap 不同的是，他没有绑定 fd，读写数据的时候还是要经过从用户空间到内核空间的 copy ,也会发生系统调用，效率相对 mmap 低。
 
 ```java
@@ -422,8 +378,6 @@ public class MMapDemo {
 }
 ```
 
-
-
 追踪代码的系统调用，在 linux 下使用 `strace`
 
 ```bash
@@ -433,7 +387,4 @@ cd /nio/target/classes
 strace -ff -o /nio/out java com.fly.blog.nio.MMapDemo
 ```
 
-
-
 数据读写速度上 `mmap` 大于 `ByteBuffer.allocateDirect` 大于 `ByteBuffer.allocate`。
-

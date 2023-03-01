@@ -1,15 +1,5 @@
 ---
 title: Mysql数据备份与恢复
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-11-22 15:20:07
-password:
-summary: 数据库备份与恢复及 binlog介绍
-tags: Mysql binlog
-categories: Mysql
-img: http://oss.mflyyou.cn/blog/20201128142246.jpeg?author=zhangpanqin
 ---
 
 ## 前言
@@ -18,13 +8,9 @@ img: http://oss.mflyyou.cn/blog/20201128142246.jpeg?author=zhangpanqin
 
 本文内容：
 
-- binlog 的作用
-- mysqldump 和 mysqlbinlog 做数据备份和数据恢复。
-- XtraBackup 全量备份和增量备份
-
-
-
-
+-   binlog 的作用
+-   mysqldump 和 mysqlbinlog 做数据备份和数据恢复。
+-   XtraBackup 全量备份和增量备份
 
 ## binlog
 
@@ -96,7 +82,7 @@ SHOW VARIABLES LIKE '%binlog_format%';
 
 `Mysql 8.0` 默认采用这个格式。记录每行的修改。相较于 `STATEMENT` 它可能记录的内容会更多，但是主从复制时更安全。
 
-比如全表更新 `update test set a=1;`  `STATEMENT` 只会记录这个 `sql` ,而 `ROW` 会记录所有数据的修改。
+比如全表更新 `update test set a=1;` `STATEMENT` 只会记录这个 `sql` ,而 `ROW` 会记录所有数据的修改。
 
 #### MIXED
 
@@ -122,13 +108,13 @@ BEGIN
 	DECLARE i INT DEFAULT 1;
 	WHILE i < 10000 DO
 		SET i = i + 1;
-		INSERT INTO account ( username, age )VALUES( '测试', 12 );	
+		INSERT INTO account ( username, age )VALUES( '测试', 12 );
 	END WHILE;
 END;
 CALL insertData ( );
 ```
 
-- `binlog_format` 在 `ROW` 模式下记录的是每行数据的修改
+-   `binlog_format` 在 `ROW` 模式下记录的是每行数据的修改
 
 ```sql
 mysql> SHOW BINLOG EVENTS IN 'binlog.000018' limit 10;
@@ -148,7 +134,7 @@ mysql> SHOW BINLOG EVENTS IN 'binlog.000018' limit 10;
 +---------------+-------+----------------+-----------+-------------+--------------------------------------+
 ```
 
-- `binlog_format` 在 `STATEMENT` 模式下记录的是 sql
+-   `binlog_format` 在 `STATEMENT` 模式下记录的是 sql
 
 ```sql
 flush logs;
@@ -167,8 +153,6 @@ mysql> SHOW BINLOG EVENTS IN 'binlog.000019' limit 10;
 | binlog.000019 | 446 | Xid            |         1 |         477 | COMMIT /* xid=300671 */                |
 +---------------+-----+----------------+-----------+-------------+----------------------------------------+
 ```
-
-
 
 ### binlog 操作
 
@@ -205,7 +189,7 @@ mysql> SHOW MASTER STATUS;
 1 row in set (0.00 sec)
 ```
 
-#### 生成新的 binlog 
+#### 生成新的 binlog
 
 ```sql
 -- 刷新产生新的日志文件
@@ -228,7 +212,7 @@ SHOW BINLOG EVENTS
    [IN 'log_name']
    [FROM pos]
    [LIMIT [offset,] row_count]
-   
+
 mysql> show binlog events limit 100,3;
 +---------------+------+----------------+-----------+-------------+-------------------------------------------------------------------------------------+
 | Log_name      | Pos  | Event_type     | Server_id | End_log_pos | Info                                                                                |
@@ -239,8 +223,6 @@ mysql> show binlog events limit 100,3;
 +---------------+------+----------------+-----------+-------------+-------------------------------------------------------------------------------------+
 ```
 
- 
-
 ### binlog 落盘时机
 
 Mysql 中有很多 `Buffer Pool` (可以简单理解为内存)，为了提高数据库性能，一般提交事务之后，二进制日志先写入 `Buffer Poll` ，在写入到二进制文件中。
@@ -249,11 +231,9 @@ Mysql 中有很多 `Buffer Pool` (可以简单理解为内存)，为了提高数
 
 参数 `sync_binlog` 配置写入 `Buffer Poll` 多少次的时候调用系统调用 `fsync` 将内存中的二进制日志数据落盘。
 
-- `sync_binlog=1` 表示提交事务的时候同步将二进制日志数据落盘。配合 `innodb_flush_log_at_trx_commit=1`（控制 redo log 落盘） 数据安全。
-- `sync_binlog=N` 表示提交了 N 个二进制数据时才将日志数据落盘。也有人将其设置为 2，提高并发性，系统崩溃时可能丢失二进制日志数据。
-- `sync_binlog=0` 表示由操作系统 IO 调度来决定日志什么时候落盘。一般没人采用这个。
-
-
+-   `sync_binlog=1` 表示提交事务的时候同步将二进制日志数据落盘。配合 `innodb_flush_log_at_trx_commit=1`（控制 redo log 落盘） 数据安全。
+-   `sync_binlog=N` 表示提交了 N 个二进制数据时才将日志数据落盘。也有人将其设置为 2，提高并发性，系统崩溃时可能丢失二进制日志数据。
+-   `sync_binlog=0` 表示由操作系统 IO 调度来决定日志什么时候落盘。一般没人采用这个。
 
 ## Mysql 备份和恢复
 
@@ -261,8 +241,8 @@ Mysql 中有很多 `Buffer Pool` (可以简单理解为内存)，为了提高数
 
 根据备份方法的不同可以划分为：
 
-- 热备（Hot Backup）
-- 冷备 （Clod Backup）
+-   热备（Hot Backup）
+-   冷备 （Clod Backup）
 
 热备是在数据库正在运行时直接备份，对业务的影响不大。
 
@@ -270,22 +250,16 @@ Mysql 中有很多 `Buffer Pool` (可以简单理解为内存)，为了提高数
 
 根据备份后的文件内容可以划分为：
 
-- 逻辑备份，数据库执行的 sql 内容
-- 文件备份，备份数据库的物理文件
-
-
+-   逻辑备份，数据库执行的 sql 内容
+-   文件备份，备份数据库的物理文件
 
 一般我们会定时对数据执行备份脚本，然后将备份的内容压缩发送到存储文件的服务器，比如 `OSS` 。
 
-
-
 #### 备份与恢复使用到程序
 
-- mysqldump，对数据库进行不停机执行逻辑备份及恢复
-- mysqlbinlog，操作 binlog 日志，使数据恢复到某个时间点的数据
-- xtrabackup，percona 开源工具，对数据库不停机进行文件备份
-
-
+-   mysqldump，对数据库进行不停机执行逻辑备份及恢复
+-   mysqlbinlog，操作 binlog 日志，使数据恢复到某个时间点的数据
+-   xtrabackup，percona 开源工具，对数据库不停机进行文件备份
 
 ### mysqldump 使用
 
@@ -303,23 +277,21 @@ mysqldump --master-data --single-transaction --all-databases -h10.211.55.8 -uroo
 
 #### 参数说明
 
-- `--single-transaction` 用于全是 `InnoDB` 表的备份。备份开始执行前 `START TRANSACTION` 会开启事务，由于 `MVCC` 的特性这种备份不会影响数据库读写，而且还保证了备份期间数据的一致性
-- `--master-data` 为 1 时记录 `CHANGE MASTER` 语句，可以在从库中使用备份的文件，比如新增加一个从库，就可以在从库上执行这个备份的数据。为 2 时 会注释 `CHANGE MASTER` 。
-- `--lock-tables` 锁住单个数据库中所有表，只允许读取数据。为了保证备份时数据的一致性。因为只能锁住单个数据库，如果有多个数据库就不能保证数据的一致性了。当数据库采用的存储引擎既有 `InnoDB` 和 `MyISAM` 时需要使用这个属性
+-   `--single-transaction` 用于全是 `InnoDB` 表的备份。备份开始执行前 `START TRANSACTION` 会开启事务，由于 `MVCC` 的特性这种备份不会影响数据库读写，而且还保证了备份期间数据的一致性
+-   `--master-data` 为 1 时记录 `CHANGE MASTER` 语句，可以在从库中使用备份的文件，比如新增加一个从库，就可以在从库上执行这个备份的数据。为 2 时 会注释 `CHANGE MASTER` 。
+-   `--lock-tables` 锁住单个数据库中所有表，只允许读取数据。为了保证备份时数据的一致性。因为只能锁住单个数据库，如果有多个数据库就不能保证数据的一致性了。当数据库采用的存储引擎既有 `InnoDB` 和 `MyISAM` 时需要使用这个属性
 
-- `--lock-all-tables` 锁住备份所有数据库的表，能保证多个数据库数据的一致性。
-- `--databases` 可以指定备份哪些数据库实例
-- `--all-databases` 备份连接中所有的数据库实例。
-- `--evnets` 备份事件调度器
-- `--routines` 备份存储过程和存储函数
-- `--triggers` 备份触发器
-- `--flush-logs` 导出之前刷新日志，因为有的数据在内存中，可能还没有写入到二进制日志中
-
-
+-   `--lock-all-tables` 锁住备份所有数据库的表，能保证多个数据库数据的一致性。
+-   `--databases` 可以指定备份哪些数据库实例
+-   `--all-databases` 备份连接中所有的数据库实例。
+-   `--evnets` 备份事件调度器
+-   `--routines` 备份存储过程和存储函数
+-   `--triggers` 备份触发器
+-   `--flush-logs` 导出之前刷新日志，因为有的数据在内存中，可能还没有写入到二进制日志中
 
 ### mysqlbinlog 使用
 
-mysqlbinlog 可以解析 `binlog` 生成 sql语句。
+mysqlbinlog 可以解析 `binlog` 生成 sql 语句。
 
 ```shell
 # 在本地生成 sql
@@ -337,12 +309,12 @@ mysqlbinlog binlog.000019 --start-date='2017-12-19 10:10:00' --stop-date='2017-1
 mysqlbinlog --disable-log-bin --read-from-remote-server  --host=10.211.55.8 --user=root --password=Mysql@12345678 binlog.000019 binlog.000020> remote_test.sql
 ```
 
-- `--start-position` 指定从哪个位置开始
-- `--stop-position` 指定从哪个位置开始
-- `--start-datetime` 指定开始时间
-- `--stop-datetime` 指定结束时间
-- `--disable-log-bin` 生成的 sql 语句中，添加 `SET SQL_LOG_BIN=0` ,执行转换的 sql 时，不会生成二进制日志
-- `--read-from-remote-server`  从远程服务器读取
+-   `--start-position` 指定从哪个位置开始
+-   `--stop-position` 指定从哪个位置开始
+-   `--start-datetime` 指定开始时间
+-   `--stop-datetime` 指定结束时间
+-   `--disable-log-bin` 生成的 sql 语句中，添加 `SET SQL_LOG_BIN=0` ,执行转换的 sql 时，不会生成二进制日志
+-   `--read-from-remote-server` 从远程服务器读取
 
 ### 数据恢复
 
@@ -368,11 +340,9 @@ SET SQL_LOG_BIN=0;
 SHOW VARIABLES LIKE '%sql_log_bin%';
 ```
 
-
-
 现在开始对数据库进行数据恢复
 
-- 开始恢复之前先 `flush logs` 刷新新的二进制日志
+-   开始恢复之前先 `flush logs` 刷新新的二进制日志
 
 ```sql
 mysql> show master status;
@@ -383,19 +353,19 @@ mysql> show master status;
 +---------------+----------+--------------+------------------+-------------------+
 ```
 
-- 设置当前会话不记录二进制日志，并恢复全备数据
+-   设置当前会话不记录二进制日志，并恢复全备数据
 
 ```shell
 (echo "SET SQL_LOG_BIN=0;";cat /Users/zhangpanqin/Desktop/backup.sql) | mysql -u root -h 10.211.55.8 -pMysql@12345678 -f
 ```
 
-- 查看 backup.sql 记录的是什么时候备份的数据
+-   查看 backup.sql 记录的是什么时候备份的数据
 
 ```sql
 /*CHANGE MASTER TO MASTER_LOG_FILE='binlog.000019', MASTER_LOG_POS=477;*/
 ```
 
-- 使用 mysqlbinlog 导出 `binlog` 从位置 `477` 开始的 sql
+-   使用 mysqlbinlog 导出 `binlog` 从位置 `477` 开始的 sql
 
 ```sql
 -- 笨的方法就是，查看删除的 sql 语句
@@ -419,9 +389,9 @@ mysql> SHOW BINLOG EVENTS IN 'binlog.000019' FROM 477 LIMIT 0,10;
 ```
 
 ```shell
- -- 导出 477-556 之间的 sql 
+ -- 导出 477-556 之间的 sql
  mysqlbinlog binlog.000019 --start-position 477 --stop-position 556 > 477-556.sql
-  -- 导出 从 775 开始的 sql 
+  -- 导出 从 775 开始的 sql
  mysqlbinlog binlog.000019 --start-position 775> 775.sql
 ```
 
@@ -433,14 +403,14 @@ mysql> SHOW BINLOG EVENTS IN 'binlog.000019' FROM 477 LIMIT 0,10;
 https://github.com/danfengcao/binlog2sql
 ```
 
-- 执行剩下的 sql 
+-   执行剩下的 sql
 
 ```shell
 (echo "SET SQL_LOG_BIN=0;";cat /Users/zhangpanqin/Desktop/477-556.sql) | mysql -u root -h 10.211.55.8 -pMysql@12345678 -f
 (echo "SET SQL_LOG_BIN=0;";cat /Users/zhangpanqin/Desktop/775.sql) | mysql -u root -h 10.211.55.8 -pMysql@12345678 -f
 ```
 
-- 查看 binlog 日志，没有添加二进制日志到数据库中，不影响从库
+-   查看 binlog 日志，没有添加二进制日志到数据库中，不影响从库
 
 ```sql
 mysql> SHOW MASTER STATUS;
@@ -451,11 +421,9 @@ mysql> SHOW MASTER STATUS;
 +---------------+----------+--------------+------------------+-------------------+
 ```
 
-
-
 ## XtraBackup 使用
 
-XtraBackup 只能备份InnoDB和XtraDB 两种数据表。 
+XtraBackup 只能备份 InnoDB 和 XtraDB 两种数据表。
 
 ### 安装
 
@@ -464,7 +432,6 @@ XtraBackup 只能备份InnoDB和XtraDB 两种数据表。
 数据库：Mysql 8.0.21
 
 由以上环境决定了 `xtrabackup` 需要安装 8.0.14 版本。
-
 
 ```txt
 https://www.percona.com/doc/percona-xtrabackup/8.0/installation/yum_repo.html
@@ -481,11 +448,11 @@ xtrabackup --version
 
 ### 命令讲解
 
-- `--backup` 备份操作，备份数据到 `--target-dir` 指定的目录。
-- `--prepare` 恢复数据执行的阶段。
-- `--use-memory` 指定备份时占用的内存，--use-memory=4G。
-- `--copy-back` 将准备好的数据文件复制到 mysql datadir 目录。
-- ``--apply-log-only` 阻止回滚未完成的事务
+-   `--backup` 备份操作，备份数据到 `--target-dir` 指定的目录。
+-   `--prepare` 恢复数据执行的阶段。
+-   `--use-memory` 指定备份时占用的内存，--use-memory=4G。
+-   `--copy-back` 将准备好的数据文件复制到 mysql datadir 目录。
+-   ``--apply-log-only` 阻止回滚未完成的事务
 
 ### 全量备份
 
@@ -494,7 +461,7 @@ xtrabackup --version
 ```sql
 CREATE USER 'xtrabackup'@'localhost' IDENTIFIED BY 'Mysql@12345678';
 GRANT BACKUP_ADMIN, PROCESS, RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.* TO 'xtrabackup'@'localhost';
-GRANT SELECT ON performance_schema.log_status TO 'xtrabackup'@'localhost'; 
+GRANT SELECT ON performance_schema.log_status TO 'xtrabackup'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
@@ -522,8 +489,6 @@ chown -R mysql:mysql /var/lib/mysql
 # 启动 mysql 数据库
 systemctl start mysqld
 ```
-
-
 
 ### 增量备份
 
@@ -577,6 +542,3 @@ chown -R mysql:mysql /var/lib/mysql
 # 启动数据库
 systemctl start mysqld
 ```
-
-
-

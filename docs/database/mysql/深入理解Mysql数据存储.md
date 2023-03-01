@@ -1,28 +1,18 @@
 ---
 title: 深入理解Mysql数据存储
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-09-21 09:36:53
-password:
-summary: Mysql 表空间、数据逻辑存储结构，数据类型
-tags: Mysql
-categories: Mysql
-img: http://oss.mflyyou.cn/blog/20200921164022.png?author=zhangpanqin
 ---
 
 ## 前言
 
 ### 本文内容
 
-- Mysql 数据文件说明
-- Mysql 数据逻辑存储架构
-- Mysql 表空间，主要是系统表空间和独立表空间
-- Mysql 数据类型
-    - 时区对 datetime 和 timestamp 影响，java 中 LocalDatetime 保存时，时间和预期不符的原因分析和解决办法
-    - varchar(n) 和 char(n) 保存时，n 能取多少，n 的含义。一行数据中 varchar 能存多少个
-    - 整型、小数
+-   Mysql 数据文件说明
+-   Mysql 数据逻辑存储架构
+-   Mysql 表空间，主要是系统表空间和独立表空间
+-   Mysql 数据类型
+    -   时区对 datetime 和 timestamp 影响，java 中 LocalDatetime 保存时，时间和预期不符的原因分析和解决办法
+    -   varchar(n) 和 char(n) 保存时，n 能取多少，n 的含义。一行数据中 varchar 能存多少个
+    -   整型、小数
 
 本文内容基于 Mysql 8.0.21 ，系统为 Centos 7。
 
@@ -36,32 +26,19 @@ img: http://oss.mflyyou.cn/blog/20200921164022.png?author=zhangpanqin
 
 存储引擎不了解的话，使用 `InnoDB` 就行，这也是比较常用的。
 
-
-
 Redis 为什么会比 Mysql 快，很大的原因是 Redis 的数据都在内存中，再加上比较好的数据结构，查询的速度当然不是一个量级的。但同时 Redis 不会存储那么多的数据量，几个 T 的内存还是挺贵的。
 
 Mysql 将数据储存在硬盘上，为了提高查询速度，比较好的做法是将索引数据和一部分热数据（经常访问的数据）放到内存中（Mysql 的 **Buffer Poll**）。
-
-
-
-
 
 当检索数据的时候，Mysql 通过索引查找，就可以知道数据在磁盘哪块了，从硬盘对应位置读取对应的数据到内存中返回给客户端。
 
 如果查询的时候没有走索引就需要扫描整个表数据文件，因为内存比硬盘小，会不停的从硬盘读取表中的一部分数据到内存，然后在内存中筛选出符合要求的数据，再去硬盘读取一部分数据做筛选直到整个表数据读取一遍。如果你有 20 g 数据，你想一下需要读取多长时间。
 
-
-
 Mysql 8.0 相对 Mysql 7.0 性能上有很大提升，条件允许建议使用 Mysql 8.0。
-
-
 
 ## Mysql 数据存储
 
-
-
 ### 连接 Mysql
-
 
 ```bash
 # -h 指定 mysqld 的服务地址
@@ -89,8 +66,6 @@ SHOW VARIABLES LIKE 'innodb_data_file_path%'
 -- ibdata1:12M:autoextend
 ```
 
-
-
 ### 独立表空间
 
 独立表空间是指每张表单独用一个文件储存每张表对应的数据和索引，文件扩展名为 ibd。
@@ -117,8 +92,6 @@ drwxr-x---    8 zhangpanqin  admin   256B 10 18  2019 mysql
 -rw-r-----  1 zhangpanqin  admin   112K  2 11  2020 weather.ibd
 ```
 
-
-
 **Mysql 8.0 是默认开启独立表空间的**，默认每张表使用一个文件进行保存数据和索引
 
 ```sql
@@ -131,13 +104,9 @@ mysql> show variables like '%innodb_file_per_table%';
 +-----------------------+-------+
 ```
 
-
-
 ## InnoDB 逻辑储存结构
 
 ![image-20200921113000653](http://oss.mflyyou.cn/blog/20200921183000.png?author=zhangpanqin)
-
-
 
 ### 表空间
 
@@ -149,16 +118,12 @@ mysql> show variables like '%innodb_file_per_table%';
 
 表空间又包含多个段（segment），常见的数据段有：
 
-- `Leaf node segment` 数据段，存储当前表中的数据
-- `Non-Leaf node segment` 索引段，存储当前表中的索引
-
-
+-   `Leaf node segment` 数据段，存储当前表中的数据
+-   `Non-Leaf node segment` 索引段，存储当前表中的索引
 
 ### 区
 
 段包含很多个区，每个区始终为 1MB 。区由多个连续连续的页组成，页的大小通常是 16KB，所以一个区可以有 64 （1024/16=64）个连续页。
-
-
 
 ### 页
 
@@ -169,8 +134,6 @@ mysql> show variables like '%innodb_file_per_table%';
 ```sql
 update test_table set a=2 where id =3;
 ```
-
-
 
 页也有类型，数据页，索引页等等。
 
@@ -215,8 +178,6 @@ Max_data_length: 0
 
 ![image-20200921120326750](http://oss.mflyyou.cn/blog/20200921190326.png?author=zhangpanqin)
 
-
-
 **VARCHAR(M)** 和 **TEXT** 类型的字段为变长字段，变长字段占用多少字节，记录在 `变长字段长度列表`
 
 记录头信息中，记录着当前行的类型和下一条记录位置等信息。
@@ -229,24 +190,18 @@ Max_data_length: 0
 
 <font color=red>**以上内容了解即可，只是为了理解原理及辅助表设计。**</font>
 
-
-
 ## 数据类型
 
 <font color=red> **表设计的时候一定要选取合适的数据类型，能用数字就不要用字符串，一是减少存储时空间的浪费，二是减少查询时内存的浪费。**</font>
 
-
-
 ### 整型
 
-| 类型     | 描述               | 占用字节 | 范围                                                                                     |
-| -------- | ------------------ | -------- | ---------------------------------------------------------------------------------------- |
-| tinyint  | 对应 java 中 byte  | 1 字节   | 有符号-128 至 127。<br>无符号 0 至 255                                                   |
-| smallint | 对应 java 中 short | 2 字节   | 有符号 -32768 至 32767。<br>无符号 0 至 65535                                            |
-| int      | 对应 java 中 int   | 4 字节   | 有符号 -2147483648 至 2147483647。<br>无符号 0 至 4294967295                             |
-| bigint   | 对应 java 中 long  | 8 字节   | 有符号 -9223372036854775808 至 9223372036854775807  <br>无符号 0 至 18446744073709551615 |
-
-
+| 类型     | 描述               | 占用字节 | 范围                                                                                    |
+| -------- | ------------------ | -------- | --------------------------------------------------------------------------------------- |
+| tinyint  | 对应 java 中 byte  | 1 字节   | 有符号-128 至 127。<br>无符号 0 至 255                                                  |
+| smallint | 对应 java 中 short | 2 字节   | 有符号 -32768 至 32767。<br>无符号 0 至 65535                                           |
+| int      | 对应 java 中 int   | 4 字节   | 有符号 -2147483648 至 2147483647。<br>无符号 0 至 4294967295                            |
+| bigint   | 对应 java 中 long  | 8 字节   | 有符号 -9223372036854775808 至 9223372036854775807 <br>无符号 0 至 18446744073709551615 |
 
 ### 小数
 
@@ -260,17 +215,15 @@ Max_data_length: 0
 
 FLOAT(4, 1) 不能存 4000.1 会报错误。
 
-
-
 ### 日期和时间
 
-| 类型           | 描述                                                            | 占用字节 | 取值范围                                                |
-| -------------- | --------------------------------------------------------------- | -------- | ------------------------------------------------------- |
-| YEAR           | 年份                                                            | 1 字节   | 1901~2155                                               |
-| DATE           | 日期，年月日                                                    | 3 字节   | 1000-01-01~ 9999-12-31                                  |
-| TIME(fsp)      | 时间，时分秒                                                    | 3 字节   | -838:59:59.000000 ~ 838:59:59.000000                    |
-| DATETIME(fsp)  | 日期+时间                                                       | 5 字节   | 1000-01-01 00:00:00.000000 ~ 9999-12-31 23:59:59.999999 |
-| TIMESTAMP(fsp) | 底层存储的是 UTC 时间戳，<br>显示值会随mysql 数据库所在时区变化 | 4 字节   | 1970-01-01 00:00:01.000000 ~ 2038-01-19 03:14:07.999999 |
+| 类型           | 描述                                                             | 占用字节 | 取值范围                                                |
+| -------------- | ---------------------------------------------------------------- | -------- | ------------------------------------------------------- |
+| YEAR           | 年份                                                             | 1 字节   | 1901~2155                                               |
+| DATE           | 日期，年月日                                                     | 3 字节   | 1000-01-01~ 9999-12-31                                  |
+| TIME(fsp)      | 时间，时分秒                                                     | 3 字节   | -838:59:59.000000 ~ 838:59:59.000000                    |
+| DATETIME(fsp)  | 日期+时间                                                        | 5 字节   | 1000-01-01 00:00:00.000000 ~ 9999-12-31 23:59:59.999999 |
+| TIMESTAMP(fsp) | 底层存储的是 UTC 时间戳，<br>显示值会随 mysql 数据库所在时区变化 | 4 字节   | 1970-01-01 00:00:01.000000 ~ 2038-01-19 03:14:07.999999 |
 
 `TIMESTAMP(fsp) ` 中的 **fsp** 是指秒的精度(x.xxx xxx)，**fsp**取值 0，1，2，3，4，5，6。
 
@@ -280,11 +233,9 @@ FLOAT(4, 1) 不能存 4000.1 会报错误。
 
 `DATETIME(3)` 精确到豪秒，有三位小数。
 
-
-
 <font color=red>**日期和时间存储时区的设置有关，一定要搞清楚原理。 **</font>
 
-**TIMESTAMP**  的显示和数据库系统设置的时区有关。**TIMESTAMP** 底层实际存储的是毫秒值，显示的时间是根据设置的时区（**time_zone**）转换为时间显示的。
+**TIMESTAMP** 的显示和数据库系统设置的时区有关。**TIMESTAMP** 底层实际存储的是毫秒值，显示的时间是根据设置的时区（**time_zone**）转换为时间显示的。
 
 还有 Java 1.8 新增的 `LocalDateTime` 需要怎么转换 `Mysql` 中的时间呢。
 
@@ -315,8 +266,6 @@ mysql> SHOW VARIABLES LIKE "%time_zone%";
 default-time-zone = '+08:00'
 ```
 
-
-
 ```sql
 CREATE TABLE `test_data_type` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -328,8 +277,6 @@ CREATE TABLE `test_data_type` (
 -- 实际保存数据的时候需要将日期转换为字符串，拼接成这样的 sql
 INSERT INTO test_data_type (test_data_time,test_timestamp) VALUES ('2020-12-12 12:12:12','2020-12-12 12:12:12');
 ```
-
-
 
 比如我们将 java 中的 `LocalDateTime` 存为 datetime 类型。
 
@@ -347,8 +294,6 @@ public class TestDataType {
     private LocalDateTime testTimestamp;
 }
 ```
-
-
 
 当我们保存数据的时候，需要根据配置的 time_zone,将 LocalDateTime 转为 String，在替换到 sql 中的 `?`
 
@@ -375,13 +320,11 @@ public void run33() {
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
     simpleDateFormat.applyPattern("yyyy.MM.dd HH:mm:ss");
     simpleDateFormat.setTimeZone(timeZone);
-	
+
 	// 然后将这个 time 替换 ？
    	String time= simpleDateFormat.format(timestamp);
 }
 ```
-
-
 
 #### 时区设置结论
 
@@ -394,8 +337,6 @@ final LocalDateTime createTime2 = LocalDateTime.now();
 // 下面这个用法是错误的。这样数据库中保存的时间比实际时间多了八个小时
 final LocalDateTime errorCreateTime =  LocalDateTime.now(ZoneId.of("UTC+8"));
 ```
-
-
 
 ### 字符串
 
@@ -434,7 +375,7 @@ CREATE TABLE `test_varchar`  (
 
 varchar (M) 实际占用字节数，除了数据的占用，还有数据字节数大小的记录（1-2 字节）。
 
-<font color=red>**varchar(255) 存储的 abc 的时候占用 4 个字节，但是这个数据加载到内存的时候是占用定义的时候指定的字节数 （255*3 utf8 编码）所以这个数值不要随便填写**</font>
+<font color=red>**varchar(255) 存储的 abc 的时候占用 4 个字节，但是这个数据加载到内存的时候是占用定义的时候指定的字节数 （255\*3 utf8 编码）所以这个数值不要随便填写**</font>
 
 #### char
 
@@ -454,4 +395,3 @@ https://dev.mysql.com/doc/refman/8.0/en/storage-requirements.html
 | BLOB、TEXT               | L + 2                                                                                                      | L<2^16   |
 | MEDIUMBLOB、MEDIUMTEXT   | L+ 3                                                                                                       | L<2^24   |
 | LONGBLOB、LONGTEXT       | L+ 4                                                                                                       | L<2^32   |
-

@@ -1,18 +1,5 @@
 ---
 title: 从锁升级的角度理解synchronized
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-06-13 16:11:16
-password:
-summary: java synchronized 使用及原理，锁升级
-tags: 
-    - Java
-    - Java-JUC
-    - Java-synchronized
-categories: Java
-img:
 ---
 
 ## 前言
@@ -78,35 +65,27 @@ public static void addA_2() {
 
 `JDK 1.6` 对 `synchronized` 做了优化。在锁竞争不大的情况下，使用 `偏向锁` 和 `轻量级锁`，这样只用在 `用户态` 完成锁的申请。当锁竞争的时候呢，会让其自旋继续获取锁，获取 n 次还是没有获取到（自适应自旋锁），升级为 `重量级锁`，`用户态` 切换到 `内核态`，从系统层级获取锁。
 
- 锁升级的宏观表现大致是这个样子。自适应自旋锁，自旋的次数 n，是 `JVM` 根据算法收集其自旋多少次获取锁算出来的（JDK 1.6 之后），是一个预测值，随着数据收集越来越多，它也越准确。
+锁升级的宏观表现大致是这个样子。自适应自旋锁，自旋的次数 n，是 `JVM` 根据算法收集其自旋多少次获取锁算出来的（JDK 1.6 之后），是一个预测值，随着数据收集越来越多，它也越准确。
 
 `synchronized` 是通过锁对象来实现的。因此了解一个对象的布局，对我们理解锁的实现及升级是很有帮助的。
 
 ### 对象布局
 
-
-
 <img src="http://oss.mflyyou.cn/blog/20200613211643.png?author=zhangpanqin" alt="image-20200613211643599" style="zoom: 25%;" />
 
 对象填充，是将一个对象大小不足 8 个字节的倍数时，使用 0 填充补齐，为了更高效效率的读取数据，64 java 虚拟机，一次读取是 64 bit（8 字节）。
 
-
-
 #### 对象头（Object Header）
 
-在64位JVM上有一个压缩指针选项-XX:+UseCompressedOops，默认是开启的。开启之后 `Class Pointer ` 部分就会压缩为4字节，对象头大小为 `12 字节`
+在 64 位 JVM 上有一个压缩指针选项-XX:+UseCompressedOops，默认是开启的。开启之后 `Class Pointer ` 部分就会压缩为 4 字节，对象头大小为 `12 字节`
 
 ![](http://oss.mflyyou.cn/blog/20200613201507.png?author=zhangpanqin)
-
-
 
 #### Mark Word
 
 ![图来自马士兵教育多线程公开课](http://oss.mflyyou.cn/blog/20200613163707.png?author=zhangpanqin)
 
 `偏向锁位` 和 `锁标志位` 是锁升级过程中承担重要的角色。
-
-
 
 ### Jol 查看对象信息
 
@@ -136,8 +115,6 @@ public class JOLSample_01_Basic {
 }
 ```
 
-
-
 ![image-20200613214753341](http://oss.mflyyou.cn/blog/20200613214753.png?author=zhangpanqin)
 
 ## 锁升级过程
@@ -156,11 +133,7 @@ java -XX:+PrintFlagsInitial | grep -i biased
 #bool UseBiasedLocking                          = true                                {product}
 ```
 
-
-
 <font color=red>锁升级之后，用户线程不能降级。GC 线程可以降级</font>
-
-
 
 ### 普通对象到轻量级锁
 
@@ -184,13 +157,9 @@ public class JOLSample_12_ThinLocking {
 }
 ```
 
-
-
 因为偏向锁的延迟，创建的对象为普通对象（偏向锁位 0，锁标志位 01），获取锁的时候，`无锁`（偏向锁位 0，锁标志位 01） 升级为 `轻量级锁`（偏向锁位 0，锁标志位 00），释放锁之后，对象的锁信息（偏向锁位 0，锁标志位 01）
 
 <img src="http://oss.mflyyou.cn/blog/20200613221547.png?author=zhangpanqin" alt="image-20200613221547109" style="zoom: 33%;" />
-
-
 
 `synchronized (a)` 的时候，由 `a` 的 `Mark Word` 中锁偏向 0，锁标志位 01 知道锁要升级为轻量级锁。java 虚拟机会在当前的线程的栈帧中建立一个锁记录（Lock Record）空间，Lock Record 储存锁对象的 `Mark World`拷贝和当前锁对象的指针。
 
@@ -200,21 +169,15 @@ java 虚拟机，使用 `CAS` 将 a 的 `Mark Word（62 位）` 指向当前线�
 
 CAS 操作失败。会依据 a 对象 Mark Word 判断是否指向当前线程的栈帧，如果是，说明当前线程已经拥有锁了，直接进入代码块执行（可重入锁）。
 
-如果 a 对象的 Mark Word判断是另外一个线程拥有所，会升级锁，锁标志位改为 （10）。
-
-
+如果 a 对象的 Mark Word 判断是另外一个线程拥有所，会升级锁，锁标志位改为 （10）。
 
 轻量级锁解锁，就是将 `Lock Record` 中的 a 的 mark word 拷贝，通过 CAS 替换 a 对象头中的 mark word ,替换成功解锁顺利完成。
-
-
 
 ### 偏向锁
 
 偏向锁是比轻量级锁更轻量的锁。轻量级锁，每次获取锁的时候，都会使用 CAS 判断是否可以加锁，不管有没有别的线程竞争。
 
-偏向锁呢，比如说 T 线程获取到了 a 对象的偏向锁，a 的 Mark Word 会记录当前 T 线程的 id ,当下次获取锁的时候。T 线程再获取 a 锁的时候，只需要判断 a 的 Mark Word 中的偏向锁位和当前持有 a 锁的线程 id，而不再需要通过 CAS 操作获取偏向锁了。 
-
-
+偏向锁呢，比如说 T 线程获取到了 a 对象的偏向锁，a 的 Mark Word 会记录当前 T 线程的 id ,当下次获取锁的时候。T 线程再获取 a 锁的时候，只需要判断 a 的 Mark Word 中的偏向锁位和当前持有 a 锁的线程 id，而不再需要通过 CAS 操作获取偏向锁了。
 
 延迟 6 秒创建 a 对象，这时已经过了偏向锁延迟的时间，创建的对象为可偏向对象。
 
@@ -240,10 +203,6 @@ public class JOLSample_13_BiasedLocking {
 ```
 
 <img src="http://oss.mflyyou.cn/blog/20200613231613.png?author=zhangpanqin" alt="image-20200613231613645" style="zoom: 33%;" />
-
-
-
-
 
 ### 重量级锁
 
@@ -305,7 +264,7 @@ public class JOLSample_14_FatLocking {
 com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
  OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
       0     4        (object header)                           05 00 00 00 (00000101 00000000 00000000 00000000) (5)
-      
+
 **** t 线程获得锁之后
 com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
  OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
@@ -315,12 +274,12 @@ com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
 com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
  OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
       0     4        (object header)                           f8 38 c3 10 (11111000 00111000 11000011 00010000) (281229560)
-      
+
 **** t3 不停获取锁
 com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
  OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
       0     4        (object header)                           5a 1b 82 d2 (01011010 00011011 10000010 11010010) (-763225254)
-      
+
 **** After System.gc()
 com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
  OFFSET  SIZE   TYPE DESCRIPTION                               VALUE
@@ -329,7 +288,7 @@ com.fly.blog.sync.JOLSample_14_FatLocking$A object internals:
 
 观察各阶段对象头中的 `偏向锁位` 和 `锁标志位` 。可以看到锁在不断升级。然后看到 gc 之后，又变成了无锁。
 
-`t2`  线程持有锁 `a` 的 `轻量级锁` 的时候，t3 也在获得 a 的 `轻量级锁`，`CAS` 修改 a 的 `Mark Word` 为 t3 所有失败。导致了锁升级为重量级锁，设置 a 的锁标志位为 10，并且将 `Mark Word` 指针指向一个 monitor对象，并将当前线程阻塞，将当前线程放入到 `_EntryList` 队列中。当 t2 执行完之后，它解锁的时候发现当前锁已经升级为重量级锁，释放锁的时候，会唤醒 `_EntryList` 的线程，让它们去抢 a 锁。
+`t2` 线程持有锁 `a` 的 `轻量级锁` 的时候，t3 也在获得 a 的 `轻量级锁`，`CAS` 修改 a 的 `Mark Word` 为 t3 所有失败。导致了锁升级为重量级锁，设置 a 的锁标志位为 10，并且将 `Mark Word` 指针指向一个 monitor 对象，并将当前线程阻塞，将当前线程放入到 `_EntryList` 队列中。当 t2 执行完之后，它解锁的时候发现当前锁已经升级为重量级锁，释放锁的时候，会唤醒 `_EntryList` 的线程，让它们去抢 a 锁。
 
 ```java
 class ObjectMonitor() {
@@ -349,12 +308,3 @@ When an object is first created, its wait set is empty. Elementary actions that 
 ```
 
 调用对象的 `Object.wait` 方法，该线程会释放锁，并将当前线程放入到 monitor 的 `_WaitSet` 队列中，等某个线程调用 `Object.notify, and Object.notifyAll`，实际就是唤醒 `_WaitSet` 中的线程。
-
-
-
-
-
-
-
-
-

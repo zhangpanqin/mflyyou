@@ -1,44 +1,32 @@
 ---
 title: Mysql优化及问题定位,看这一篇就够了
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2021-02-24 13:23:46
-password:
-summary:
-tags: Mysql优化
-categories: Mysql
-img:
 ---
 
 ## Mysql 系列博客
 
-[面试必问的Mysql事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
+[面试必问的 Mysql 事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
 
-[深入了解Mysql索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
+[深入了解 Mysql 索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
 
-[深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
+[深入理解 Mysql 数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
 
 [Mysql 权限管理【原创】](https://mp.weixin.qq.com/s/WbilZ1mxH9u9YXflRpkccQ)
 
-[Mysql数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)
+[Mysql 数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)
 
 ## 前言
 
 我最近由于换工作，博客更新暂缓，后面争取一周两篇。
 
-Mysql 系列到这里就差不多了，Mysql集群、分库分表及分布式事务由于我还是停留在理论上，没在生产环境上玩过，又怕写不好，这部分内容我会在有底气的一天回来补上来。
+Mysql 系列到这里就差不多了，Mysql 集群、分库分表及分布式事务由于我还是停留在理论上，没在生产环境上玩过，又怕写不好，这部分内容我会在有底气的一天回来补上来。
 
 下一个系列，想写 java 相关的，java 虚拟机及问题定位，java 并发，java 源码等等。
 
 ### 本文内容
 
-- explain 查看执行计划
-- show profile 定位问题
-- 硬件的选择及mysql 使用内存估计
-
-
+-   explain 查看执行计划
+-   show profile 定位问题
+-   硬件的选择及 mysql 使用内存估计
 
 Mysql 单机扛不住的时候，考虑读写分离，主库用于写，从库用于查。主要还是为了减小 insert/update/delete 锁开销降低了数据库的并发。
 
@@ -75,15 +63,11 @@ vmstat -t 1 1000
 https://www.mysqlcalculator.com/
 ```
 
-
-
-`innodb_buffer_pool_size` 
+`innodb_buffer_pool_size`
 
 实际中主要关心的还是 `innodb_buffer_pool_size` （主要用于缓存业务数据和索引数据）配置，以下是一些参考设置。
 
-典型值为5-6GB（8GB RAM），20-25GB（32GB RAM），100-120GB（128GB RAM）。
-
-
+典型值为 5-6GB（8GB RAM），20-25GB（32GB RAM），100-120GB（128GB RAM）。
 
 `key_buffer_size` 默认 8M
 
@@ -94,17 +78,13 @@ Key_read_requests:	0
 Key_reads:	0
 ```
 
-key_cache_miss_rate = Key_reads / Key_read_requests * 100%;
+key_cache_miss_rate = Key_reads / Key_read_requests \* 100%;
 
-key_cache_miss_rate 在0.1%以下都很好(每1000个请求有一个直接读硬盘)
-
-
+key_cache_miss_rate 在 0.1%以下都很好(每 1000 个请求有一个直接读硬盘)
 
 `max_connections` 最大连接数默认是 151 。
 
 一般我们都是使用线程池，这个值也不太需要调多大，当你 mysql 实例上有很多个数据库供多个项目使用的时候需要调整这个值。
-
-
 
 `read_buffer_size` 默认 128 KB
 
@@ -115,8 +95,6 @@ key_cache_miss_rate 在0.1%以下都很好(每1000个请求有一个直接读硬
 `sort_buffer_size` 默认 256 KB
 
 `join_buffer_size` 默认 256 KB
-
-
 
 ### 硬盘
 
@@ -130,9 +108,7 @@ Mysql 数据的文件还是需要放到 SSD 上的。
 
 当 cpu 总是 100% 的时候你就需要考虑增加 cpu 的核数了。
 
-一般我们选择 4 核 8g内存，8 核 16g，16 核 64g ，32 核 128 g内存 。
-
-
+一般我们选择 4 核 8g 内存，8 核 16g，16 核 64g ，32 核 128 g 内存 。
 
 #### 查看数据库中数据和索引大小
 
@@ -143,11 +119,11 @@ SELECT
 	ts.TABLE_SCHEMA AS '数据库',
 	CONCAT( ROUND( SUM( ts.DATA_LENGTH / 1024 / 1024 ), 2 ), 'MB' ) AS '总数据大小',
 	CONCAT( ROUND( SUM( ts.index_length / 1024 / 1024 ), 2 ), 'MB' ) AS '索引数据大小',
-	CONCAT( ROUND( SUM( ( ts.index_length + ts.DATA_LENGTH ) / 1024 / 1024 ), 2 ), 'MB' ) AS '索引数据大小' 
+	CONCAT( ROUND( SUM( ( ts.index_length + ts.DATA_LENGTH ) / 1024 / 1024 ), 2 ), 'MB' ) AS '索引数据大小'
 FROM
-	information_schema.TABLES AS ts 
+	information_schema.TABLES AS ts
 WHERE
-	ts.TABLE_SCHEMA NOT IN ( 'mysql', 'information_schema', 'performance_schema' ) 
+	ts.TABLE_SCHEMA NOT IN ( 'mysql', 'information_schema', 'performance_schema' )
 GROUP BY
 	ts.TABLE_SCHEMA;
 ```
@@ -155,10 +131,6 @@ GROUP BY
 ![image-20210306230137102](http://oss.mflyyou.cn/blog/20210306230137.png?author=zhangpanqin)
 
 内存的容量小于索引数据的时候，需要考虑增加内存容量。
-
-
-
-
 
 ## 定位慢 sql
 
@@ -201,8 +173,6 @@ logback 配置
 </logger>
 ```
 
-
-
 2、mysql 的慢 sql 日志，从这个慢 sql 日志文件中分析出执行慢的 sql
 
 默认是不开启慢 sql 日志记录的
@@ -216,7 +186,7 @@ show variables like 'long_query_time%';
 
 ![image-20210307151402651](http://oss.mflyyou.cn/blog/20210307151402.png?author=zhangpanqin)
 
- 开启慢 sql 日志记录，这是动态修改，没有持久化，数据库重启就失效了。
+开启慢 sql 日志记录，这是动态修改，没有持久化，数据库重启就失效了。
 
 ```sql
 -- 这个值单位是秒，不要设置的太小。不然打印日志太多，我们要先优化哪些执行时间较长的 sql 比如大于 5 秒，大于 10 秒
@@ -252,8 +222,6 @@ mysqldumpslow -s t -t 10  /usr/local/var/mysql/wanguyunxiao-slow.log | more
 mysqldumpslow -s t -t 10 -g "left join"  /usr/local/var/mysql/wanguyunxiao-slow.log | more
 ```
 
-
-
 ### 慢 sql 产生的原因
 
 1、可能没有用到索引，建立合适的索引
@@ -278,16 +246,11 @@ ANALYZE TABLE table_name;
 OPTIMIZE TABLE tbl_name [, tbl_name] ...
 ```
 
-
-
-
-
 ## Explain 查看执行计划
 
 o 表为组织机构表，字段 id,name
 
 oc 记录的是某个某个组织机构下某个仓库的库存数量，oid,cid,oc_num
-
 
 ```sql
 EXPLAIN SELECT o.`name`,t.`库存总量` FROM (SELECT oc.oid,sum(oc.oc_num) AS '库存总量' FROM oc GROUP BY oc.oid HAVING SUM(oc.oc_num)>5000 ) AS t INNER JOIN o ON t.oid=o.id;
@@ -295,9 +258,7 @@ EXPLAIN SELECT o.`name`,t.`库存总量` FROM (SELECT oc.oid,sum(oc.oc_num) AS '
 
 ![image-20210307155802832](http://oss.mflyyou.cn/blog/20210307155802.png?author=zhangpanqin)
 
-
-
-#### id 
+#### id
 
 sql 执行的顺序标识，序号越大越先执行，相同序号，自上而下执行。
 
@@ -307,19 +268,19 @@ sql 执行的顺序标识，序号越大越先执行，相同序号，自上而�
 
 #### type，重要关注
 
-访问类型。性能这块 
+访问类型。性能这块
 
 system > const > eq_ref > ref > range > index > ALL
 
-- ALL
+-   ALL
 
 ALL 标识全表扫描，我们要避免全表扫描。
 
-- index
+-   index
 
 扫描全部索引数据。
 
-- range
+-   range
 
 扫描一部分索引数据。使用索引进行范围查询。一般是 =, <>, >, >=, <, <=, IS NULL, <=>, BETWEEN, IN() 操作中
 
@@ -337,7 +298,7 @@ SELECT * FROM tbl_name
   WHERE key_part1 = 10 AND key_part2 IN (10,20,30);
 ```
 
-- ref
+-   ref
 
 查询的时候，条件是普通索引等值查询
 
@@ -352,7 +313,7 @@ SELECT * FROM ref_table,other_table
   AND ref_table.key_column_part2=1;
 ```
 
-- eq_ref
+-   eq_ref
 
 关联查询的时候，关联的条件使用的是主键或者唯一索引
 
@@ -365,7 +326,7 @@ SELECT * FROM ref_table,other_table
   AND ref_table.key_column_part2=1;
 ```
 
-- const
+-   const
 
 使用主键或唯一索引等值查询。
 
@@ -373,7 +334,7 @@ SELECT * FROM ref_table,other_table
 SELECT * FROM index_test WHERE id =1
 ```
 
-- system
+-   system
 
 表只有一行数据，一般是系统表。
 
@@ -410,27 +371,25 @@ ANALYZE TABLE table_name;
 
 extra 包含 Using filesort 和 Using temporary 考虑优化。
 
-- Using where
+-   Using where
 
-列数据是从仅仅使用了索引中的信息而没有读取实际的行动的表返回的，这发生在对表的全部的请求列都是同一个索引的部分的时候，表示mysql服务器将在存储引擎检索行后再进行过滤
+列数据是从仅仅使用了索引中的信息而没有读取实际的行动的表返回的，这发生在对表的全部的请求列都是同一个索引的部分的时候，表示 mysql 服务器将在存储引擎检索行后再进行过滤
 
-- Useing index
+-   Useing index
 
 覆盖索引扫描，只扫描了索引数据就拿到了结果。往往性能不错。
 
-- Using temporary
+-   Using temporary
 
 表示 MySQL 需要使用临时表来存储结果集，常见于排序和分组查询或者多表查询，**需要考虑优化**
 
-- Using filesort
+-   Using filesort
 
-MySQL中无法利用索引完成的排序操作称为“文件排序”，**必须优化**
-
-
+MySQL 中无法利用索引完成的排序操作称为“文件排序”，**必须优化**
 
 ## show profile
 
-show profile 可以看到 sql执行在哪块比较耗时，cpu/内存/io 等等
+show profile 可以看到 sql 执行在哪块比较耗时，cpu/内存/io 等等
 
 ```sql
 -- 查看 profile 是否开启,默认是关闭的。
@@ -446,13 +405,11 @@ show variables like '%profil%';
 -- 开启 profile
 set profiling=1;
 
--- 查看已经执行的 sql 
+-- 查看已经执行的 sql
 SHOW PROFILES;
 ```
 
 ![image-20210307171104670](http://oss.mflyyou.cn/blog/20210307171104.png?author=zhangpanqin)
-
-
 
 ```sql
 -- show profile cpu, block io, memory,swaps,context switches,source for query [Query_ID];
@@ -462,8 +419,6 @@ show profile cpu, block io, memory,swaps,context switches,source for query [Quer
 -- 先执行 SHOW PROFILES;拿到 query_id 在执行下面的 sql
 show profile cpu, block io, memory,swaps,context switches,source for query 173;
 ```
-
-
 
 ## SHOW PROCESSLIST
 
@@ -476,7 +431,7 @@ SHOW PROCESSLIST;
 SELECT * FROM information_schema.`PROCESSLIST`;
 ```
 
-结合 top/vmstat/iostat 可以定位mysql 中 cpu,io,内存相关问题。
+结合 top/vmstat/iostat 可以定位 mysql 中 cpu,io,内存相关问题。
 
 ```shell
 # 查看 mysqld 的进程
@@ -490,16 +445,14 @@ top -Hp `ps -ef | grep mysqld | grep -v grep | awk '{print $2}'`
 
 通过以上工具就可以定位 MySQL 具体的信息
 
-
-
 ## Mysql 系列博客
 
-[面试必问的Mysql事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
+[面试必问的 Mysql 事务和锁,你真的了解吗?【原创】](https://mp.weixin.qq.com/s/GOOrKcicwzpZUMb70kZcIA)
 
-[深入了解Mysql索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
+[深入了解 Mysql 索引【原创】](https://mp.weixin.qq.com/s/EtaBDwvN60yEeEh6_-qIWg)
 
-[深入理解Mysql数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
+[深入理解 Mysql 数据存储【原创】](https://mp.weixin.qq.com/s/hnJE6CkjXSXS3FatG11E3Q)
 
 [Mysql 权限管理【原创】](https://mp.weixin.qq.com/s/WbilZ1mxH9u9YXflRpkccQ)
 
-[Mysql数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)
+[Mysql 数据备份与恢复【原创】](https://mp.weixin.qq.com/s/JkB4z1a7fTSCAObnk-x7pw)

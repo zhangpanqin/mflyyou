@@ -1,17 +1,6 @@
 ---
 title: 深入了解Mysql索引
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-12-06 15:34:41
-password:
-summary: 索引的原理和使用
-tags: Mysql
-categories: Mysql
-img: http://oss.mflyyou.cn/blog/20201207213957.png?author=zhangpanqin
 ---
-
 
 ## 前言
 
@@ -19,32 +8,28 @@ img: http://oss.mflyyou.cn/blog/20201207213957.png?author=zhangpanqin
 
 当我们了解索引的原理之后，就没有必要去死记硬背所谓的 Mysql 军规之类的东西了。
 
-
-
 ### 本文内容
 
-- 索引的类型：UNIQUE，FULLTEXT，SPATIAL，NORMAL(普通索引)
-- 索引为什么会采用 B+ 树结构，为什么不是二叉树、B- 树
-- Mysql 中 B+ 树索引 和 Hash 索引应该选哪个
-- 为什么索引的使用需要遵循 `最左匹配原则`
-- `联合索引`、`聚簇索引` 和 `覆盖索引` 分别是什么
-- 索引添加的判断依据是什么
-
-
+-   索引的类型：UNIQUE，FULLTEXT，SPATIAL，NORMAL(普通索引)
+-   索引为什么会采用 B+ 树结构，为什么不是二叉树、B- 树
+-   Mysql 中 B+ 树索引 和 Hash 索引应该选哪个
+-   为什么索引的使用需要遵循 `最左匹配原则`
+-   `联合索引`、`聚簇索引` 和 `覆盖索引` 分别是什么
+-   索引添加的判断依据是什么
 
 ## 索引
 
 Mysql 中常见的索引类型有：
 
-- 普通索引
-- 唯一索引
-- 全文索引
-- 空间索引
+-   普通索引
+-   唯一索引
+-   全文索引
+-   空间索引
 
 Mysql 中索引的数据结构有：
 
-- `B+Tree` ，存储引擎 `InnoDB` 和 `MyISAM` 都支持。因为我们一般都是使用存储引擎 `InnoDB` 和 `MyISAM`，我们都是使用 `B+Tree` 数据结构的索引。
-- `HASH`，存储引擎 `MEMORY` 支持，存储引擎 `InnoDB` 和 `MyISAM` 不能手动定义 HASH 索引。
+-   `B+Tree` ，存储引擎 `InnoDB` 和 `MyISAM` 都支持。因为我们一般都是使用存储引擎 `InnoDB` 和 `MyISAM`，我们都是使用 `B+Tree` 数据结构的索引。
+-   `HASH`，存储引擎 `MEMORY` 支持，存储引擎 `InnoDB` 和 `MyISAM` 不能手动定义 HASH 索引。
 
 因此，我们详细了解 `B+Tree` 就行了。
 
@@ -71,8 +56,6 @@ INSERT INTO `index_hash_test` VALUES (4, 'd');
 INSERT INTO `index_hash_test` VALUES (5, 'e');
 ```
 
-
-
 #### HASH 索引范围查找不生效
 
 ```sql
@@ -82,8 +65,6 @@ EXPLAIN SELECT * FROM index_hash_test WHERE description >= 'b'
 
 ![image-20201207222246741](http://oss.mflyyou.cn/blog/20201207222246.png?author=zhangpanqin)
 
-
-
 #### HASH 等值查找生效
 
 ```sql
@@ -91,8 +72,6 @@ EXPLAIN SELECT * FROM index_hash_test WHERE description = 'b'
 ```
 
 ![image-20201207222418954](http://oss.mflyyou.cn/blog/20201207222418.png?author=zhangpanqin)
-
-
 
 ### B+Tree 数据结构的索引
 
@@ -114,8 +93,6 @@ INSERT INTO `index_test` VALUES (4, 'd');
 INSERT INTO `index_test` VALUES (5, 'e');
 ```
 
-
-
 在 `B+Tree` 数据结构的索引表上执行查询计划，可以看到在查询的时候，索引可以使用。
 
 ```sql
@@ -124,11 +101,7 @@ EXPLAIN SELECT * FROM index_test WHERE description > 'b';
 EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 ```
 
-
-
 <img src="http://oss.mflyyou.cn/blog/20210216173430.png?author=zhangpanqin" alt="image-20210216173430636" style="zoom: 50%;" />
-
-
 
 分别查看执行计划可以看到，等值查找和范围查找都使用到了索引，但是这三者性能上会有所差别 （以后会详细介绍这部分内容）。
 
@@ -141,21 +114,15 @@ EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
 ```
 
-
-
 ![image-20200923203559362](http://oss.mflyyou.cn/blog/20200923203559.png?author=zhangpanqin)
 
 相较于二叉树，B+ 树子节点会更多，树的高度会更低，在查找数据的时候，减少了遍历的次数以达到可以减少 Io 次数 （从磁盘加载数据到内存中）。
 
 B+ 树相较于 B- 树，叶子节点是有序的，并且只有叶子节点会存数据。
 
-比如查询大于 3 的数据的时候，找到了 3 直接遍历 3 上的链表就可以查询大于3 的数据。
-
-
+比如查询大于 3 的数据的时候，找到了 3 直接遍历 3 上的链表就可以查询大于 3 的数据。
 
 一个表上索引也不是越多越好，通常推荐不超过 5 个索引。因为我们修改数据的时候，数据库为了维护索引的数据结构也会产生计算和 io 从而影响数据的性能。当索引多的时候，数据量大的时候，这部分的影响就可以体现出来了。
-
-
 
 当因为业务需要，添加的索引超过了 5 个，并且通过压测确定是索引过多影响了数据库的性能。可以考虑对表进行垂直拆分，将一部分业务字段拆分到另一个表中去。
 
@@ -191,8 +158,6 @@ INSERT INTO `my_test` VALUES (5, 'b', '2');
 
 当使用主键查询数据的时候，实际就是查询聚簇索引，然后从其中把数据读出来返回。
 
-
-
 #### 联合索引
 
 联合索引：就是多个列组成一个索引。比如 name 和 age 组成一个索引
@@ -221,17 +186,13 @@ SELECT * FROM my_test WHERE `name` = b;
 
 先查询 （name,age） 这个索引拿到主键 id，在通过主键 id 去聚簇索引中查询数据。
 
-也有人经常推荐说，查询的时候要查询需要的字段，不要使用 select * ，这样做的好处一是减少 io，另一个就是避免回表。
-
-
+也有人经常推荐说，查询的时候要查询需要的字段，不要使用 select \* ，这样做的好处一是减少 io，另一个就是避免回表。
 
 Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一页一页的数据，下面这张图可以近似理解。
 
 图来自《[MySQL 是怎样运行的：从根儿上理解 MySQL](https://juejin.im/book/6844733769996304392)》
 
 ![img](http://oss.mflyyou.cn/blog/20200923215958.png?author=zhangpanqin)
-
-
 
 ### 索引的使用和添加
 
@@ -240,8 +201,6 @@ Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一�
 通常说的索引失效，一部分是可以从数据结构来推算出来的；另一部分就是 mysql 通过自身查询统计的数据判断不走索引性能会更高而导致索引失效而去全表扫描。
 
 索引是为了我们从表中检索出少量数据才使用的。如果你添加了索引，当查询的时候还需要扫描表中绝大数的数据，就不用在这个字段添加索引了，因为这对你的查询没有任何提高，反而因为数据的修改需要维护索引，可能还降低了查询性能。
-
-
 
 通常我们会选择区分度比较高的字段添加索引（如果这个字段和查询业务没有关系也没有必要添加索引）。
 
@@ -252,8 +211,6 @@ SHOW INDEX FROM index_test;
 ```
 
 ![image-20210216180939368](http://oss.mflyyou.cn/blog/20210216180939.png?author=zhangpanqin)
-
-
 
 当我们创建索引之后，可以通过查看 `Cardinality` 来判断索引添加是否合理。`Cardinality/表总行数` 值越接近 1 查询性能越好。
 
@@ -273,8 +230,6 @@ mysql> analyze table index_test;
 1 row in set (0.00 sec)
 ```
 
-
-
 #### 最左匹配规则
 
 我们在使用索引的时候，只需要包含索引的最左边就可以匹配索引（name,age）
@@ -285,8 +240,6 @@ SELECT * FROM my_test WHERE `name` = 'b';
 SELECT * FROM my_test WHERE `name` = 'b' AND age = 1;
 ```
 
-
-
 当我们执行下面的 sql 的时候，就用不到索引 （name,age）
 
 ```sql
@@ -294,15 +247,11 @@ SELECT * FROM my_test WHERE `name` = 'b' AND age = 1;
 EXPLAIN SELECT * FROM my_test WHERE age=1;
 ```
 
-
-
 `最左匹配原则` 是由 Mysql 的索引的数据结构决定的。
 
 联合索引 `(name,age) ` 的 `B+Tree` 数据结构中叶子节点是按照 name 排序再按照 age 排序。age 实际是乱序的，没有办法进行范围查找。
 
 如果你还想在 age 进行索引查找，就需要在 age 上建立一个新索引。
-
-
 
 ```sql
 -- 全表扫描
@@ -312,9 +261,6 @@ EXPLAIN SELECT * FROM my_test WHERE NAME LIKE '%a';
 EXPLAIN SELECT * FROM my_test WHERE NAME LIKE 'a%';
 ```
 
-
-
 索引的建立，不会整个字段值都参与索引的建立，一般会指定多长的字段（从值开头部分的长度）参与索引的建立。
 
 当你需要关键字查找的时候，可以使用全文索引，或者是增加一个 ES 用于检索。
-

@@ -1,16 +1,7 @@
 ---
 title: Linux-包教包会系列之-入门
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-03-21 19:43:17
-password:
-summary: linux 目录说明,常用命令,awk,sed,find,scp,管道流,重定向
-tags: Linux
-categories: Linux
-img: http://oss.mflyyou.cn/blog/20200322095648.jpeg?author=zhangpanqin
 ---
+
 ## 前言
 
 以前我的不喜欢用 `Linux` 系统，什么目录啊，文件啊，权限啊，都得命令操作，入门难度较大。但是一旦熟练起来，真不想再去用 `windows` 了。再加上 `shell` 脚本，那才叫如虎添翼啊，真的是见识到了什么才是性能，什么才是自动化。
@@ -19,15 +10,14 @@ img: http://oss.mflyyou.cn/blog/20200322095648.jpeg?author=zhangpanqin
 
 在 Linux 中，一切皆文件。所以各种目录、文件的权限、创建者、所属组都是比较实用的东西。
 
-
-
 本文内容基于<font color=red> `Centos 7.4`</font> 版本。
 
 主要内容:
-- linux 目录说明
-- PATH 加载的原理及配置
-- 常用简单命令
-- sed,awk,find,管道流,重定向,scp
+
+-   linux 目录说明
+-   PATH 加载的原理及配置
+-   常用简单命令
+-   sed,awk,find,管道流,重定向,scp
 
 ## 目录介绍
 
@@ -49,7 +39,7 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 ### `/home`
 
-除 `root` 用户之外的其它的用户家目录。`cd ~` 就是进入当前用户的家目录。 
+除 `root` 用户之外的其它的用户家目录。`cd ~` 就是进入当前用户的家目录。
 
 ### `/bin`
 
@@ -61,9 +51,9 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 `/sbin` 也是一个软连接，链接到 `/usr/sbin` 存放二进制文件，管理员可执行的命令。
 
-### `/etc` 
+### `/etc`
 
-`/etc`  为配置文件所在路径。比如 `/etc/nginx` 存放 `nginx` 的配置文件。
+`/etc` 为配置文件所在路径。比如 `/etc/nginx` 存放 `nginx` 的配置文件。
 
 ### `/usr`
 
@@ -83,17 +73,15 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 #### `/usr/src`
 
-系统内核 `kernel`  源码位置。
+系统内核 `kernel` 源码位置。
 
 ### `/var`
 
 程序运行产生的缓存文件，锁文件，pid 文件，日志文件等会在这个目录，一些经常会变化的内容保存的位置。
 
-
-
 ## 命令执行的优先级
 
-我们经常用 `pwd` 获取当前目录路径，如果我自己写个 shell 脚本，命名为 `pwd`,将其加入到  `PATH` 中，那二者谁会执行呢？
+我们经常用 `pwd` 获取当前目录路径，如果我自己写个 shell 脚本，命名为 `pwd`,将其加入到 `PATH` 中，那二者谁会执行呢？
 
 这就是为什么要了解命令的优先级了。
 
@@ -101,27 +89,15 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 第一优先级：指定路径的命令。绝对路径 `/home/parallels/a.sh` 或者相对路径 `./a.sh`。
 
-
-
 第二优先级：别名指定的命令 `alias pwd=/home/parallels/a.sh`
-
-
 
 第三优先级：内部命令(pwd)
 
-
-
 第四优先级：hash 命令
-
-
 
 第五优先级：通过 `PATH` 定义的查找顺序查找
 
-
-
 如果以上顺序都找不到，就会报 `未找到命令...` 的错误。
-
-
 
 通过 `type command` 可以查看 command 命令类型。
 
@@ -147,13 +123,13 @@ echo 11
 
 当我执行 `pwd` 的时候，命令运行的是 `a.sh`
 
- ## PATH 
+## PATH
 
-###  PATH 生效的原理
+### PATH 生效的原理
 
 <font color=red>启动终端的时候会初始化命令，会加载 `/etc/profile` 和 `~/.bash_profile` </font>
 
-`/etc/profile` 会将路径加载`/usr/local/bin` 、`/usr/bin`、`/usr/local/sbin` 、`/usr/sbin` 追加到 PATH 中去。然后将  `/etc/profile.d/*.sh` 进行初始化。
+`/etc/profile` 会将路径加载`/usr/local/bin` 、`/usr/bin`、`/usr/local/sbin` 、`/usr/sbin` 追加到 PATH 中去。然后将 `/etc/profile.d/*.sh` 进行初始化。
 
 `~`对应当前登录用户的用户空间。比如我用 `flyu` 操作当前 shell，那么`~` 等于 `/home/flyu`
 
@@ -161,17 +137,13 @@ echo 11
 
 `~/.bashrc` 中会判断 `/etc/bashrc` 存在吗，存在会运行它。
 
-`/ect/bashrc` 将  `/etc/profile.d/*.sh` 进行初始化。
-
-
+`/ect/bashrc` 将 `/etc/profile.d/*.sh` 进行初始化。
 
 ### PATH 全局配置
 
 基于以上的理解，<font color=red>全局命令配置建议直接在 `/usr/bin`下建立软连接到你的可执行文件。</font>
 
 不要想着在 `/etc/profile.d/` 下写脚本进行配置 PATH。当脚本写错，那么你可能会配置 `PATH` 的有效性，
-
-
 
 ### PATH 用户配置
 
@@ -182,17 +154,13 @@ PATH="${PATH}:/usr/local/aa"
 export PATH
 ```
 
-
-
 一般我们用 `yum` 安装环境已经给配置好了环境变量。
-
-
 
 ## 系统登录
 
 我比较讨厌一遍一遍输入用户名和密码访问服务器。
 
-我每次只要输入 `ssh mflyyou`  连接我的服务器。
+我每次只要输入 `ssh mflyyou` 连接我的服务器。
 
 ```bash
 ssh mflyyou.com
@@ -203,11 +171,13 @@ ssh mflyyou.com
 ```bash
 ssh-keygen -o -t rsa  -b 4096
 ```
+
 ![img](http://oss.mflyyou.cn/blog/20200320210953.png?author=zhangpanqin)
 
 ### 2、将公钥复制到远程服务器
 
 `.pub` 结尾是公钥。
+
 ```bash
 # ssh-copy-id -i {公钥绝对路径} {远程服务器用户名}@{远程服务器 ip}
 ssh-copy-id -i /Users/zhangpanqin/.ssh/test_local_server.pub parallels@10.211.55.8
@@ -218,8 +188,6 @@ ssh-copy-id -i /Users/zhangpanqin/.ssh/test_local_server.pub parallels@10.211.55
 运行上述命令将公钥内容拷贝到 /home/parallels/.ssh/authorized_keys。
 
 ![img](http://oss.mflyyou.cn/blog/20200320211111.png?author=zhangpanqin)
-
-
 
 ### 3、本地电脑配置私钥
 
@@ -234,19 +202,13 @@ Host mflyyou.com
 
 ![img](http://oss.mflyyou.cn/blog/20200320211422.png?author=zhangpanqin)
 
-
-
 ```bash
 # 验证登录
 # ssh -T 私钥文件 用户名@ip
 ssh -T /Users/zhangpanqin/.ssh/mflyyou_server_rs mysql@192.168.10.1
 ```
 
-
-
 以上配置结束，你可以 `ssh mflyyou.com` 登录远程服务器了。
-
-
 
 ## 用户管理
 
@@ -277,8 +239,6 @@ mflyyou ALL=(ALL)      PASSWD:ALL
 chmod  400 /etc/sudoers
 ```
 
-
-
 ## 文件权限控制
 
 ![image-20200320212048568](http://oss.mflyyou.cn/blog/20200320212048.png?author=zhangpanqin)
@@ -291,13 +251,9 @@ chmod  400 /etc/sudoers
 
 `l` 表示软连接。
 
-
-
 `mkdir` 创建目录。
 
 `touch` 创建空文件。
-
-
 
 对文件夹或文件划分权限。 4 读 r，2 编辑 w,1 执行 x
 
@@ -305,38 +261,30 @@ chmod  400 /etc/sudoers
 chmod 754 /opt/config
 ```
 
+修改 /opt/config 所属用户、用户组、其它人的访问权限。
 
+-   所属用户：读、编辑、执行，7
 
-修改 /opt/config 所属用户、用户组、其它人的访问权限。 
+-   所属组：读、执行，5
 
-- 所属用户：读、编辑、执行，7 
-
-- 所属组：读、执行，5 
-
-- 其他：读，4
-
-
+-   其他：读，4
 
 修改文件夹或者文件的所属用户和用户组
 
 ```
 # 递归修改 /opt/config 的归属 admin 用户，所属 admin 组
-chown -R admin:admin  /opt/config 
+chown -R admin:admin  /opt/config
 ```
 
 ![img](https://user-gold-cdn.xitu.io/2020/1/13/16f9f1268d7b6f9e?w=1286&h=554&f=png&s=154657)
-
-
 
 ## 程序安装
 
 ### rpm
 
-linux 分为源码包和rpm 包。源码包需要我们自己编译，然后安装，自由度比较高。rpm 包是厂商编译好的二进制包，可以类比 windows .exe 包。但 rpm 包安装的时候需要处理依赖关系。因此，yum 管理 rpm 包诞生。yum 一般需要联网，有的时候，部署的服务器没有网络，我们可以通过挂载光盘或者 U 盘搭建本地 yum 源使用。
+linux 分为源码包和 rpm 包。源码包需要我们自己编译，然后安装，自由度比较高。rpm 包是厂商编译好的二进制包，可以类比 windows .exe 包。但 rpm 包安装的时候需要处理依赖关系。因此，yum 管理 rpm 包诞生。yum 一般需要联网，有的时候，部署的服务器没有网络，我们可以通过挂载光盘或者 U 盘搭建本地 yum 源使用。
 
 rpm 包安装的好处之一是我们不需要配置环境变量了。包已经内置处理好了。
-
-
 
 比如我们安装 jdk ,通过官网下载 jdk rpm 包。
 
@@ -358,15 +306,11 @@ rpm -lvh 包全名
 rpm -e 包名
 ```
 
-
-
 #### 查询安装了哪些 npm 包
 
 ```bash
 rpm -qa | grep nginx
 ```
-
-
 
 #### 查看安装的 rpm 包的信息
 
@@ -377,8 +321,6 @@ rpm -qi 包名
 
 ![image-20200320232543119](http://oss.mflyyou.cn/blog/20200320232543.png?author=zhangpanqin)
 
-
-
 #### 查找 rpm 包会安装哪些文件及位置
 
 ```bash
@@ -388,13 +330,11 @@ rpm -ql 包名
 
 ![image-20200320232309137](http://oss.mflyyou.cn/blog/20200320232309.png?author=zhangpanqin)
 
-
-
 #### 其他命令
 
 ```bash
 # 查询文件属于的安装程序
-rpm -qf 系统文件名 
+rpm -qf 系统文件名
 
 # 校验安装的包中的文件是否被修改
 rpm -V 包名
@@ -403,11 +343,9 @@ rpm -V 包名
 rpm -Uvh 包全名
 ```
 
-
-
 ### yum
 
-国外的 yum 源速度较慢，使用阿里云提供了yum 源镜像，速度挺快，给阿里点赞。
+国外的 yum 源速度较慢，使用阿里云提供了 yum 源镜像，速度挺快，给阿里点赞。
 
 yum 实际是也是安装的 `rpm` 包，只是包之间的依赖关系由 `rpm` 管理了。
 
@@ -427,7 +365,7 @@ yum list
 yum list installed | grep mysql
 
 # 在软件包详细信息中搜索指定字符串
-yum search 
+yum search
 
 # 安装包
 yum -y install 包名
@@ -438,10 +376,6 @@ yum -y update 包名
 # 卸载包，尽量不卸载
 yum -y remove 包名
 ```
-
-
-
-
 
 ## 常用命令
 
@@ -454,8 +388,6 @@ man find
 # -h -? 一般是程序的帮助信息
 nginx -h
 ```
-
-
 
 ### 基本命令
 
@@ -501,12 +433,12 @@ a || b
 
 ### cp
 
-- 创建软连接
+-   创建软连接
 
-````bash
+```bash
 # 复制为软连接，快捷方式
 cp -s  a.txt /tmp/a.txt
-````
+```
 
 ### scp-远程拷贝
 
@@ -519,9 +451,9 @@ scp -rp /a/* 用户名@ip:/usr/share/nginx/html/
 
 Linux shell 使用 3 种标准的 I/O 流，每种流都与一个文件描述符相关联：
 
-1. *stdout* 是*标准输出流*，它显示来自命令的输出。它的文件描述符为 1。
-2. *stderr* 是*标准错误流*，它显示来自命令的错误输出。它的文件描述符为 2。
-3. *stdin* 是*标准输入流*，它为命令提供输入。它的文件描述符为 0。
+1. _stdout_ 是*标准输出流*，它显示来自命令的输出。它的文件描述符为 1。
+2. _stderr_ 是*标准错误流*，它显示来自命令的错误输出。它的文件描述符为 2。
+3. _stdin_ 是*标准输入流*，它为命令提供输入。它的文件描述符为 0。
 
 `>` 改变输出流。`>` 等价于 `1>`
 
@@ -529,7 +461,7 @@ Linux shell 使用 3 种标准的 I/O 流，每种流都与一个文件描述符
 
 ```bash
 # 改变输出流量,a.txt 不存在的情况下创建
-echo "111" > a.txt 
+echo "111" > a.txt
 
 # 有时候我们需要将标准输出流和标准错误流输入到一个文件。a.txt 存在，bb.txt 不存在。内容不会追加。
 ls a.txt bb.txt > error.log 2>&1
@@ -537,7 +469,7 @@ ls a.txt bb.txt > error.log 2>&1
 # 如果内容需要追加
 ls a.txt bb.txt >> error.log 2>&1
 
-# 如果不想要输出内容, 写入到 /dev/null 的内容都会被丢弃掉 
+# 如果不想要输出内容, 写入到 /dev/null 的内容都会被丢弃掉
 ls a.txt bb.txt >> /dev/null 2>&1
 ```
 
@@ -560,12 +492,12 @@ grep -v
 # 忽略大小
 grep -i
 
-ps -ef | grep jail-2.0-0.0.1-SNAPSHOT.jar | grep -v grep 
+ps -ef | grep jail-2.0-0.0.1-SNAPSHOT.jar | grep -v grep
 ```
 
 ### awk-操作文本
 
-对文本根据 `空格`  或者  `tab` 切割，然后根据操作获取符合条件的某行中某列的数据。
+对文本根据 `空格` 或者 `tab` 切割，然后根据操作获取符合条件的某行中某列的数据。
 
 `$n` 获取第几个内容，`$0` 获取当前行，`$NF` 获取最后一个字段
 
@@ -580,14 +512,12 @@ echo "a1 a2 a3" | awk '{print $NF}'
 echo "a1 a2 a3" | awk '{print $(NF-1)}'
 ```
 
-
-
 awk 还提供一些内置函数。其余的内置函数可以查看帮助命令。
 
-- `toupper()`：字符转为大写。
-- `tolower()`：字符转为小写。
-- `length()`：返回字符串长度。
-- `substr()`：返回子字符串。
+-   `toupper()`：字符转为大写。
+-   `tolower()`：字符转为小写。
+-   `length()`：返回字符串长度。
+-   `substr()`：返回子字符串。
 
 ```bash
 # A2
@@ -599,11 +529,9 @@ echo "A1 A2 A3" | awk '{print tolower($2)}'
 # 9
 echo "A1 123456789 A3" | awk '{print length($2)}'
 
-# 
+#
 echo "A1 123456789 A3" | awk '{print substr($2)}'
 ```
-
-
 
 指定分隔符使用。
 
@@ -611,8 +539,6 @@ echo "A1 123456789 A3" | awk '{print substr($2)}'
 # A2
 echo "a1:a2:a3" | awk -F: '{print toupper($2)}'
 ```
-
-
 
 使用条件进行筛选。
 
@@ -632,8 +558,6 @@ awk '{print $1}' a.txt
 awk 'length($1) > 2 {print $1}' a.txt
 ```
 
-
-
 ### sed-操作文本
 
 也是一个比较厉害的操作文本的命令。可以用于替换文件中的内容，删除或新增内容，搜索符合条件的内容
@@ -645,8 +569,6 @@ echo "a1b2c1" | sed s/a/,/g
 # 比如我们在本地部署集群的时候，批量生成配置文件
 sed s/6379/6380/g redis.conf > redis_6380.conf
 ```
-
-
 
 ### find-查询文件
 

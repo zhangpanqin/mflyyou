@@ -1,18 +1,5 @@
 ---
 title: 你需要了解 Lock 的前提-volatile
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2020-06-20 14:31:09
-password:
-summary: java 锁 
-tags: 
-    - Java-JUC
-    - Java-volatile
-    - Java
-categories: Java
-img:
 ---
 
 ## 前言
@@ -23,10 +10,10 @@ java 中鼎鼎有名的 `AQS` 维护 `private volatile int state` 状态实现�
 
 本文将会介绍如下内容：
 
-- `volatile` 的可见性是什么，有什么用
-- `volatile` 禁止指令重排是个什么东东
-- 单例模式，饿汉式和懒汉式（DCL）的写法
-- 伪共享是什么，怎么避免伪共享
+-   `volatile` 的可见性是什么，有什么用
+-   `volatile` 禁止指令重排是个什么东东
+-   单例模式，饿汉式和懒汉式（DCL）的写法
+-   伪共享是什么，怎么避免伪共享
 
 ## volatile
 
@@ -42,15 +29,9 @@ java 中鼎鼎有名的 `AQS` 维护 `private volatile int state` 状态实现�
 
 `缓存一致性协议` 是在计算机层面保证数据的一致性。`JAVA` 在自己的虚拟机中执行，也有自己的内存模型 `Java Memory Model (JMM)`，但不管怎么样，底层还是依靠的 `CPU` 指令集达到缓存一致性。`JAVA 内存模型` 屏蔽了不同操作系统（windows/linux/mac os）缓存一致性协议的不同实现细节，定义了 java 层面的接口，虚拟机要实现这个接口保证内存一致性。
 
-
-
 ![image-20200620153620353](http://oss.mflyyou.cn/blog/20200620153620.png?author=zhangpanqin)
 
-
-
 Java 内存模型规定所有的变量全部储存在主存中，每个线程都有自己的工作内存，工作内存中的变量是主存变量的副本拷贝（使用那些变量，拷贝那些），每个线程只会操作自己工作内存的变量，当需要保存数据一致性的时候，线程会将工作内存中的变量同步到主存中去，然后让用到这个变量的别的线程，从主存中重新读取最新变量到自己的工作内存中去。
-
-
 
 接下来代码体会一下，带不带 volatile 的区别。
 
@@ -123,8 +104,6 @@ System.out.println(a);
 int b = 2;
 ```
 
-
-
 网上也有人写的 demo 验证可能会发生指令重排的小程序
 
 ```java
@@ -179,24 +158,20 @@ public class T04_Disorder {
 
 ![image-20200620174915155](http://oss.mflyyou.cn/blog/20200620174915.png?author=zhangpanqin)
 
-
-
-大致简单理解，加了内存屏障之后，代码分成 1，2，3部分。1 部分代码你怎么指令重排我不管，但是 1 部分代码执行完了之后，必须执行 2 部分代码，再执行 3 部分代码。
+大致简单理解，加了内存屏障之后，代码分成 1，2，3 部分。1 部分代码你怎么指令重排我不管，但是 1 部分代码执行完了之后，必须执行 2 部分代码，再执行 3 部分代码。
 
 ### 内存屏障
 
 为了禁止 `编译器重排序 ` 和 `CPU 重排序`，在编译器和 CPU 层面都有对应的指令，也就是内存屏障（Memory Barrier）。
 编译器的内存屏障，只是为了告诉编译器不要对指令进行重排序。当编译完成之后，这种内存屏障就消失了。
 
-CPU 并不会感知到编译器中内存屏障的存在。而CPU的内存屏障是CPU提供的指令，可以由开发者显示调用。
+CPU 并不会感知到编译器中内存屏障的存在。而 CPU 的内存屏障是 CPU 提供的指令，可以由开发者显示调用。
 
-
-
-CPU内存屏障分成四种：
+CPU 内存屏障分成四种：
 
 （1）`LoadLoad`：禁止读和读的重排序。
 
-读1 ; LoadLoad ; 读 2。LoadLoad 屏障确保读 1 和 读 2 排序。
+读 1 ; LoadLoad ; 读 2。LoadLoad 屏障确保读 1 和 读 2 排序。
 
 （2）`StoreStore`：禁止写和写的重排序。
 
@@ -210,14 +185,14 @@ CPU内存屏障分成四种：
 
 写 1;StoreLoad;读 2。该屏障确保 `写 1` 立刻刷新数据到内存的操作先于 读 2 及其后续别的读。
 
- 这里只探讨为了实现 volatile 关键字的语义的一种参考做法：
+这里只探讨为了实现 volatile 关键字的语义的一种参考做法：
 （1）在 volatile 写操作的前面插入一个 `StoreStore` 屏障。保证 volatile 写操作不会和之前的写操作重排序。
 
 （2）在 volatile 写操作的后面插入一个 `StoreLoad` 屏障。保证 volatile 写操作不会和之后的读操作重排序。
 
 （3）在 volatile 读操作的前面插入一个 `LoadLoad` 屏障。保证 volatile 读操作不会和之前的读操作重排序。
 
-（4）在 volatile 读操作的后面插入一个 `LoadStore` 屏障。保证volatile读操作不会和之后的写操作重排序。
+（4）在 volatile 读操作的后面插入一个 `LoadStore` 屏障。保证 volatile 读操作不会和之后的写操作重排序。
 
 #### volatile 写
 
@@ -235,7 +210,7 @@ public class VolatileDemo2 {
 }
 ```
 
-b=2 赋值这个 store1 (写1) 不能和 a=2 这个赋值 store2 (写 2) 操作重排序。
+b=2 赋值这个 store1 (写 1) 不能和 a=2 这个赋值 store2 (写 2) 操作重排序。
 
 a =2 赋值这个 store2 (写 1) 不能和 c=b 这个 load1 (读 2) 重排序。
 
@@ -263,8 +238,6 @@ d=a load1（读 1）不能和 e=2 (写 2 ) 重排序。
 #### 总结
 
 volatile 的可见性是通过内存屏障实现的。volatile 修饰的变量只要修改了，别的线程读取到的就是最新的值。
-
-
 
 JDK 1.8 开始也提供了 api 层面的内存屏障，供我们使用。
 
@@ -294,8 +267,6 @@ public final class Unsafe {
 
 }
 ```
-
-
 
 ```java
 public class VolatileDemo {
@@ -329,15 +300,7 @@ public class VolatileDemo {
 }
 ```
 
-
-
-上述 demo 实际只增加了 `getUnSafe().loadFence();`  使用，就改变了运行效果。
-
-
-
-
-
-
+上述 demo 实际只增加了 `getUnSafe().loadFence();` 使用，就改变了运行效果。
 
 ### volatile 并不能保证原子性
 
@@ -374,8 +337,6 @@ a=b+1;
 ```
 
 <font color=red>volatile 并不能保证原子性 </font>
-
-
 
 ## 单例模式
 
@@ -428,11 +389,7 @@ public class SingletonDemo1 {
 
 ![image-20200620182245333](http://oss.mflyyou.cn/blog/20200620182245.png?author=zhangpanqin)
 
-
-
 从图中我们可以看到调用 `SingletonDemo1.getInstance()` 的时候，才加载的 `SingletonDemo1Holder` 类，再实例化单例，达到懒加载的要求。
-
-
 
 #### DCL 实现单例
 
@@ -468,8 +425,6 @@ public class SingletonDemo2 {
 3、将对象指向分配的内存空间
 
 当指令重排的时候，2 和 3 会进行重排序，导致有的线程可能拿到未初始化的对象调用，存在风险问题。
-
-
 
 ## 伪共享
 
@@ -551,7 +506,7 @@ public class VolatileDemo3 {
 相似的用法在 `ConcurrentHashMap` 可以看到，
 
 ```java
-@sun.misc.Contended 
+@sun.misc.Contended
 static final class CounterCell {
     volatile long value;
     CounterCell(long x) { value = x; }
@@ -564,13 +519,11 @@ static final class CounterCell {
 
 当 `Cpu` 从内存加载数据的时候，它会把可能会用到的数据和目标数据一起加载到 `L1/L2/L3` 中。上述代码的变量 ` private static volatile Demo[] demos = new Demo[2];` 这两个变量被一起加载到同一个缓存行中去了，一个线程修改了其中的 ` demos[0].x` 导致缓存行失效，另一个线程修改 `demos[1].x = i;` 的时候发现缓存行失效，会去主存重新加载新的数据，两个线程相互影响导致不停从内存加载，运行速度自然降低了。
 
-`@sun.misc.Contended` 作用就是让 ` demos[0]` 和 ` demos[1]`  分配在不同的缓存行中去。
-
-
+`@sun.misc.Contended` 作用就是让 ` demos[0]` 和 ` demos[1]` 分配在不同的缓存行中去。
 
 我们也可以通过对齐填充，而避免伪共享。
 
-`缓存行` 通常都是 64 bit。而 long 为 8 个 bit，我们自己补充 7 个没有用 long 变量就可以让 x 和 7个没用的变量单独一个缓存行
+`缓存行` 通常都是 64 bit。而 long 为 8 个 bit，我们自己补充 7 个没有用 long 变量就可以让 x 和 7 个没用的变量单独一个缓存行
 
 ```java
 public class VolatileDemo3 {
@@ -609,6 +562,3 @@ public class VolatileDemo3 {
 
 }
 ```
-
-
-

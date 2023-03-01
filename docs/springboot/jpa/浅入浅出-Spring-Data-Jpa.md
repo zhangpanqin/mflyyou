@@ -1,18 +1,6 @@
 ---
 title: 浅入浅出 Spring Data Jpa
-top: false
-cover: false
-toc: true
-mathjax: true
-date: 2021-05-15 14:40:58
-password:
-summary: JPA
-tags: JPA
-categories: JPA
-img:
 ---
-
-
 
 ## 前言
 
@@ -22,33 +10,25 @@ img:
 
 下周更新 GraphQL 。
 
-
-
-本文例子全部在 [https://github.com/zhangpanqin/jpa-study](https://github.com/zhangpanqin/jpa-study) ,数据库使用的是内存数据库H2。
-
-
+本文例子全部在 [https://github.com/zhangpanqin/jpa-study](https://github.com/zhangpanqin/jpa-study) ,数据库使用的是内存数据库 H2。
 
 ## JPA
 
-### 认识JPA 
+### 认识 JPA
 
 `JPA` 是 `Java Persistence API` 的简称，定义了 Java 对象与数据库表的映射关系，以及定义运行时期怎么 CRUD 的接口规范。
 
 `Hibernate` 提供了 JPA 的实现。除此之外还有别的实现，比如 Open Jpa 等等。
 
+Spring Data 为数据访问提供了一个熟悉且一致的，基于 Spring 的编程模型，同时仍保留基础数据存储的特殊特征。
 
+-   Spring Data JPA 用于操作关系型数据库
 
-Spring Data 为数据访问提供了一个熟悉且一致的，基于Spring的编程模型，同时仍保留基础数据存储的特殊特征。
+-   Spring Data MongoDB 用于操作 MongoDB
+-   Spring Data Elasticsearch 用于操作 Es
+-   Spring Data Redis 用于操作 Redis
 
-- Spring Data JPA 用于操作关系型数据库
-
-- Spring Data MongoDB 用于操作 MongoDB
-- Spring Data Elasticsearch 用于操作 Es
-- Spring Data Redis 用于操作 Redis
-
-`Spring Data JPA`  底层的 JPA 实现采用的是 `Hibernate` ，也可以说是封装了 `Hibernate`，提供了 Spring 统一的编程模型。
-
-
+`Spring Data JPA` 底层的 JPA 实现采用的是 `Hibernate` ，也可以说是封装了 `Hibernate`，提供了 Spring 统一的编程模型。
 
 统一的编程模型是指：下面这段代码，可以操作 JPA，ES，Redis 等等，只是 Person 上的注解不一样。
 
@@ -63,13 +43,11 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 }
 ```
 
-
-
 ### JPA 常用注解介绍
 
 <font color=red>使用 JPA 的时候不要使用数据库的外键，一是影响性能，二是不利于更换数据库。</font>
 
-<font color=red>不要使用 `Hibernate` 生成表结构，使用 flyway 组件，通过 SQL 来控制数据库表、索引，字段管理，flyway 灵活性更强</font>
+<font color=red>不要使用  `Hibernate`  生成表结构，使用 flyway 组件，通过 SQL 来控制数据库表、索引，字段管理，flyway 灵活性更强</font>
 
 ```java
 @Data
@@ -104,7 +82,7 @@ public class SysUserEntity extends BaseEntity {
 
 #### @Column
 
-指定了Entity 字段与表的那个字段关联
+指定了 Entity 字段与表的那个字段关联
 
 #### @Id
 
@@ -170,14 +148,12 @@ public interface SysBlogRepository extends JpaRepository<SysBlogEntity,Long> {
 }
 ```
 
-
-
 #### 主键生成策略
 
 ```java
 /**
- * strategy 取值 
- * 
+ * strategy 取值
+ *
  * AUTO 由程序控制，默认策略。Oracle 默认是 SEQUENCE，Mysql默认是 IDENTITY
  *
  * IDENTITY： 主键自增长，需要在表中定义表字段自增长，Mysql ，PostgreSQL，SQL Server 可以采用）
@@ -185,10 +161,10 @@ public interface SysBlogRepository extends JpaRepository<SysBlogEntity,Long> {
  * SEQUENCE：使用序列作为主键 ，Oracle、PostgreSQL、DB2 可以使用
  * @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emailSeq")
  * @SequenceGenerator(initialValue = 1, name = "emailSeq", sequenceName = "EMAIL_SEQUENCE")
- * private long id; 
+ * private long id;
  * 然后再数据库创建一个序列 create sequence EMAIL_SEQUENCE;
  * 当不在 SequenceGenerator 指定 sequenceName ，默认使用 Hibernate 提供的序列名称为 hibernate_sequence
- * 
+ *
  * TABLE 一般不适用这一个
  */
 public @interface GeneratedValue {
@@ -196,8 +172,6 @@ public @interface GeneratedValue {
     String generator() default "";
 }
 ```
-
-
 
 #### 主键生成策略例子
 
@@ -233,11 +207,9 @@ class KeyGeneratorRepositoryTest {
 }
 ```
 
-
-
 hibernate 提供了以下主键生成策略
 
-当 `@GeneratedValue(strategy = GenerationType.SEQUENCE)` 使用的是  `SequenceStyleGenerator.class` 控制主键生成。
+当 `@GeneratedValue(strategy = GenerationType.SEQUENCE)` 使用的是 `SequenceStyleGenerator.class` 控制主键生成。
 
 当 `@GenericGenerator(name = "system-uuid",strategy = "uuid")` ，使用的是 `UUIDHexGenerator.class`
 
@@ -298,9 +270,7 @@ public List<Order1> listOrder(){
 }
 ```
 
-
-
-当数据需要懒加载的时候，JPA不会查询 `Lazy` 的数据，只有在使用的时候才会查询，但是使用的时候需要和原来的查询在同一个事务中,不然会抛出以下异常 
+当数据需要懒加载的时候，JPA 不会查询 `Lazy` 的数据，只有在使用的时候才会查询，但是使用的时候需要和原来的查询在同一个事务中,不然会抛出以下异常
 
 ```java
 org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: com.mflyyou.jpa.n1.Order1.orderItemList, could not initialize proxy - no Session
@@ -309,8 +279,6 @@ org.hibernate.LazyInitializationException: failed to lazily initialize a collect
 由于没有开启事务，orderRepository.findAll() 执行之后这个查询事务就关闭了，所以获取 Order1.orderItemList 的时候报错。
 
 当添加事务注解 `@Transactional` ，整个方法在一个事务内执行，就不会报错了。
-
-
 
 ### N+1 问题
 
@@ -347,25 +315,25 @@ public Order1 findOne(Long id){
 ```java
 ---------------------开始查询---------------------
 ---------------------开始查询---------------------
-Hibernate: 
+Hibernate:
     select
         order1x0_.id as id1_2_0_,
-        order1x0_.description as descript2_2_0_ 
+        order1x0_.description as descript2_2_0_
     from
-        order1 order1x0_ 
+        order1 order1x0_
     where
         order1x0_.id=?
 ---------------------开始懒加载---------------------
-Hibernate: 
+Hibernate:
     select
         orderiteml0_.order_id as order_id3_3_0_,
         orderiteml0_.id as id1_3_0_,
         orderiteml0_.id as id1_3_1_,
         orderiteml0_.name as name2_3_1_,
         orderiteml0_.order_id as order_id3_3_1_,
-        orderiteml0_.price as price4_3_1_ 
+        orderiteml0_.price as price4_3_1_
     from
-        order_item orderiteml0_ 
+        order_item orderiteml0_
     where
 ```
 
@@ -413,7 +381,7 @@ Hibernate:
 查询一次获取了全部数据
 
 ```txt
-Hibernate: 
+Hibernate:
     select
         order1x0_.id as id1_2_0_,
         order1x0_.description as descript2_2_0_,
@@ -422,17 +390,15 @@ Hibernate:
         orderiteml1_.id as id1_3_2_,
         orderiteml1_.name as name2_3_2_,
         orderiteml1_.order_id as order_id3_3_2_,
-        orderiteml1_.price as price4_3_2_ 
+        orderiteml1_.price as price4_3_2_
     from
-        order1 order1x0_ 
+        order1 order1x0_
     left outer join
-        order_item orderiteml1_ 
-            on order1x0_.id=orderiteml1_.order_id 
+        order_item orderiteml1_
+            on order1x0_.id=orderiteml1_.order_id
     where
         order1x0_.id=?
 ```
-
-
 
 当出现 orderItemList 和 orderItemList2 的时候，@OneToMany(fetch = FetchType.EAGER) 会报错
 
@@ -452,8 +418,6 @@ public class Order1 {
     private List<OrderItem2> orderItemList2;
 }
 ```
-
-
 
 `@NamedEntityGraph` 和 `@EntityGraph` 可以解决 N+1 问题。又可以解决级联查询的时候，查询哪些成员变量，不查询哪些成员变量。让我们可以根据业务有更高的自由度查询数据。
 
@@ -498,8 +462,6 @@ public interface OrderGraphRepository extends JpaRepository<OrderGraph1, Long> {
 }
 ```
 
-
-
 ```java
 @Test
 public void findById() {
@@ -508,9 +470,9 @@ public void findById() {
 }
 ```
 
-`@EntityGraph`  中指定的的 `type` 可以取值 `FETCH`与 `LOAD`
+`@EntityGraph` 中指定的的 `type` 可以取值 `FETCH`与 `LOAD`
 
-- FETCH 对于 `NamedEntityGraph` 定义的 `attributeNodes` 使用eager，未声明的使用 lazy
+-   FETCH 对于 `NamedEntityGraph` 定义的 `attributeNodes` 使用 eager，未声明的使用 lazy
 
 ```java
 @EntityGraph(value = "searchOrderGraphItem", type = EntityGraph.EntityGraphType.FETCH)
@@ -519,9 +481,7 @@ OrderGraph1 findByIdEquals(Long id);
 
 只会查询出 OrderGraph1 对应表中的字段和 orderGraphItemList。orderGraphItemList2 当用的时候才会查询。
 
-
-
-- LOAD 对于 `NamedEntityGraph` 定义的 `attributeNodes ` 使用eager，未声明的属性使用属性配置的 `FetchType`
+-   LOAD 对于 `NamedEntityGraph` 定义的 `attributeNodes ` 使用 eager，未声明的属性使用属性配置的 `FetchType`
 
 ```java
 @EntityGraph(value = "searchOrderGraphItem", type = EntityGraph.EntityGraphType.LOAD)
@@ -530,7 +490,7 @@ OrderGraph1 findByIdEquals(Long id);
 
 这个会查询出 OrderGraph1 对应表中的字段和 orderGraphItemList。orderGraphItemList2 属性由于配置的是 `FetchType.EAGER` ,也会直接查出来。
 
-orderGraphItemList2 属性如果配置的是 `FetchType.Lazy` ,orderGraphItemList2  使用的时候才会被查出来
+orderGraphItemList2 属性如果配置的是 `FetchType.Lazy` ,orderGraphItemList2 使用的时候才会被查出来
 
 ### 审计功能
 
@@ -597,9 +557,7 @@ public class MyAuditorAware implements AuditorAware<Integer> {
 }
 ```
 
-
-
-乐观锁，更新的version 必须等于数据库中的版本，否则更新会抛出异常。也可以使用 `Spring-retry` 捕获  `ObjectOptimisticLockingFailureException` 重试更新。
+乐观锁，更新的 version 必须等于数据库中的版本，否则更新会抛出异常。也可以使用 `Spring-retry` 捕获 `ObjectOptimisticLockingFailureException` 重试更新。
 
 ```java
 @Data
@@ -612,8 +570,6 @@ public class SysUserEntity extends BaseEntity {
     private Integer age;
 }
 ```
-
-
 
 ```java
 @SpringBootTest
@@ -686,6 +642,3 @@ class JpaStudyApplicationTests {
 
 }
 ```
-
-
-
