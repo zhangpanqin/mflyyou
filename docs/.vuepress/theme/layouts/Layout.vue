@@ -41,7 +41,7 @@ import Navbar from '@parent-theme/components/Navbar.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
 import Page from '@parent-theme/components/Page.vue'
 import RightSidebar from '@theme/components/RightSidebar'
-import { LINK_TYPES, resolvePageLink, resolveSidebarItems } from '@theme/util/prevAndNext'
+import { LINK_TYPES, resolvePageLink, resolveSidebarItems } from '@theme/util'
 import { computed } from 'vue'
 
 export default {

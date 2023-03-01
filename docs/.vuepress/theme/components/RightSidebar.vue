@@ -43,7 +43,7 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
-import { groupHeaders } from '@theme/util/prevAndNext'
+import { groupHeaders } from '@theme/util'
 export default {
     name: 'RightSidebar',
     components: { TocLinks, },
