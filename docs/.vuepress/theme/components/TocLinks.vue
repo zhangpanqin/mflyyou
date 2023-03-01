@@ -1,7 +1,7 @@
 <template>
     <DropdownTransition>
-        <ul v-if="items[0].children.length">
-            <li v-for="(item, i) in items[0].children" :key="i">
+        <ul v-if="items.children.length">
+            <li v-for="(item, i) in items.children" :key="i">
                 <TocLink :sidebarDepth="sidebarDepth" :item="item" />
             </li>
         </ul>

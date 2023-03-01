@@ -5,7 +5,7 @@
             <div class="pos-box">
                 <div class="icon-arrow"></div>
                 <div class="scroll-box" style="max-height:650px">
-                    <div style="font-weight:bold;text-align:center;">{{ rightSidebarItems[0].title }}</div>
+                    <div style="font-weight:bold;text-align:center;">{{ rightSidebarItems.title }}</div>
                     <hr />
                     <div class="toc-box">
                         <TocLinks :items="rightSidebarItems" :sidebarDepth="3" />
@@ -57,7 +57,7 @@ export default {
         rightSidebarItems() {
             const page = this.$page
             const headers = groupHeaders(page.headers || [])
-            return [{
+            return {
                 type: 'group',
                 collapsable: false,
                 title: page.title,
@@ -69,7 +69,7 @@ export default {
                     path: page.path + '#' + h.slug,
                     children: h.children || []
                 }))
-            }]
+            }
         },
     },
     methods: {
