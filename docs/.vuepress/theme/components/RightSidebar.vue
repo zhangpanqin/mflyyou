@@ -43,15 +43,34 @@
 
 <script>
 import TocLinks from '@theme/components/TocLinks.vue'
+import { groupHeaders } from '@theme/util/prevAndNext'
 export default {
     name: 'RightSidebar',
     components: { TocLinks, },
-    props: ['rightSidebarItems', 'sidebarItems'],
     inject: ['prev', 'next'],
     data() {
         return {
             showTocContainer: true
         }
+    },
+    computed: {
+        rightSidebarItems() {
+            const page = this.$page
+            const headers = groupHeaders(page.headers || [])
+            return [{
+                type: 'group',
+                collapsable: false,
+                title: page.title,
+                path: null,
+                children: headers.map(h => ({
+                    type: 'auto',
+                    title: h.title,
+                    basePath: page.path,
+                    path: page.path + '#' + h.slug,
+                    children: h.children || []
+                }))
+            }]
+        },
     },
     methods: {
         toggleShowTocContainer() {

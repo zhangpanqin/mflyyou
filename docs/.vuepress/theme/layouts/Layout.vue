@@ -24,10 +24,8 @@
             </template>
         </Page>
 
-        <RightSidebar :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems"
-            @toggle-sidebar="toggleSidebar">
+        <RightSidebar @toggle-sidebar="toggleSidebar">
             <template #top>
-                1111
                 <slot name="right-sidebar-top" />
             </template>
             <template #bottom>
@@ -41,10 +39,9 @@
 import Home from '@parent-theme/components/Home.vue'
 import Navbar from '@parent-theme/components/Navbar.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
-import { resolveSidebarItems, groupHeaders } from '@parent-theme/util'
 import Page from '@parent-theme/components/Page.vue'
 import RightSidebar from '@theme/components/RightSidebar'
-import { LINK_TYPES, resolvePageLink } from '@theme/util/prevAndNext'
+import { LINK_TYPES, resolvePageLink, resolveSidebarItems } from '@theme/util/prevAndNext'
 import { computed } from 'vue'
 
 export default {
@@ -108,24 +105,6 @@ export default {
                 this.$site,
                 this.$localePath
             )
-        },
-
-        rightSidebarItems() {
-            const page = this.$page
-            const headers = groupHeaders(page.headers || [])
-            return [{
-                type: 'group',
-                collapsable: false,
-                title: page.title,
-                path: null,
-                children: headers.map(h => ({
-                    type: 'auto',
-                    title: h.title,
-                    basePath: page.path,
-                    path: page.path + '#' + h.slug,
-                    children: h.children || []
-                }))
-            }]
         },
 
         pageClasses() {

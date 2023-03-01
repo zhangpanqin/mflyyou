@@ -1,4 +1,8 @@
-import { resolvePage } from "@parent-theme/util";
+export {
+    resolveSidebarItems,
+    groupHeaders,
+    resolvePage,
+} from "@parent-theme/util";
 import isString from "lodash/isString";
 import isNil from "lodash/isNil";
 
