@@ -21,3 +21,4 @@ docs/.vuepress/dist
 .envrc
 .idea
 .temp
+.history
