@@ -19,7 +19,7 @@
                 <span class="show-txt">目录</span>
             </div>
 
-            <div class="option-box" @click="$emit('toggle-sidebar-force')">
+            <div class="option-box" @click="$emit('toggle-sidebar')">
                 <img src="/images/system/toggle.png" width="30px" class="nozoom" />
                 <span class="show-txt">左栏</span>
             </div>
@@ -46,7 +46,8 @@ import TocLinks from '@theme/components/TocLinks.vue'
 export default {
     name: 'RightSidebar',
     components: { TocLinks, },
-    props: ['rightSidebarItems', 'sidebarItems', 'prev', 'next'],
+    props: ['rightSidebarItems', 'sidebarItems'],
+    inject: ['prev', 'next'],
     data() {
         return {
             showTocContainer: true

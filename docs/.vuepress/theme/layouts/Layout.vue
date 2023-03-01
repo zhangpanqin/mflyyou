@@ -15,7 +15,7 @@
 
         <Home v-if="$page.frontmatter.home" />
 
-        <Page v-else :sidebar-items="sidebarItems" :prev="prev" :next="next">
+        <Page v-else :sidebar-items="sidebarItems">
             <template #top>
                 <slot name="page-top" />
             </template>
@@ -24,9 +24,10 @@
             </template>
         </Page>
 
-        <RightSidebar :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems" :prev="prev" :next="next"
-            @toggle-sidebar-force="toggleSidebarForce">
+        <RightSidebar :right-sidebar-items="rightSidebarItems" :sidebar-items="sidebarItems"
+            @toggle-sidebar="toggleSidebar">
             <template #top>
+                1111
                 <slot name="right-sidebar-top" />
             </template>
             <template #bottom>
@@ -41,10 +42,10 @@ import Home from '@parent-theme/components/Home.vue'
 import Navbar from '@parent-theme/components/Navbar.vue'
 import Sidebar from '@parent-theme/components/Sidebar.vue'
 import { resolveSidebarItems, groupHeaders } from '@parent-theme/util'
-import Page from '@theme/components/Page.vue'
+import Page from '@parent-theme/components/Page.vue'
 import RightSidebar from '@theme/components/RightSidebar'
 import { LINK_TYPES, resolvePageLink } from '@theme/util/prevAndNext'
-
+import { computed } from 'vue'
 
 export default {
     name: 'Layout',
@@ -59,14 +60,19 @@ export default {
     data() {
         return {
             isSidebarOpen: false,
-            isForeCloseSidebar: false,
+        }
+    },
+    provide() {
+        return {
+            prev: computed(() => this.prev_),
+            next: computed(() => this.next_),
         }
     },
     computed: {
-        prev() {
+        prev_() {
             return resolvePageLink(LINK_TYPES.PREV, this)
         },
-        next() {
+        next_() {
             return resolvePageLink(LINK_TYPES.NEXT, this)
         },
         shouldShowNavbar() {
@@ -92,20 +98,6 @@ export default {
                 !frontmatter.home
                 && frontmatter.sidebar !== false
                 && this.sidebarItems.length
-            )
-        },
-
-        shouldShowPageSidebar() {
-            const { frontmatter } = this.$page
-
-            if (true) {
-                return true;
-            }
-
-            return (
-                !frontmatter.home
-                && frontmatter.sidebar !== false
-                && this.pageSidebarItems.length
             )
         },
 
@@ -141,8 +133,8 @@ export default {
             return [
                 {
                     'no-navbar': !this.shouldShowNavbar,
-                    'sidebar-open': this.isSidebarOpen && !this.isForeCloseSidebar,
-                    'no-sidebar': !this.shouldShowSidebar || this.isForeCloseSidebar
+                    'sidebar-open': this.isSidebarOpen,
+                    'no-sidebar': !this.shouldShowSidebar
                 },
                 userPageClass
             ]
@@ -151,23 +143,14 @@ export default {
 
     mounted() {
         this.$router.afterEach(() => {
-            if (!this.isForeCloseSidebar) {
-                this.isSidebarOpen = false
-            }
+            this.isSidebarOpen = false
         })
     },
 
     methods: {
-        toggleSidebar(to, foreCloseSidebar) {
+        toggleSidebar(to) {
             this.isSidebarOpen = typeof to === 'boolean' ? to : !this.isSidebarOpen
-            this.isForeCloseSidebar = typeof foreCloseSidebar === 'boolean' ? foreCloseSidebar : false;
             this.$emit('toggle-sidebar', this.isSidebarOpen)
-        },
-
-        toggleSidebarForce() {
-            this.isSidebarOpen = !this.isSidebarOpen
-            this.isForeCloseSidebar = !this.isForeCloseSidebar
-            this.$emit('toggle-sidebar-force', this.isSidebarOpen)
         },
 
         onTouchStart(e) {

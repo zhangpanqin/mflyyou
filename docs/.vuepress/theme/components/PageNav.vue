@@ -34,7 +34,9 @@
 export default {
     name: 'PageNav',
 
-    props: ['sidebarItems', 'prev', 'next'],
+    props: ['sidebarItems',],
+
+    inject: ['prev', 'next']
 }
 </script>
 

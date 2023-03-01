@@ -28,7 +28,6 @@ export function resolvePageLink(
     { $themeConfig, $page, $route, $site, sidebarItems }
 ) {
     const { resolveLink, getThemeLinkConfig, getPageLinkConfig } = linkType;
-
     // Get link config from theme
     const themeLinkConfig = getThemeLinkConfig($themeConfig);
 
