@@ -5,7 +5,6 @@
                 ←
                 <a v-if="prev.type === 'external'" class="prev" :href="prev.path" target="_blank" rel="noopener noreferrer">
                     {{ prev.title || prev.path }}
-
                     <OutboundLink />
                 </a>
 
@@ -17,7 +16,6 @@
             <span v-if="next" class="next">
                 <a v-if="next.type === 'external'" :href="next.path" target="_blank" rel="noopener noreferrer">
                     {{ next.title || next.path }}
-
                     <OutboundLink />
                 </a>
 
