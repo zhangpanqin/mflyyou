@@ -2,6 +2,8 @@ export {
     resolveSidebarItems,
     groupHeaders,
     resolvePage,
+    isActive,
+    hashRE,
 } from "@parent-theme/util";
 import isString from "lodash/isString";
 import isNil from "lodash/isNil";

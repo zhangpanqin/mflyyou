@@ -5,10 +5,10 @@
             <div class="pos-box">
                 <div class="icon-arrow"></div>
                 <div class="scroll-box" style="max-height:650px">
-                    <div style="font-weight:bold;text-align:center;">{{ rightSidebarItems.title }}</div>
+                    <div style="font-weight:bold;text-align:center;">{{ tocContent.title }}</div>
                     <hr />
                     <div class="toc-box">
-                        <TocLinks :items="rightSidebarItems" :sidebarDepth="3" />
+                        <TocLinks :items="tocContent" :sidebarDepth="3" />
                     </div>
                 </div>
             </div>
@@ -54,9 +54,22 @@ export default {
         }
     },
     computed: {
-        rightSidebarItems() {
+        tocContent() {
             const page = this.$page
             const headers = groupHeaders(page.headers || [])
+            console.log({
+                type: 'group',
+                collapsable: false,
+                title: page.title,
+                path: null,
+                children: headers.map(h => ({
+                    type: 'auto',
+                    title: h.title,
+                    basePath: page.path,
+                    path: page.path + '#' + h.slug,
+                    children: h.children || []
+                }))
+            })
             return {
                 type: 'group',
                 collapsable: false,

@@ -11,7 +11,7 @@
 <script>
 import TocLink from '@theme/components/TocLink.vue'
 import DropdownTransition from '@parent-theme/components/DropdownTransition.vue'
-import { isActive } from '@parent-theme/util'
+import { isActive } from '@theme/util'
 
 export default {
     name: 'TocLinks',
@@ -20,7 +20,7 @@ export default {
 
     props: [
         'items',
-        'sidebarDepth' // depth of headers to be extracted
+        'sidebarDepth'
     ],
 
     data() {
@@ -43,7 +43,7 @@ export default {
         refreshIndex() {
             const index = resolveOpenGroupIndex(
                 this.$route,
-                this.items[0].children
+                this.items.children
             )
             if (index > -1) {
                 this.openGroupIndex = index
