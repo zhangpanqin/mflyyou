@@ -10,5 +10,11 @@ export const MFlyYouPlugin: UserPlugins = [
             updatePopup: true
         }
     ],
-    ['@vuepress/medium-zoom', true]
+    ['@vuepress/medium-zoom', true],
+    [
+        '@vuepress/google-analytics',
+        {
+            'ga': 'UA-159299742-2'
+        }
+    ]
 ];
