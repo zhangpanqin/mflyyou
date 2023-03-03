@@ -1,5 +1,5 @@
 <template>
-    <aside class="right-sidebar">
+    <aside class="right-sidebar" v-show="$page.right_sidebar_active">
         <slot name="top" />
         <div class="right-sidebar-toc-container" ref="tocc" v-show="showTocContainer">
             <div class="pos-box">

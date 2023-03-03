@@ -1,10 +1,10 @@
 <template>
     <div class="theme-container" :class="pageClasses" @touchstart="onTouchStart" @touchend="onTouchEnd">
-        <Navbar v-if="shouldShowNavbar" @toggle-sidebar="toggleSidebar" />
+        <Navbar v-show="shouldShowNavbar" @toggle-sidebar="toggleSidebar" />
 
         <div class="sidebar-mask" @click="toggleSidebar(false)" />
 
-        <Sidebar :items="sidebarItems" @toggle-sidebar="toggleSidebar">
+        <Sidebar v-show="shouldShowNavbar" :items="sidebarItems" @toggle-sidebar="toggleSidebar">
             <template #top>
                 <slot name="sidebar-top" />
             </template>
@@ -113,7 +113,7 @@ export default {
                 {
                     'no-navbar': !this.shouldShowNavbar,
                     'sidebar-open': this.isSidebarOpen,
-                    'no-sidebar': !this.shouldShowSidebar
+                    'no-sidebar': !this.shouldShowSidebar || !this.isSidebarOpen
                 },
                 userPageClass
             ]

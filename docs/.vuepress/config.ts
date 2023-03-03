@@ -1,16 +1,17 @@
 import { defineConfig } from 'vuepress/config'
+import path from "path";
 import {
     MFlyYouThemeConfig,
     MFlyYouPlugin,
     MFlyYouHeads
 } from './config/theme'
-
+import { MflyyouConfig } from './config/env_config';
 export default defineConfig(ctx => ({
     head: MFlyYouHeads,
     themeConfig: MFlyYouThemeConfig,
     plugins: MFlyYouPlugin,
     title: "张攀钦的博客",
-    base: "/mflyyou/",
+    base: MflyyouConfig.base,
     locales: {
         "/": {
             lang: "zh-CN",
