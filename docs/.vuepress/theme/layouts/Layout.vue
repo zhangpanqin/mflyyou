@@ -2,9 +2,9 @@
     <div class="theme-container" :class="pageClasses" @touchstart="onTouchStart" @touchend="onTouchEnd">
         <Navbar v-show="shouldShowNavbar" @toggle-sidebar="toggleSidebar" />
 
-        <div class="sidebar-mask" @click="toggleSidebar(false)" />
+        <div class="sidebar-mask" @click="toggleSidebar()" />
 
-        <Sidebar v-show="shouldShowNavbar" :items="sidebarItems" @toggle-sidebar="toggleSidebar">
+        <Sidebar :items="sidebarItems" @toggle-sidebar="toggleSidebar">
             <template #top>
                 <slot name="sidebar-top" />
             </template>
@@ -56,7 +56,7 @@ export default {
     },
     data() {
         return {
-            isSidebarOpen: false,
+            isSidebarOpen: true,
         }
     },
     provide() {
@@ -122,7 +122,7 @@ export default {
 
     mounted() {
         this.$router.afterEach(() => {
-            this.isSidebarOpen = false
+            this.isSidebarOpen = true
         })
     },
 
