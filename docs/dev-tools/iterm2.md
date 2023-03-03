@@ -1,6 +1,4 @@
----
-title: Iterm2
----
+# Iterm2
 
 ### iterm2 快捷键配置
 

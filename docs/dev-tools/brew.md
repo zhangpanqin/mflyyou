@@ -1,6 +1,4 @@
----
-title: HomeBrew
----
+# HomeBrew
 
 ### brew bundle
 

@@ -1,6 +1,4 @@
----
-title: Git
----
+# Git
 
 ## Hooks
 

@@ -13,11 +13,9 @@ export const MFlyYouThemeConfig: DefaultThemeConfig = {
     docsDir: "docs",
     docsBranch: "main",
     editLinks: true,
-    sidebar: 'auto',
-    sidebarDepth: 2,
+    sidebarDepth: 3,
     smoothScroll: true,
     editLinkText: "在 GitHub 上编辑此页",
-    activeHeaderLinks: true,
     locales: {
         '/': {
             label: '简体中文',

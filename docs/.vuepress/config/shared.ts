@@ -17,26 +17,26 @@ export function getJava(): SidebarConfigArray {
             title: 'IO',
             collapsable: false,
             children: [
-                'io-module',
-                'java-io',
-                'java-nio',
+                'io/io-module',
+                'io/java-io',
+                'io/java-nio',
             ]
         },
         {
             title: 'JUC',
             collapsable: false,
             children: [
-                'synchronized',
-                'volatile',
-                'thread-pool-executor',
+                'juc/synchronized',
+                'juc/volatile',
+                'juc/thread-pool-executor',
             ]
         },
         {
             title: "JVM",
             collapsable: false,
             children: [
-                'jvm-memory-model',
-                'jvm-gc'
+                'jvm/jvm-memory-model',
+                'jvm/jvm-gc'
             ]
         }
     ]
@@ -45,79 +45,162 @@ export function getJava(): SidebarConfigArray {
 
 
 export function getSpringboot(): SidebarConfigArray {
-    return ['project-sumary', 'jpa/jpa'];
+    const sidebar: SidebarConfigArray = [
+        {
+            title: 'SpringBoot',
+            collapsable: false,
+            children: [
+                {
+                    title: "项目总结",
+                    collapsable: false,
+                    path: "project-sumary",
+                },
+                'jpa/jpa'
+            ]
+        },]
+    return sidebar;
 }
 
 export function getTcpIp(): SidebarConfigArray {
-    return ['tcp/ip', 'http/http-cors-jsonp'];
+    const sidebar: SidebarConfigArray = [
+        {
+            title: 'HTTP',
+            collapsable: false,
+            children: [
+                {
+                    title: "跨域",
+                    collapsable: false,
+                    path: "http/http-cors-jsonp",
+                }
+            ]
+        },
+        {
+            title: 'TCP/IP',
+            collapsable: false,
+            children: [
+                {
+                    title: "TCP/IP 三次握手，四次挥手",
+                    collapsable: false,
+                    path: "tcp-ip",
+                },
+            ]
+        },]
+    return sidebar;
 }
 
 export function getDevTools(): SidebarConfigArray {
-    return [
-        'git',
-        'brew',
-        'iterm2',
-        'gradle',
-        'maven',
-        'mac',
-        'pre-commit',
-    ];
+    const sidebar: SidebarConfigArray = [
+        {
+            title: 'Git',
+            collapsable: false,
+            children: [
+                'git'
+            ]
+        }, {
+            title: 'Brew',
+            collapsable: false,
+            children: [
+                'brew'
+            ]
+        }, {
+            title: 'Iterm2',
+            collapsable: false,
+            children: [
+                'iterm2'
+            ]
+        }, {
+            title: 'Gradle',
+            collapsable: false,
+            children: [
+                'gradle'
+            ]
+        }, {
+            title: 'Maven',
+            collapsable: false,
+            children: [
+                'maven'
+            ]
+        }, {
+            title: 'Mac',
+            collapsable: false,
+            children: [
+                'mac'
+            ]
+        }, {
+            title: 'Pre-commit',
+            collapsable: false,
+            children: [
+                'pre-commit'
+            ]
+        },
+    ]
+
+    return sidebar;
 }
 
 export function getDevops(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
         {
-            title: 'Devops',
+            title: 'Docker',
             collapsable: false,
             children: [
-                'docker',
-                'terraform/terraform',
-                'aws',
+                'docker/'
+            ]
+        },
+        {
+            title: 'Terraform',
+            collapsable: false,
+            children: [
+                'terraform/'
+            ]
+        },
+        {
+            title: 'AWS',
+            collapsable: false,
+            children: [
+                'aws/',
             ]
         },
         {
             title: 'Shell',
             collapsable: false,
             children: [
-                'linux-base',
-                'shell-bash',
-                'shell-example',
+                'shell/linux-base',
+                'shell/shell-bash',
+                'shell/shell-example',
             ]
         },
         {
             title: 'Nginx',
             collapsable: false,
             children: [
-                'nginx-base',
-                'nginx-config',
-                'nginx-performance',
+                'nginx/nginx-base',
+                'nginx/nginx-config',
+                'nginx/nginx-performance',
             ]
         },
         {
             title: '数据库',
             collapsable: false,
-            path: 'database',
             children: [
                 {
                     title: 'Mysql',
                     collapsable: false,
-                    path: 'mysql',
                     children: [
-                        '',
-                        'mysql-index',
-                        'mysql-lock-and-transaction',
-                        'mysql-explain-optimization',
-                        'mysql-account-management',
-                        'mysql-backup-recovery',
-                        'mysql-data',
+                        'database/mysql/',
+                        'database/mysql/mysql-index',
+                        'database/mysql/mysql-lock-and-transaction',
+                        'database/mysql/mysql-explain-optimization',
+                        'database/mysql/mysql-account-management',
+                        'database/mysql/mysql-backup-recovery',
+                        'database/mysql/mysql-data',
                     ]
                 },
                 {
                     title: 'PostgreSql',
                     collapsable: false,
-                    path: 'postgresql',
                     children: [
-                        'postgresql'
+                        'database/postgresql/postgresql'
                     ]
                 },
             ]
@@ -125,25 +208,22 @@ export function getDevops(): SidebarConfigArray {
         {
             title: 'Elasticsearch',
             collapsable: false,
-            path: 'elasticsearch',
             children: [
-                'es'
+                'elasticsearch/es'
             ]
         },
         {
             title: 'Redis',
             collapsable: false,
-            path: 'redis',
             children: [
-                'redis'
+                'redis/redis'
             ]
         },
         {
             title: 'vue',
             collapsable: false,
-            path: 'vue',
             children: [
-                'vue-depoly',
+                'vue/vue-depoly',
             ]
         }
     ]

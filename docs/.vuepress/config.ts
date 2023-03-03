@@ -1,5 +1,4 @@
 import { defineConfig } from 'vuepress/config'
-import path from "path";
 import {
     MFlyYouThemeConfig,
     MFlyYouPlugin,
@@ -10,13 +9,13 @@ export default defineConfig(ctx => ({
     head: MFlyYouHeads,
     themeConfig: MFlyYouThemeConfig,
     plugins: MFlyYouPlugin,
-    title: "张攀钦的博客",
+    title: "张攀钦的笔记",
     base: MflyyouConfig.base,
     locales: {
         "/": {
             lang: "zh-CN",
             title: "Mflyyou",
-            description: "张攀钦的学习笔记及博客",
+            description: "张攀钦的笔记",
         },
     },
     // 监听文件变化并重新构建
