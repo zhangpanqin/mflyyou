@@ -10,7 +10,7 @@ dist=${BASE_DIR}/docs/.vuepress/dist
 if [ -d ${dist} ]; then
     rm -fr ${dist}
     echo "删除目录 ${dist}"
-else
+fi
 
 yarn docs:build:mflyyou
 
