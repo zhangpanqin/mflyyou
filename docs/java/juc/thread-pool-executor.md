@@ -1,5 +1,5 @@
 ---
-title: JUC之ThreadPoolExecutor
+title: ThreadPoolExecutor
 ---
 
 ## 前言

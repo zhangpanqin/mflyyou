@@ -1,5 +1,5 @@
 ---
-title: 浅入浅出 Spring Data Jpa
+title: Spring Data Jpa
 ---
 
 ## 前言

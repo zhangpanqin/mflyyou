@@ -4,7 +4,10 @@ module.exports = (options, ctx) => ({
 
         $page.right_sidebar_active = true;
 
-        if (frontmatter.right_sidebar_active == "false") {
+        if (
+            frontmatter.right_sidebar_active == "false" ||
+            frontmatter.right_sidebar_active == false
+        ) {
             $page.right_sidebar_active = false;
         }
     },

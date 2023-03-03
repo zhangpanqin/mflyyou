@@ -1,13 +1,13 @@
+---
+title: Mysql 基础
+---
+
 ```shell
 docker pull mysql:5.7.38
 docker run --name fly-mysql -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=fly-mysql -p 3306:3306 -d mysql:5.7.38
 docker container stop fly-mysql &&  docker container rm fly-mysql
 mysql -h127.0.0.1 -uroot -p123456 -Dfly-mysql
 ```
-
-
-
-
 
 ```sql
 CREATE TABLE person (
@@ -27,4 +27,3 @@ INSERT INTO `person` (`id`, `username`, `username2`, `username3`) VALUES
 
 explain delete from person where id =1;
 ```
-

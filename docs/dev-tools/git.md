@@ -1,4 +1,6 @@
-
+---
+title: Git
+---
 
 ## Hooks
 
@@ -55,8 +57,6 @@ fi
 
 ```
 
-
-
 ## 配置
 
 ### 某个目录下 git 配置
@@ -72,6 +72,7 @@ autocrlf = input
 [includeIf "gitdir:/Users/panqinzhang/xx/"]
 path = /Users/panqinzhang/xx/.gitconfig
 ```
+
 #### /Users/panqinzhang/xx/.gitconfig
 
 ```git
@@ -104,11 +105,10 @@ echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
 killall gpg-agent
 ```
 
-
-
 ## git submodule
 
 可以在仓库下关联另一个仓库
+
 ```shell
 # 生成 .shared folder 或者 clone 代码
 git submodule update --init

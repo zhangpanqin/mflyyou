@@ -1,4 +1,6 @@
-## 推荐实践
+---
+title: 实用的 shell example
+---
 
 ```shell
 #!/bin/bash

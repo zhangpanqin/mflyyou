@@ -1,5 +1,5 @@
 ---
-title: 你不知道的SpringBoot与Vue部署解决方案
+title: 你不知道的 SpringBoot 与 Vue 部署解决方案
 ---
 
 ### 前言

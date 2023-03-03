@@ -1,5 +1,5 @@
 ---
-title: 从锁升级的角度理解synchronized
+title: 从锁升级的角度理解 synchronized
 ---
 
 ## 前言

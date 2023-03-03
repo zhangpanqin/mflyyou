@@ -1,6 +1,10 @@
+---
+title: Terraform
+---
+
 ### Terraform login
 
-创建了 `.envrc` 文件，其中定义了项目token 从哪里去
+创建了 `.envrc` 文件，其中定义了项目 token 从哪里去
 
 ```text
 export TF_CLI_CONFIG_FILE="$HOME/.terraformrc-mflyyou"

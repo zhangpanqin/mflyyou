@@ -1,3 +1,7 @@
+---
+title: HomeBrew
+---
+
 ### brew bundle
 
 ```shell
@@ -10,7 +14,7 @@ brew bundle -v
 
 ### 安装以前版本的应用
 
-- checkout 以前版本的应用
+-   checkout 以前版本的应用
 
 ```shell
 TAP=Homebrew/homebrew-core

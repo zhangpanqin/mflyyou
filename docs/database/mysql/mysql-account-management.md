@@ -1,5 +1,5 @@
 ---
-title: Mysql用户权限管理
+title: Mysql 用户权限管理
 ---
 
 ## 前言
