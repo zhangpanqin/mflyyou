@@ -24,7 +24,7 @@
             </template>
         </Page>
 
-        <RightSidebar @toggle-sidebar="toggleSidebar">
+        <RightSidebar @toggle-sidebar-force="toggleSidebarForce">
             <template #top>
                 <slot name="right-sidebar-top" />
             </template>
@@ -57,6 +57,7 @@ export default {
     data() {
         return {
             isSidebarOpen: false,
+            forceSidebarClose: false,
         }
     },
     provide() {
@@ -113,7 +114,7 @@ export default {
                 {
                     'no-navbar': !this.shouldShowNavbar,
                     'sidebar-open': this.isSidebarOpen,
-                    'no-sidebar': !this.shouldShowSidebar
+                    'no-sidebar': !this.shouldShowSidebar || this.forceSidebarClose
                 },
                 userPageClass
             ]
@@ -127,6 +128,9 @@ export default {
     },
 
     methods: {
+        toggleSidebarForce() {
+            this.forceSidebarClose = !this.forceSidebarClose
+        },
         toggleSidebar(to) {
             this.isSidebarOpen = typeof to === 'boolean' ? to : !this.isSidebarOpen
             this.$emit('toggle-sidebar', this.isSidebarOpen)

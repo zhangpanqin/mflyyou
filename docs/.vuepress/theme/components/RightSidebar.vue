@@ -19,7 +19,7 @@
                 <span class="show-txt">目录</span>
             </div>
 
-            <div class="option-box" @click="$emit('toggle-sidebar')">
+            <div class="option-box" @click="$emit('toggle-sidebar-force')">
                 <img src="/images/system/toggle.png" width="30px" class="nozoom" />
                 <span class="show-txt">左栏</span>
             </div>
