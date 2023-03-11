@@ -91,6 +91,13 @@ export function getTcpIp(): SidebarConfigArray {
 export function getDevTools(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
         {
+            title: 'asdf 工具多版本管理',
+            collapsable: false,
+            children: [
+                'asdf'
+            ]
+        },
+        {
             title: 'Git',
             collapsable: false,
             children: [
