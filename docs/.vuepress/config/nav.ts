@@ -15,7 +15,7 @@ export const NavItems4ZH: NavItem[] = [
     },
     {
         text: "开发工具",
-        link: '/dev-tools/git/'
+        link: '/dev-tools/asdf/'
     },
     {
         text: "DevOps",
