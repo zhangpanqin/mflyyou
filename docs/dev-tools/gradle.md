@@ -101,7 +101,7 @@ include 'lib-b'
 
 settings.gradle 主要用于配置项目名称，和包含哪些子项目。
 
-也可以用于配置插件的依赖版本（不会应用到项目中去，除非项目应用这个插件）和插件下载的
+也可以用于配置插件的依赖版本（不会应用到项目中去，除非项目应用这个插件）和插件下载的仓库
 
 
 
@@ -125,8 +125,6 @@ org.gradle.jvmargs=-Xms512m -Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutO
  `org.gradle.jvmargs` 用来配置 Daemon 的 JVM 参数，默认值是 `-Xmx512m "-XX:MaxMetaspaceSize=384m"`。
 
 当我们的项目比较大的时候，可能会由于 JVM 堆内存不足导致构建失败，就需要修改此配置。
-
-
 
 `org.gradle.logging.level` 调整 gradle 的日志级别。参考 [gradle logging](https://docs.gradle.org/current/userguide/logging.html#sec:choosing_a_log_level) 选择想要的日志级别。
 
@@ -153,7 +151,7 @@ Gradle 默认会启用 Daemon 进程去构建项目。
 
 Gradle 是基于 task 依赖关系来构建项目的，我们只需要定义 task 和 task 之间的依赖关系，Gradle 会保证 task 的执行顺序。
 
-Gradle 在执行 task 之前会建立 `Task Graphs`，我们引入的插件和自己构建脚本会往这个 task graph 中添加 task。
+Gradle 在执行 task 之前会建立 `Task Graphs`，我们引入的插件和自己的构建脚本会往这个 task graph 中添加 task。
 
 ![Example task graphs](./gradle.assets/task-dag-examples.png)
 
@@ -230,6 +228,52 @@ Gradle 会按照配置的仓库顺序查询依赖下载。
 
 
 
+### Gradle Configuration
+
+`Configuration` 用于声明一组 jar 依赖，它可以让 plugin 在构建的时候知道使用哪些依赖。
+
+
+
+compileOnly 就是一种类型 `Configuration`，它是由 java plugin 这个插件引入进来的。我们可以 compileOnly 去定义那些依赖是在  application code 编译的时候使用，这个功能也是 java plugin 定义好的。
+
+```groovy
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.26'
+	annotationProcessor 'org.projectlombok:lombok:1.18.26'
+}
+```
+
+我们也可以自定义 Configuration，比如 mavenBom
+
+
+
+比如我们在多项目构建中，父工程的 build.gradle 定义 configuration，然后就可以使用 maven bom 中定义好的 jar
+
+```groovy
+configurations {
+  parentBom
+  runtimeOnly.extendsFrom(parentBom)
+  compileOnly.extendsFrom(parentBom)
+  annotationProcessor.extendsFrom(parentBom)
+}
+
+dependencies {
+  parentBom platform("org.springframework.boot:spring-boot-dependencies:3.0.4") 
+}
+```
+
+
+
+子工程就可以直接引入依赖，不需要引入 org.springframework.boot 和 io.spring.dependency-management 插件也可以。
+
+```groovy
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+```
+
+
+
 ### 配置依赖来自某个目录
 
 ```groovy
@@ -250,7 +294,7 @@ dependencies {
 #### 默认依赖冲突
 
 ::: tip
-当出现依赖冲突的时候，gradle 优先选择版本较高的，因为较高版本会兼容低版本。
+当出现依赖冲突的时候，gradle 优先选择版本较高的，因为 Gradle 认为较高版本会兼容低版本。
 :::
 
 
@@ -421,7 +465,7 @@ configurations.all {
 
 ### api 和 implementation 区别
 
-jar b 包含一下依赖
+jar b 包含以下依赖
 
 ```groovy
 dependencies {
@@ -527,6 +571,24 @@ tasks.register("task3", Exec) {
 
 
 
+### Task outcomes
+
+gralde 具有 build cache，意思就是有个 task 可能在构建的过程中不需要执行，应用以前的构建结果。比如我们的 java 代码没有变化，但是你还是去编译 class 文件，gralde 就会使用 build cache，从task 执行的输出可以看到，有很多的 task 都是没有执行的，应用以前的构建。 
+
+```
+> Task :application:compileJava UP-TO-DATE
+> Task :application:processResources UP-TO-DATE
+> Task :application:classes UP-TO-DATE
+```
+
+- EXECUTED，代表 task 执行它的构建逻辑。
+- UP-TO-DATE，代表 task 输入输出没有改变，构建逻辑没有执行，或者没有构建逻辑，或者走了build cache。
+- FROM-CACHE，task 的输出可以从 buildcache 找到，也代表不需要执行构建逻辑。
+- SKIPPED task 不会执行构建逻辑，可能执行 task 的时候被指定排除了，或者构建逻辑的 onlyIf 导致，task 没有被触发。
+- NO-SOURCE，代表 task 依赖的文件或者目录不存在，不需要执行 task。比如编译 java 文件，结果目录下没有 java 文件。
+
+
+
 ## Plugin
 
 ### 插件分类
@@ -570,7 +632,7 @@ buildSrc/build.gradle
 
 `groovy-gradle-plugin` 对应的是使用 groovy 写插件。
 
-`java-gradle-plugin` 对应 java
+`java-gradle-plugin` 对应 java 写插件。
 
 ```groovy
 plugins {
@@ -630,4 +692,71 @@ apply plugin: 'com.jfrog.bintray'
 ```shell
 apply from: 'other.gradle'
 ```
+
+
+
+### Debugging build logic
+
+![remote-debug-gradle](./gradle.assets/remote-debug-gradle.gif)
+
+- 在 idea 中配置 remote jvm debug
+
+- 用 debug 模式，运行 gradle 命令。下面命令会等待 debug attach jvm，才会继续执行。
+
+  ```shell
+  ./gradlew help -Dorg.gradle.debug=true --no-daemon
+  ```
+
+- 然后运行 idea remote debug 
+
+
+
+### Build script classpath 和 application source code classpath
+
+我们的构建脚本也是代码，build.gradle 是 groovy 代码，他们也需要编译然后运行构建逻辑去帮助我们编译我们的业务代码和运行等等。
+
+因此 build script 也是有他们自己的 classpath 并且他们和我们的 source code 的 classpath 是分开的。
+
+```shell
+# 查看我们构建脚本的 classpath 有哪些 jar
+./gradlew buildEnvironment
+
++--- org.apache.commons:commons-lang3:3.12.0
++--- com.avast.gradle.docker-compose:com.avast.gradle.docker-compose.gradle.plugin:0.16.11
+|    \--- com.avast.gradle:gradle-docker-compose-plugin:0.16.11
+|         \--- org.yaml:snakeyaml:1.33
++--- org.springframework.boot:org.springframework.boot.gradle.plugin:3.0.2
+```
+
+因此我们写 binary plugin 的时候尽量避免去要第三方的工具包，如果出现了依赖冲突，很不好解决。要不然你不用冲突的插件，要不然你重写代码。
+
+
+
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'
+    }
+}
+```
+
+
+
+buildscript 代码块就是定义我们自己的构建脚本需要哪些依赖，他们只是被添加到 classpath，如果你应用某个插件，还需要 apply plugin。
+
+plugins dsl ，也有个属性是 apply。当 apply 为 false 的时候，插件只是被引入到构建脚本的 classpath 下，但是插件中的 task 是不是应用当构建逻辑中去。
+
+```groovy
+plugins {
+    id «plugin id»                                            
+    id «plugin id» version «plugin version» [apply «false»]   
+}
+```
+
+
+
+
 
