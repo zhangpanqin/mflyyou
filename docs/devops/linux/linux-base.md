@@ -1,5 +1,5 @@
 ---
-title: Linux-包教包会系列之-入门
+title: Linux 基础
 ---
 
 ## 前言

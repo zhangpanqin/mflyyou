@@ -1,6 +1,8 @@
 ---
-title: 实用的 shell example
+title: 实用的 shell 列子
 ---
+
+## shell 解析推荐配置
 
 ```shell
 #!/bin/bash
@@ -19,7 +21,7 @@ export AWS_ASSUME_ROLE
 
 ## 基础操作
 
-#### jq，操作 json 文件
+### jq，操作 json 文件
 
 ```shell
 yum install epel-release -y
@@ -27,7 +29,7 @@ yum update -y
 yum install jq -y
 ```
 
-#### 年月日
+### 年月日
 
 ```shell
 # 2022-04-03-13-32-02
@@ -47,7 +49,7 @@ file_timestamp() {
 }
 ```
 
-#### 添加多行到文件
+### 添加多行到文件
 
 ```bash
 #!/bin/bash
@@ -75,6 +77,12 @@ EOF
 )
 # 保留换行添加双引号
 echo "$AA"
+
+```
+
+## 格式化显示 json
+
+```shell
 json=$(
     cat <<-END
     {
@@ -86,7 +94,7 @@ END
 echo $json
 ```
 
-#### 软连接
+### 软连接
 
 ```shell
 # 创建硬链接
@@ -96,7 +104,7 @@ ln 源文件 目标文件
 ln -s 源文件 目标文件
 ```
 
-#### 获取执行的脚本所在目录
+### 获取执行的脚本所在目录
 
 ```shell
 #!/bin/bash
@@ -112,7 +120,7 @@ PROJECT_HOME_DIR=$(
 )
 ```
 
-## 远程执行命令
+### 远程执行命令
 
 ```shell
 # 双引号，必须有。如果不加双引号，第二个ls命令在本地执行
@@ -141,7 +149,25 @@ ssh local_centos7 "curl -fsSL -O https://raw.githubusercontent.com/zhangpanqin/f
 
 ## 有趣命令
 
-#### 判断程序是否安装
+### 动态传参数到脚本中
+
+```shell
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -c | --count)
+        declare count="$2"
+        shift 2
+        ;;
+    *)
+        shift
+        ;;
+    esac
+done
+
+echo "count: ${count}"
+```
+
+### 判断程序是否安装
 
 ```shell
 if [[ "$(command -v brew)" ]]; then
@@ -151,7 +177,7 @@ else
 fi
 ```
 
-#### 使用管理员权限运行
+### 使用管理员权限运行
 
 ```shell
 CURRENT_USER=$(whoami)
@@ -161,7 +187,7 @@ exit 2
 fi
 ```
 
-#### 提示输入值操作
+### 提示输入值操作
 
 ```shell
 read -r -p "Do you want to install ? (Y/n) " yn
@@ -174,7 +200,7 @@ case $yn in
 esac
 ```
 
-#### 判断数据是否包含
+### 判断数据是否包含
 
 ```shell
 SUPPORT_ENVIRONMENT=(
@@ -189,7 +215,7 @@ exit 1
 fi
 ```
 
-#### 遍历 json
+### 遍历 json
 
 ```shell
 JSON_TEST=$(

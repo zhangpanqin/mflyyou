@@ -169,12 +169,20 @@ export function getDevops(): SidebarConfigArray {
             ]
         },
         {
-            title: 'Shell',
+            title: 'Linux',
             collapsable: false,
             children: [
-                'shell/linux-base',
-                'shell/shell-bash',
-                'shell/shell-example',
+                'linux/linux-base',
+                'linux/debian',
+                'linux/shell-base',
+                'linux/shell-example',
+            ]
+        },
+        {
+            title: 'auth0',
+            collapsable: false,
+            children: [
+                'auth0/auth0'
             ]
         },
         {

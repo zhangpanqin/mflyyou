@@ -167,7 +167,26 @@ terraform import 直接操作的就是 state，如果是 remote 模式，直接�
 
 - 然后 tf plan 查看执行计划，然后在预期内，tf apply
 
+## TF_VAR_name
 
+terraform 定义的 variable 可以通过环境变量来传值，优先级低于 auto.tfvars.json 文件。
+
+比如在 terraform 定义了敏感的 secret 。
+
+```terraform
+variable "auth0_client_secret" {
+  type      = string
+  sensitive = true
+}
+```
+
+你可以通过传递环境变量，在运行 tf plan 的时候，terraform 会从环境变量中找到对应的值。
+
+```shell
+export TF_VAR_auth0_client_secret="xxx"
+```
+
+For more on how to use `TF_VAR_name` in context, check out the section on [Variable Configuration](https://developer.hashicorp.com/terraform/language/values/variables).
 
 
 
