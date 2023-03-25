@@ -589,6 +589,14 @@ gralde 具有 build cache，意思就是有个 task 可能在构建的过程中�
 
 
 
+### 调试 task 的执行顺序
+
+```shell
+./gradlew application:check --dry-run
+```
+
+
+
 ## Plugin
 
 ### 插件分类
