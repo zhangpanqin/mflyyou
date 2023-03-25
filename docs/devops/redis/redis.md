@@ -281,11 +281,11 @@ RDB 缺点：耗时，会丢失数据。fork() 产生子进程，会占用内存
 -   everysec 每秒把缓冲区 中的记录命令写入到 aof 文件。主进程会阻塞命令执行，将需要写入的命令刷盘。
 -   no 由系统调用。不使用这个。
 
-![image-20200215035830345](http://oss.mflyyou.cn/blog/20201005231659.png?author=zhangpanqin)
+![image-20200215035830345](/blog/20201005231659.png?author=zhangpanqin)
 
 -   bgrewriteaof fork 子进程对当前内存数据进行分析然后重写 aof 文件，而不是整理 aof 文件。
 
-    ![image-20200215040332598](http://oss.mflyyou.cn/blog/20201005231706.png?author=zhangpanqin)
+    ![image-20200215040332598](/blog/20201005231706.png?author=zhangpanqin)
 
 ```txt
 appendonly yes
@@ -293,7 +293,7 @@ appendfilename appendonly-${port}.aof
 appendfsync everysec
 ```
 
-![image-20200215041246924](http://oss.mflyyou.cn/blog/20201005231712.png?author=zhangpanqin)
+![image-20200215041246924](/blog/20201005231712.png?author=zhangpanqin)
 
 ### RDB 和 AOF 配置
 
@@ -323,11 +323,11 @@ sentinel 通过发布订阅一个 chanel 进行通信，交换选举信息，判
 
 sentinel 通过 1 秒 ping 每个 redis 确定 redis 是否健康。
 
-![image-20200216022528544](http://oss.mflyyou.cn/blog/20201005231719.png?author=zhangpanqin)
+![image-20200216022528544](/blog/20201005231719.png?author=zhangpanqin)
 
-![image-20200216023522450](http://oss.mflyyou.cn/blog/20201005231724.png?author=zhangpanqin)
+![image-20200216023522450](/blog/20201005231724.png?author=zhangpanqin)
 
-![image-20200216023825223](http://oss.mflyyou.cn/blog/20201005231730.png?author=zhangpanqin)
+![image-20200216023825223](/blog/20201005231730.png?author=zhangpanqin)
 
 ```txt
 port 26379
@@ -405,7 +405,7 @@ redis-cli --cluster create 127.0.0.1:6382 127.0.0.1:6380 127.0.0.1:6381 127.0.0.
 
 ### 数据迁移
 
-![image-20200216074100621](http://oss.mflyyou.cn/blog/20201005231736.png?author=zhangpanqin)
+![image-20200216074100621](/blog/20201005231736.png?author=zhangpanqin)
 
 ### 集群模式使用
 
@@ -434,11 +434,11 @@ cluster slots
 
 -   主观下线
 
-    ![image-20200216190723545](http://oss.mflyyou.cn/blog/20201005231740.png?author=zhangpanqin)
+    ![image-20200216190723545](/blog/20201005231740.png?author=zhangpanqin)
 
 -   客观下线
 
-![image-20200216190839732](http://oss.mflyyou.cn/blog/20201005231745.png?author=zhangpanqin)
+![image-20200216190839732](/blog/20201005231745.png?author=zhangpanqin)
 
 ## Redis 慢查询
 

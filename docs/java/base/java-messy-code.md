@@ -63,7 +63,7 @@ public class Str {
 
 idea 自带的插件 ByteCodeViewer 和安装的插件 jclasslib。在导航栏 View 下可以看到。
 
-![image-20200606172050099](http://oss.mflyyou.cn/blog/20200606172050.png?author=zhangpanqin)
+![image-20200606172050099](/blog/20200606172050.png?author=zhangpanqin)
 
 <font color=red> java 内存中的字符串采用的是 unicode 字符集，也就是内编码。不管怎么编码解码，最后的字符串都会用 unicode 字符集   </font>
 
@@ -124,7 +124,7 @@ public void run100() throws UnsupportedEncodingException {
 
 Uincode 是一个字符集。它规定了我们使用到的字或符号的码点（code point）。码点使用 16 进制保存。
 
-![](http://oss.mflyyou.cn/blog/20200606164146.png?author=zhangpanqin)
+![](/blog/20200606164146.png?author=zhangpanqin)
 
 Uincode 字符集规定 `一` 的码点为 4E00。
 
@@ -306,7 +306,7 @@ public void run100() throws UnsupportedEncodingException {
 
 解决乱码问题的思路，是先确定在哪里开始的乱码，这里开始向上查代码，看哪里解码采用了错误的编码规则。
 
-![image-20200606190126427](http://oss.mflyyou.cn/blog/20200606190126.png?author=zhangpanqin)
+![image-20200606190126427](/blog/20200606190126.png?author=zhangpanqin)
 
 上述场景实际是对不乱码的 gbks 采用了错误的解码规则，我们只要换一下解码规则就行了。
 

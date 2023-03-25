@@ -14,7 +14,7 @@ title: Mysql数据备份与恢复
 
 ## binlog
 
-![mysql 逻辑架构](http://oss.mflyyou.cn/blog/20201128120321.jpg?author=zhangpanqin)
+![mysql 逻辑架构](/blog/20201128120321.jpg?author=zhangpanqin)
 
 ### binlog 作用及配置
 

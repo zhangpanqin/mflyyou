@@ -425,7 +425,7 @@ public class Order1 {
 
 `@NamedEntityGraph` 定义查询的时候查询哪些数据，`@EntityGraph` 用于标记 Repository 使用哪个 `NamedEntityGraph` 。
 
-![image-20210516132930802](http://oss.mflyyou.cn/blog/20210516132930.png?author=zhangpanqin)
+![image-20210516132930802](/blog/20210516132930.png?author=zhangpanqin)
 
 ```java
 @Entity

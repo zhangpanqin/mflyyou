@@ -62,11 +62,11 @@ class UnixFileSystem extends FileSystem {
 
 只要我们弄清楚 `System.getProperty("user.dir")`，问题就迎刃而解。[Java System Properties](https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html) 中介绍 `user.dir` 是用户的工作目录。
 
-![image-20200418232813977](http://oss.mflyyou.cn/blog/20200418232814.png?author=zhangpanqin)
+![image-20200418232813977](/blog/20200418232814.png?author=zhangpanqin)
 
 <font color=red>什么是用户工作目录呢？就是执行 java 命令的目录。</font>在那个目录下执行命令，usr.dir 就会被 java 虚拟机赋值为执行命令的路径。我在 `/Users/zhangpanqin/github/fly-java/test` 目录下运行编译的 `class` 文件。`-cp` 指定 classpath 路径。
 
-![image-20200418233359327](http://oss.mflyyou.cn/blog/20200418233359.png?author=zhangpanqin)
+![image-20200418233359327](/blog/20200418233359.png?author=zhangpanqin)
 
 ## nio 读取文件内容
 
@@ -94,7 +94,7 @@ public static void main(String[] args) {
 }
 ```
 
-![image-20200419001203097](http://oss.mflyyou.cn/blog/20200419001203.png?author=zhangpanqin)
+![image-20200419001203097](/blog/20200419001203.png?author=zhangpanqin)
 
 ## 基于 ClassLoader 获取文件内容
 
@@ -186,7 +186,7 @@ public void run555(){
 
 我们经常会听到类加载器的 `双亲委派模型`。
 
-![img](http://oss.mflyyou.cn/blog/20200419163544.png?author=zhangpanqin)
+![img](/blog/20200419163544.png?author=zhangpanqin)
 
 去哪里可以看到这些类加载呢。
 

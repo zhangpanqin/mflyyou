@@ -121,7 +121,7 @@ const router = new VueRouter({
 export default router;
 ```
 
-<img src="http://oss.mflyyou.cn/blog/20200727234702.png?author=zhangpanqin" alt="image-20200727234702928" style="zoom: 25%;" />
+<img src="/blog/20200727234702.png?author=zhangpanqin" alt="image-20200727234702928" style="zoom: 25%;" />
 
 `http://localhost:8087/app/index.css` 为 css 的真实地址。所以想办法为这些不以 `/app` 开头的资源加上 `/app` 就可以了，想了想只有 cookie 能做到。
 
@@ -156,7 +156,7 @@ server {
 }
 ```
 
-![image-20200728014849158](http://oss.mflyyou.cn/blog/20200728014849.png?author=zhangpanqin)
+![image-20200728014849158](/blog/20200728014849.png?author=zhangpanqin)
 
 下面这个是重定向的配置
 
@@ -182,7 +182,7 @@ server {
 }
 ```
 
-![image-20200728014654144](http://oss.mflyyou.cn/blog/20200728014654.png?author=zhangpanqin)
+![image-20200728014654144](/blog/20200728014654.png?author=zhangpanqin)
 
 根据这个思路就可以把所有的资源进行转发了，不用改业务代码，只需给 `vue-router` 加上一个 `base` 基础路由。
 

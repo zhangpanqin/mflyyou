@@ -40,7 +40,7 @@
 
 当我们在 `pom.xml` 引入某个 `a.jar` , `Maven` 会从本地仓库查找有没有 `a.jar`，没有就会去私服下载，私服没有会从中央仓库下载到私服，然后下载本地仓库。
 
-![image-20200607151711515](http://oss.mflyyou.cn/blog/20200607151711.png?author=zhangpanqin)
+![image-20200607151711515](/blog/20200607151711.png?author=zhangpanqin)
 
 ### 依赖传递
 
@@ -50,7 +50,7 @@
 
 `maven-client` 项目中引入 `maven-a.jar`，那么 `maven-b.jar` 和 `maven-c.jar` 都会引入进来。
 
-![image-20200607154728583](http://oss.mflyyou.cn/blog/20200607154728.png?author=zhangpanqin)
+![image-20200607154728583](/blog/20200607154728.png?author=zhangpanqin)
 
 ### 依赖传递遵循的两个规则
 
@@ -318,7 +318,7 @@ install：安装 jar 到本地仓库
 
 deploy: 发布 jar 到远程仓库或私有仓库
 
-![image-20200607175812514](http://oss.mflyyou.cn/blog/20200607175812.png?author=zhangpanqin)
+![image-20200607175812514](/blog/20200607175812.png?author=zhangpanqin)
 
 ### 自定义操作到生命周期某个阶段
 
@@ -560,7 +560,7 @@ package.xml
 </assembly>
 ```
 
-打包如下图 ![image-20200607182606397](http://oss.mflyyou.cn/blog/20200607182606.png?author=zhangpanqin)
+打包如下图 ![image-20200607182606397](/blog/20200607182606.png?author=zhangpanqin)
 
 #### 配合 SpringBoot 使用
 
@@ -578,7 +578,7 @@ spring:
 
 `*-local.yml` 在 `.gitignore` 忽略掉，本地开发环境各个之间互不影响。
 
-![image-20200607182749440](http://oss.mflyyou.cn/blog/20200607182749.png?author=zhangpanqin)
+![image-20200607182749440](/blog/20200607182749.png?author=zhangpanqin)
 
 自动构建的时候使用下面命令，打包开发环境
 

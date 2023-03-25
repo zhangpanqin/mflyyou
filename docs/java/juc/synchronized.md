@@ -71,7 +71,7 @@ public static void addA_2() {
 
 ### 对象布局
 
-<img src="http://oss.mflyyou.cn/blog/20200613211643.png?author=zhangpanqin" alt="image-20200613211643599" style="zoom: 25%;" />
+<img src="/blog/20200613211643.png?author=zhangpanqin" alt="image-20200613211643599" style="zoom: 25%;" />
 
 对象填充，是将一个对象大小不足 8 个字节的倍数时，使用 0 填充补齐，为了更高效效率的读取数据，64 java 虚拟机，一次读取是 64 bit（8 字节）。
 
@@ -79,11 +79,11 @@ public static void addA_2() {
 
 在 64 位 JVM 上有一个压缩指针选项-XX:+UseCompressedOops，默认是开启的。开启之后 `Class Pointer ` 部分就会压缩为 4 字节，对象头大小为 `12 字节`
 
-![](http://oss.mflyyou.cn/blog/20200613201507.png?author=zhangpanqin)
+![](/blog/20200613201507.png?author=zhangpanqin)
 
 #### Mark Word
 
-![图来自马士兵教育多线程公开课](http://oss.mflyyou.cn/blog/20200613163707.png?author=zhangpanqin)
+![图来自马士兵教育多线程公开课](/blog/20200613163707.png?author=zhangpanqin)
 
 `偏向锁位` 和 `锁标志位` 是锁升级过程中承担重要的角色。
 
@@ -115,11 +115,11 @@ public class JOLSample_01_Basic {
 }
 ```
 
-![image-20200613214753341](http://oss.mflyyou.cn/blog/20200613214753.png?author=zhangpanqin)
+![image-20200613214753341](/blog/20200613214753.png?author=zhangpanqin)
 
 ## 锁升级过程
 
-![图来自马士兵教育多线程公开课](http://oss.mflyyou.cn/blog/20200613163442.png?author=zhangpanqin)
+![图来自马士兵教育多线程公开课](/blog/20200613163442.png?author=zhangpanqin)
 
 <font color=red>偏向锁是默认开启的，但是有个延迟时间</font>
 
@@ -159,13 +159,13 @@ public class JOLSample_12_ThinLocking {
 
 因为偏向锁的延迟，创建的对象为普通对象（偏向锁位 0，锁标志位 01），获取锁的时候，`无锁`（偏向锁位 0，锁标志位 01） 升级为 `轻量级锁`（偏向锁位 0，锁标志位 00），释放锁之后，对象的锁信息（偏向锁位 0，锁标志位 01）
 
-<img src="http://oss.mflyyou.cn/blog/20200613221547.png?author=zhangpanqin" alt="image-20200613221547109" style="zoom: 33%;" />
+<img src="/blog/20200613221547.png?author=zhangpanqin" alt="image-20200613221547109" style="zoom: 33%;" />
 
 `synchronized (a)` 的时候，由 `a` 的 `Mark Word` 中锁偏向 0，锁标志位 01 知道锁要升级为轻量级锁。java 虚拟机会在当前的线程的栈帧中建立一个锁记录（Lock Record）空间，Lock Record 储存锁对象的 `Mark World`拷贝和当前锁对象的指针。
 
 java 虚拟机，使用 `CAS` 将 a 的 `Mark Word（62 位）` 指向当前线程（main 线程）中 `Lock Record` 指针，CAS 操作成功，将 a 的锁标志位变为 00。
 
-<img src="http://oss.mflyyou.cn/blog/20200613224235.png?author=zhangpanqin" alt="image-20200613224235023" style="zoom:50%;" />
+<img src="/blog/20200613224235.png?author=zhangpanqin" alt="image-20200613224235023" style="zoom:50%;" />
 
 CAS 操作失败。会依据 a 对象 Mark Word 判断是否指向当前线程的栈帧，如果是，说明当前线程已经拥有锁了，直接进入代码块执行（可重入锁）。
 
@@ -202,7 +202,7 @@ public class JOLSample_13_BiasedLocking {
 }
 ```
 
-<img src="http://oss.mflyyou.cn/blog/20200613231613.png?author=zhangpanqin" alt="image-20200613231613645" style="zoom: 33%;" />
+<img src="/blog/20200613231613.png?author=zhangpanqin" alt="image-20200613231613645" style="zoom: 33%;" />
 
 ### 重量级锁
 

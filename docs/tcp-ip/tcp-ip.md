@@ -17,7 +17,7 @@ https://zh.wikipedia.org/wiki/TCP/IP%E5%8D%8F%E8%AE%AE%E6%97%8F
 https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 ```
 
-<img src="http://oss.mflyyou.cn/blog/20200801104517.png?author=zhangpanqin" alt="image-20200801104517510" style="zoom:50%;" />
+<img src="/blog/20200801104517.png?author=zhangpanqin" alt="image-20200801104517510" style="zoom:50%;" />
 
 > 图片来自 《图解 TCP/IP 与 OSI 参考模型》 中 TCP/IP 协议分层模型
 
@@ -59,7 +59,7 @@ https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 
 [维基百科：交换机](<[https://zh.wikipedia.org/wiki/%E7%B6%B2%E8%B7%AF%E4%BA%A4%E6%8F%9B%E5%99%A8](https://zh.wikipedia.org/wiki/網路交換器)>)
 
-![](http://oss.mflyyou.cn/blog/20200801151356.jpg?author=zhangpanqin)
+![](/blog/20200801151356.jpg?author=zhangpanqin)
 
 交换机上有多个端口（不是 port）供计算机连接，交换机会维护端口与连接这个端口的 PC 的 Mac 地址映射表。当交换机接受到数据的时候，会根据目的 Mac 地址，发送到对应的端口上，然后经过网线发送到目的 PC。
 
@@ -77,7 +77,7 @@ https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 
 当 `PC` 或者 `手机` 连接无线路由器时也会给 `PC` 分配一个`局域网 IP`，子网掩码，网关等。
 
-我住的地方的网络拓扑图如下：![未命名文件](http://oss.mflyyou.cn/blog/20200801165520.png?author=zhangpanqin)
+我住的地方的网络拓扑图如下：![未命名文件](/blog/20200801165520.png?author=zhangpanqin)
 
 当手机与电脑通信的时候，实际通过 `LAN` 口走局域网通信。
 
@@ -85,7 +85,7 @@ https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 
 只要需要有 IP 地址的设备（光猫，路由器，PC，手机）都需要有网卡，网卡出厂自带有 Mac 地址。IP 和 Mac 地址的作用后文中会介绍。
 
-![image-20200801144243065](http://oss.mflyyou.cn/blog/20200801144243.png?author=zhangpanqin)
+![image-20200801144243065](/blog/20200801144243.png?author=zhangpanqin)
 
 ### 交互机和路由器的区别
 
@@ -101,7 +101,7 @@ https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 
 ## TCP/IP 通信
 
-![TCP_IP 同一以太网 (2)](http://oss.mflyyou.cn/blog/20200801175145.svg?author=zhangpanqin)
+![TCP_IP 同一以太网 (2)](/blog/20200801175145.svg?author=zhangpanqin)
 
 从发送端发送数据的时候，数据经过每层的封包，经物理层传送到接收端。接收端收到数据包，一层一层进行拆包，然后将数据数据发送给我接收端的应用层的应用程序。
 
@@ -109,7 +109,7 @@ https://zh.wikipedia.org/wiki/OSI%E6%A8%A1%E5%9E%8B
 
 ### 数据链路层
 
-![image-20200801220255714](http://oss.mflyyou.cn/blog/20200801220255.png?author=zhangpanqin)
+![image-20200801220255714](/blog/20200801220255.png?author=zhangpanqin)
 
 `源 MAC 地址` 就是发送端的 `MAC 地址`，目标 MAC 地址不是最终的 MAC 地址，是下一跳节点的 MAC 地址。
 
@@ -137,7 +137,7 @@ netstat -i
 
 也可以在电脑配置 DNS 解析时访问的 ip，这样域名解析时就会访问这个服务。
 
-<img src="http://oss.mflyyou.cn/blog/20200801182357.png?author=zhangpanqin" alt="image-20200801182357581" style="zoom:50%;" />
+<img src="/blog/20200801182357.png?author=zhangpanqin" alt="image-20200801182357581" style="zoom:50%;" />
 
 ```bash
 # 解析域名的 ip
@@ -188,11 +188,11 @@ IP：192.168.201.56
 
 查询的这个 `IP` 是当前网段内的 ip，它会通过广播地址发送给当前网段内所有主机，收到这个协议的主机会判断是否是当前主机，是的话就会恢复当前 ip 对应的 MAC 地址。
 
-![image-20200801223925086](http://oss.mflyyou.cn/blog/20200801223925.png?author=zhangpanqin)
+![image-20200801223925086](/blog/20200801223925.png?author=zhangpanqin)
 
 ### 通信过程分析
 
-![未命名文件](http://oss.mflyyou.cn/blog/20200801165520.png?author=zhangpanqin)
+![未命名文件](/blog/20200801165520.png?author=zhangpanqin)
 
 当我在浏览器输入 `wwww.mflyyou.cn` 的时候：
 
@@ -223,7 +223,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 <font color=red>IPv4 数据结构</font>
 
-<img src="http://oss.mflyyou.cn/blog/20200802000153.png?author=zhangpanqin" alt="image-20200802000153692" style="zoom:50%;" />
+<img src="/blog/20200802000153.png?author=zhangpanqin" alt="image-20200802000153692" style="zoom:50%;" />
 
 > 图来自《图解 TCP/IP》
 
@@ -246,13 +246,13 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 ping -s 3050 www.mflyyou.cn
 ```
 
-![image-20200801230015436](http://oss.mflyyou.cn/blog/20200801230015.png?author=zhangpanqin)
+![image-20200801230015436](/blog/20200801230015.png?author=zhangpanqin)
 
-<img src="http://oss.mflyyou.cn/blog/20200801230141.png?author=zhangpanqin" alt="image-20200801230141070" style="zoom:50%;" />
+<img src="/blog/20200801230141.png?author=zhangpanqin" alt="image-20200801230141070" style="zoom:50%;" />
 
-<img src="http://oss.mflyyou.cn/blog/20200801230528.png?author=zhangpanqin" alt="image-20200801230528418" style="zoom:50%;" />
+<img src="/blog/20200801230528.png?author=zhangpanqin" alt="image-20200801230528418" style="zoom:50%;" />
 
-<img src="http://oss.mflyyou.cn/blog/20200801230423.png?author=zhangpanqin" alt="image-20200801230423653" style="zoom:50%;" />
+<img src="/blog/20200801230423.png?author=zhangpanqin" alt="image-20200801230423653" style="zoom:50%;" />
 
 通过 `wireshark` 抓包可以看到，IP 数据包的首部长度占了 20 字节，实际每次发送数据为 1480 字节，最后一次发送了 98 字节。
 
@@ -282,7 +282,7 @@ ping -s 3050 www.mflyyou.cn
 
 首先我们要先了解 `TCP` 数据格式，才能更容易知道 TCP 的工作原理。
 
-<img src="http://oss.mflyyou.cn/blog/20200802000246.png?author=zhangpanqin" alt="image-20200802000246545" style="zoom:50%;" />
+<img src="/blog/20200802000246.png?author=zhangpanqin" alt="image-20200802000246545" style="zoom:50%;" />
 
 ### 源端口号（Source Port）
 
@@ -338,13 +338,13 @@ ping -s 3050 www.mflyyou.cn
 
 接收端发送 `ACK` 包中的 `确认应答号`，指明这个序列号之前的数据我已经接受了。
 
-<img src="http://oss.mflyyou.cn/blog/20200802205000.png?author=zhangpanqin" alt="image-20200802205000890" style="zoom:50%;" />
+<img src="/blog/20200802205000.png?author=zhangpanqin" alt="image-20200802205000890" style="zoom:50%;" />
 
 ### 窗口大小（Window Size）
 
 窗口大小适用于流控的。发送端不能一直发送消息，需要根据我的接受能力来调整发包的速率。
 
-![未命名文件](http://oss.mflyyou.cn/blog/20200809131931.svg?author=zhangpanqin)
+![未命名文件](/blog/20200809131931.svg?author=zhangpanqin)
 
 内核会为每个 `TCP/IP` 分配读写缓冲区，网卡会从这些读写缓冲区中把数据取走，然后发送。数据大致可以分为这几类。
 
@@ -354,7 +354,7 @@ ping -s 3050 www.mflyyou.cn
 
 当窗口中的数据全都是 `已发送未确认数据` 时，发送端不能再发送新的数据，必须等待窗口空出位置来。
 
-![未命名文件 (2)](http://oss.mflyyou.cn/blog/20200809132819.svg?author=zhangpanqin)
+![未命名文件 (2)](/blog/20200809132819.svg?author=zhangpanqin)
 
 当有一个数据包被确认了，发送端就可以发送新的数据包。`已发送未确认数据` 会在超时的时候重新发包。
 
@@ -378,19 +378,19 @@ TCP 为了避免分片，会主动将数据分片之后交给网络层。 TCP �
 
 在以太网中 TCP 的 MSS = 1500（MTU） - 20（一般 IP 首部大小） - 20（一般 TCP 首部大小）= 1460，这个值需要根据首部计算
 
-![image-20200802211639395](http://oss.mflyyou.cn/blog/20200802211639.png?author=zhangpanqin)
+![image-20200802211639395](/blog/20200802211639.png?author=zhangpanqin)
 
 MSS 值在三次握手时，会通过 MTU 计算的。
 
 ### TCP 三次握手建立连接
 
-<img src="http://oss.mflyyou.cn/blog/20200802212532.png?author=zhangpanqin" alt="image-20200802212532628" style="zoom: 33%;" />
+<img src="/blog/20200802212532.png?author=zhangpanqin" alt="image-20200802212532628" style="zoom: 33%;" />
 
 > 图片来自 码出高效：Java 开发手册
 
 为什么是三次握手建立连接呢？很多面试官也会问。这其实是可靠连接的最少握手次数。
 
-<img src="http://oss.mflyyou.cn/blog/20200802212808.png?author=zhangpanqin" alt="image-20200802212808724" style="zoom:50%;" />
+<img src="/blog/20200802212808.png?author=zhangpanqin" alt="image-20200802212808724" style="zoom:50%;" />
 
 > 图片来自 码出高效：Java 开发手册
 
@@ -398,7 +398,7 @@ MSS 值在三次握手时，会通过 MTU 计算的。
 
 ### TCP 四次挥手断开连接
 
-<img src="http://oss.mflyyou.cn/blog/20200802213247.png?author=zhangpanqin" alt="image-20200802213247725" style="zoom: 33%;" />
+<img src="/blog/20200802213247.png?author=zhangpanqin" alt="image-20200802213247725" style="zoom: 33%;" />
 
 > 图片来自 码出高效：Java 开发手册
 

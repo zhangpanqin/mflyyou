@@ -102,7 +102,7 @@ DiscardOldestPolicy: 抛弃队列中最久的任务，然后再次调用这个�
 DiscardPolicy: 不处理，丢弃掉这个任务。调用者感知不到
 ```
 
-![531605003712_.pic_hd](http://oss.mflyyou.cn/blog/20201114210852.jpg?author=zhangpanqin)
+![531605003712_.pic_hd](/blog/20201114210852.jpg?author=zhangpanqin)
 
 ## 线程池源码
 
@@ -166,7 +166,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 }
 ```
 
-![image-20201114230504012](http://oss.mflyyou.cn/blog/20201114230504.png?author=zhangpanqin)
+![image-20201114230504012](/blog/20201114230504.png?author=zhangpanqin)
 
 打断线程其实就是调用了线程的 `Thread.interrupt()`，只是标记了线程被打断，不会影响程序运行，打断的线程调用 `Thread.isInterrupted()` 返回 true。当线程阻塞等待时被打断，会抛出异常 `InterruptedException` ，在线程 run 方法中如果捕获处理这个异常，线程就会退出。
 

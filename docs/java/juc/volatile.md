@@ -19,7 +19,7 @@ java 中鼎鼎有名的 `AQS` 维护 `private volatile int state` 状态实现�
 
 ### 可见性
 
-![image-20200620152106412](http://oss.mflyyou.cn/blog/20200620152106.png?author=zhangpanqin)
+![image-20200620152106412](/blog/20200620152106.png?author=zhangpanqin)
 
 计算机 `CPU` 与 `主存` 交互的逻辑大致如图，`CPU` 的运算速度是 `主存` 的 100 倍左右，为了避免 `CPU` 被主存拖慢速度。当`CPU` 需要一个数据的时候，会先从 `L1` 找，找到直接使用；`L1` 中未找到，会去 `L2` 中，`L2` 中找不到会去 `L3` ，L3 找不到再去主存加载到 `L3`，再从 `L3`加载到 `L2` ，再从 `L2` 加载到 `L1`。为了避免每次加载运算数据都从主存中加载，`Cpu` 会将使用数据内存地址附近的数据也加载进来，因为通常内存分配是连续性的，目标数据附近的数据用到的可能性比较大。尽管可能浪费一部分存储空间，但是降低加载数据浪费的时间。这也就是以空间换时间。
 
@@ -29,7 +29,7 @@ java 中鼎鼎有名的 `AQS` 维护 `private volatile int state` 状态实现�
 
 `缓存一致性协议` 是在计算机层面保证数据的一致性。`JAVA` 在自己的虚拟机中执行，也有自己的内存模型 `Java Memory Model (JMM)`，但不管怎么样，底层还是依靠的 `CPU` 指令集达到缓存一致性。`JAVA 内存模型` 屏蔽了不同操作系统（windows/linux/mac os）缓存一致性协议的不同实现细节，定义了 java 层面的接口，虚拟机要实现这个接口保证内存一致性。
 
-![image-20200620153620353](http://oss.mflyyou.cn/blog/20200620153620.png?author=zhangpanqin)
+![image-20200620153620353](/blog/20200620153620.png?author=zhangpanqin)
 
 Java 内存模型规定所有的变量全部储存在主存中，每个线程都有自己的工作内存，工作内存中的变量是主存变量的副本拷贝（使用那些变量，拷贝那些），每个线程只会操作自己工作内存的变量，当需要保存数据一致性的时候，线程会将工作内存中的变量同步到主存中去，然后让用到这个变量的别的线程，从主存中重新读取最新变量到自己的工作内存中去。
 
@@ -156,7 +156,7 @@ public class T04_Disorder {
 
 `volatile` 可以禁止指令重排。
 
-![image-20200620174915155](http://oss.mflyyou.cn/blog/20200620174915.png?author=zhangpanqin)
+![image-20200620174915155](/blog/20200620174915.png?author=zhangpanqin)
 
 大致简单理解，加了内存屏障之后，代码分成 1，2，3 部分。1 部分代码你怎么指令重排我不管，但是 1 部分代码执行完了之后，必须执行 2 部分代码，再执行 3 部分代码。
 
@@ -387,7 +387,7 @@ public class SingletonDemo1 {
 
 运行的时候加上这个 `-XX:+TraceClassLoading` 会打印加载的类。
 
-![image-20200620182245333](http://oss.mflyyou.cn/blog/20200620182245.png?author=zhangpanqin)
+![image-20200620182245333](/blog/20200620182245.png?author=zhangpanqin)
 
 从图中我们可以看到调用 `SingletonDemo1.getInstance()` 的时候，才加载的 `SingletonDemo1Holder` 类，再实例化单例，达到懒加载的要求。
 

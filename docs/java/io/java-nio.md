@@ -19,7 +19,7 @@ JAVA 对 `NIO` 抽象为 `Channel` , `Channel` 又可以分为 `FileChannel` （
 -   从 `Linux 内核` 中的 `虚拟内存` 、`系统调用`、`文件描述符`、`Inode`、`Page Cache` 、`缺页异常`讲述整个 IO 的过程
 -   jvm 堆外的 DirectByteBuffer 的内存怎么回收
 
-<img src="http://oss.mflyyou.cn/blog/20200711165857.png?author=zhangpanqin" alt="image-20200711165857889" style="zoom: 33%;" />
+<img src="/blog/20200711165857.png?author=zhangpanqin" alt="image-20200711165857889" style="zoom: 33%;" />
 
 > 本文计算机系统相关的图全部来自 《深入理解计算机系统》
 
@@ -43,7 +43,7 @@ NIO 抽象为 `Channel` 是面向缓冲区的（操作的是一块数据），�
 
 `position` 表示为下一个读取数据时的索引
 
-<img src="http://oss.mflyyou.cn/blog/20200711202515.png?author=zhangpanqin" alt="image-20200711202515462" style="zoom:50%;" />
+<img src="/blog/20200711202515.png?author=zhangpanqin" alt="image-20200711202515462" style="zoom:50%;" />
 
 ```java
 @Test
@@ -273,7 +273,7 @@ public class Cleaner extends PhantomReference<Object> {
 
 ## 内存映射
 
-<img src="http://oss.mflyyou.cn/blog/20200712125658.png?author=zhangpanqin" alt="image-20200712125657989" style="zoom:50%;" />
+<img src="/blog/20200712125658.png?author=zhangpanqin" alt="image-20200712125657989" style="zoom:50%;" />
 
 当应用程序读文件的时候，数据需要从先从磁盘读取到内核空间(第一次读写，没有 page cache 缓存数据)，在从内核空间 copy 到用户空间，这样应用程序才能使用读到的数据。当一个文件的全部数据都在内核的 Page Cache 上时，就不用再从磁盘读了，直接从内核空间 copy 到用户空间去了。
 
@@ -283,7 +283,7 @@ public class Cleaner extends PhantomReference<Object> {
 
 这样在用户空间读写数据，实际操作的也是内核空间的，减少了数据的 copy 。
 
-<img src="http://oss.mflyyou.cn/blog/20200712145306.png?author=zhangpanqin" alt="image-20200712145306814" style="zoom:50%;" />
+<img src="/blog/20200712145306.png?author=zhangpanqin" alt="image-20200712145306814" style="zoom:50%;" />
 
 怎么实现的呢，简单来说就是 linux 中进程的地址是虚拟地址，cpu 会将虚拟地址映射到物理内存的物理地址上。mmap 实际是将用户进程的某块虚拟地址与内核空间的某块虚拟地址映射到同一块物理内存上，已达到减少数据的 copy 。
 
@@ -295,7 +295,7 @@ public class Cleaner extends PhantomReference<Object> {
 
 Cpu 使用的 `虚拟寻址` （`VA`,`Virtual Address`） 来查找物理地址。
 
-<img src="http://oss.mflyyou.cn/blog/20200711171400.png?author=zhangpanqin" alt="image-20200711171400757" style="zoom:50%;" />
+<img src="/blog/20200711171400.png?author=zhangpanqin" alt="image-20200711171400757" style="zoom:50%;" />
 
 `CPU` 会将进程使用的 `虚拟地址` 通过 CPU 上的硬件 `内存管理单元` (`Memory Management Unit` `MMU`) 的进行地址翻译找到物理主存中的物理地址，从而获取数据。
 
@@ -307,7 +307,7 @@ Cpu 使用的 `虚拟寻址` （`VA`,`Virtual Address`） 来查找物理地址�
 
 系统通过 MMU 和 `页表（Page Table）` 来管理 `虚拟页` 和 `物理也` 的对应关系，页表就是页表条目（`Page Table Entry,PTE`）的数组
 
-<img src="http://oss.mflyyou.cn/blog/20200711183510.png?author=zhangpanqin" alt="image-20200711183510194" style="zoom:50%;" />
+<img src="/blog/20200711183510.png?author=zhangpanqin" alt="image-20200711183510194" style="zoom:50%;" />
 
 PTE 的有效为 1 时，标识数据在内存中，标识为 0 时，标识在磁盘上。
 
@@ -321,7 +321,7 @@ PTE 的有效为 1 时，标识数据在内存中，标识为 0 时，标识在�
 
 `Linux` 会为每个进程分配一个单独的虚拟内存地址，
 
-<img src="http://oss.mflyyou.cn/blog/20200711174755.png?author=zhangpanqin" alt="image-20200711174755550" style="zoom: 50%;" />
+<img src="/blog/20200711174755.png?author=zhangpanqin" alt="image-20200711174755550" style="zoom: 50%;" />
 
 当我们的程序运行的时候，不是整个程序的代码文件一次性全部加载到内存中去，而是执行懒加载。
 

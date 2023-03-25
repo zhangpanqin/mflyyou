@@ -8,7 +8,7 @@ title: 从Linux内核理解Java中的IO
 
 基于安全考虑，只有 `Linux内核` 才能权限去访问计算机的硬件，`Linux内核`会提供一些接口（系统调用）让我们可以和硬件交互。不过数据一般都是从`硬件` 到`内核态` ,再从 `Linux内核` 复制到 `用户态` 进程的内存空间中，这样进程才能对读取的数据进行处理。
 
-![image-20200704231239764](http://oss.mflyyou.cn/blog/20200704231239.png?author=zhangpanqin)
+![image-20200704231239764](/blog/20200704231239.png?author=zhangpanqin)
 
 本文内容：
 
@@ -24,7 +24,7 @@ title: 从Linux内核理解Java中的IO
 
 `df -i` 可以看到 VFS 中路径挂载的分区。
 
-![image-20200704233624173](http://oss.mflyyou.cn/blog/20200704233642.png?author=zhangpanqin)
+![image-20200704233624173](/blog/20200704233642.png?author=zhangpanqin)
 
 ```bash
 # 将分区挂载到虚拟文件系统的 /boot 目录下
@@ -44,7 +44,7 @@ umount /boot
 
 查看文件的 `Inode`及 `块` 的基本大小（一般 4KB）
 
-![image-20200705002110818](http://oss.mflyyou.cn/blog/20200705002110.png?author=zhangpanqin)
+![image-20200705002110818](/blog/20200705002110.png?author=zhangpanqin)
 
 当应用程序调用系统调用 `open`，会返回一个文件描述符 （简称 FD，File Decsriptor）。我们可以把 `FD` 理解为文件的指针，这个指针会指向一个`Inode` 。多个 `FD` 可以指向同一个 `Inode`，FD 会维护一个对文件内容操作的偏移量（读写到什么地方了）。`FD` 是上层应用程序使用的，`Inode` 是内核维护使用的。
 
@@ -70,7 +70,7 @@ public class ErrorOpenFile {
 
 `/proc/pid/fd` 下可以看到一个进程打开的 `FD`,其中的 `0、1、2` 是默认输入(System.in)，输出(System.out)，错误输出(System.err)，每个程序都会有。
 
-![image-20200705004254331](http://oss.mflyyou.cn/blog/20200705004254.png?author=zhangpanqin)
+![image-20200705004254331](/blog/20200705004254.png?author=zhangpanqin)
 
 ## 为什么 `BufferedInputStream` 比 `FileInputStream` 快?
 
@@ -137,7 +137,7 @@ ssize_t write(int fd, const void *buf, size_t count);
 strace -ff -o /root/testfileio/out java com.fly.io.IoOperation $1
 ```
 
-![image-20200705122935804](http://oss.mflyyou.cn/blog/20200705122935.png?author=zhangpanqin)
+![image-20200705122935804](/blog/20200705122935.png?author=zhangpanqin)
 
 `FileInputStream` 会调用 10000 次系统调用，进程用户态到内核态切换了 10000 次，所以代码执行时间比较长。
 
@@ -151,7 +151,7 @@ strace -ff -o /root/testfileio/out java com.fly.io.IoOperation $1
 
 当我们调用了 `FileOutputStream.getFD().sync()` 会触发系统调用 `fsync`，将数据落盘。
 
-![image-20200704201130013](http://oss.mflyyou.cn/blog/20200704201130.png?author=zhangpanqin)
+![image-20200704201130013](/blog/20200704201130.png?author=zhangpanqin)
 
 Linux 内核进行 Io 调度，来控制数据落盘，时机是：
 

@@ -71,11 +71,11 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 一般我们不会使用 `读未提交` 和 `序列化`。Mysql 默认的隔离级别是 `可重复读`，Oracle 是 `读已提交`。
 
-![image-20210217113317019](http://oss.mflyyou.cn/blog/20210217113317.png?author=zhangpanqin)
+![image-20210217113317019](/blog/20210217113317.png?author=zhangpanqin)
 
 #### 脏读
 
-![image-20210217152105920](http://oss.mflyyou.cn/blog/20210217152105.png?author=zhangpanqin)
+![image-20210217152105920](/blog/20210217152105.png?author=zhangpanqin)
 
 一个事务可以读取另一个事务未提交的数据。会话 A 中插入的数据，但是 `事务 A` 没有提交，但是 `事务 B` 读取到了插入的 h。
 
@@ -85,7 +85,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 不可重复读和脏读的区别是，脏读是读取到了事务未提交的数据，而不可重读读到的是事务提交之后的数据。
 
-![image-20210217152048832](http://oss.mflyyou.cn/blog/20210217152048.png?author=zhangpanqin)
+![image-20210217152048832](/blog/20210217152048.png?author=zhangpanqin)
 
 由于 `会话 A ` 在 Time=4 更新了 id =6 的数据， `会话 B` 在同一个事务内在 Time=3 和 Time=5 读取的数据一致，但是 Time=7 读取的数据和之前读取到的数据不一致。
 
@@ -95,19 +95,19 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 <font color=red>敲黑板，重点来了</font>
 
-![image-20210217152024875](http://oss.mflyyou.cn/blog/20210217152024.png?author=zhangpanqin)
+![image-20210217152024875](/blog/20210217152024.png?author=zhangpanqin)
 
 t5,t7,t9 读取的数据都是一致的。并没有出现幻读问题，这个 Mysql 的 MVCC 有关，<font color=red>但是 MVCC 解决不了幻读问题。</font>
 
 Mysql 具有 `MVCC` 多版本并发控制（Multi version Concurrency Controller）的特性。它是指如果读取的行正在进行 UPDATE 或 DELETE 操作，这时读操作并不会阻塞等待当前行的 UPDATE 或 DELETE 操作完成，而是去读取当前行的一个快照。MVCC 通过 undo log 实现。
 
-![image-20210217152004039](http://oss.mflyyou.cn/blog/20210217152004.png?author=zhangpanqin)
+![image-20210217152004039](/blog/20210217152004.png?author=zhangpanqin)
 
 在隔离级别是 `可重复读` 的情况下，t5,t7,t9 读取的数据是一致的。
 
 但是在隔离级别为 `读已提交` 的情况下，得到的结果就不一样了。
 
-![image-20210217151935004](http://oss.mflyyou.cn/blog/20210217151935.png?author=zhangpanqin)
+![image-20210217151935004](/blog/20210217151935.png?author=zhangpanqin)
 
 在 `读已提交` 的情况下，t5 和 t7 读取的是一样的数据，而 t9 读取到了最新的数据。
 
@@ -120,7 +120,7 @@ MVCC 和 undo log 有关，undo log 是储存在共享表空间中的，但从 5
 -   insert undo log，insert 操作在事务提交前只对当前事务可见
 -   upate undo log，UPDATE 和 DELETE 操作产生的 undo log
 
-![image-20210217141224775](http://oss.mflyyou.cn/blog/20210217141224.png?author=zhangpanqin)
+![image-20210217141224775](/blog/20210217141224.png?author=zhangpanqin)
 
 《图来自：[MySQL 是怎样运行的：从根儿上理解 MySQL](https://juejin.cn/book/6844733769996304392)》
 
@@ -250,13 +250,13 @@ DELTE、UPDATE、INSERT 数据库默认会给我们添加排它锁。
 
 事务 A 获取 id=1 的 s 锁，事务 B 也获得了 id=1 的 s 锁。两个事务是不需要阻塞等待另一个事务结束的。
 
-![image-20210217155910816](http://oss.mflyyou.cn/blog/20210217155910.png?author=zhangpanqin)
+![image-20210217155910816](/blog/20210217155910.png?author=zhangpanqin)
 
 #### 排它锁
 
 事务 B 阻塞等待事务 A 提交，当事务 A commit 之后，事务 B 的更新语句才能完成。
 
-![image-20210217155924209](http://oss.mflyyou.cn/blog/20210217155924.png?author=zhangpanqin)
+![image-20210217155924209](/blog/20210217155924.png?author=zhangpanqin)
 
 ### 意向锁
 
@@ -265,7 +265,7 @@ DELTE、UPDATE、INSERT 数据库默认会给我们添加排它锁。
 
 #### 行级锁和表级意向锁的兼容性
 
-![image-20210217154247167](http://oss.mflyyou.cn/blog/20210217154247.png?author=zhangpanqin)
+![image-20210217154247167](/blog/20210217154247.png?author=zhangpanqin)
 
 我们可以通过 `information_schema.INNODB_TRX` 表判断事务的状态，及事务和锁之间的信息。
 
@@ -304,13 +304,13 @@ Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。隔�
 
 实现的大致逻辑是这样，但是会发生超卖现象。
 
-![image-20210217162507049](http://oss.mflyyou.cn/blog/20210217162507.png?author=zhangpanqin)
+![image-20210217162507049](/blog/20210217162507.png?author=zhangpanqin)
 
 #### 悲观锁解决超卖问题
 
 解决这个问题也比较简单，加互斥锁。这样检查商品的时候，同时只有一个人能查询。当事务 B 阻塞获取 id=1 的 x 锁超时会抛出异常。
 
-![image-20210217162445067](http://oss.mflyyou.cn/blog/20210217162445.png?author=zhangpanqin)
+![image-20210217162445067](/blog/20210217162445.png?author=zhangpanqin)
 
 以上是悲观锁解决超卖问题，但是排他锁之间是互斥的，同一时间只能有一个人可以购买商品，后续的人全部都阻塞在事务 B t3 哪里等待锁的释放，这大大降低了程序的并发。
 
@@ -318,7 +318,7 @@ Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。隔�
 
 乐观锁其实就是类似于 java 中 cas。我们在表中添加一个字段 version。
 
-![image-20210217170519998](http://oss.mflyyou.cn/blog/20210217170520.png?author=zhangpanqin)
+![image-20210217170519998](/blog/20210217170520.png?author=zhangpanqin)
 
 重试操作，可以使用 Spring-retry 这个框架进行，一个注解搞定，很方便。
 

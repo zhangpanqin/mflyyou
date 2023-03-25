@@ -48,11 +48,11 @@ Mysql 单机扛不住的时候，考虑读写分离，主库用于写，从库�
 vmstat -t 1 1000
 ```
 
-![image-20210306180141644](http://oss.mflyyou.cn/blog/20210306180141.png?author=zhangpanqin)
+![image-20210306180141644](/blog/20210306180141.png?author=zhangpanqin)
 
 再不发生 swap 的前提下，一般推荐将系统内存的 80% 的内存分配给 mysql 使用。
 
-![公式来推算和配置数据库合适的总内存](http://oss.mflyyou.cn/blog/20210306184304.PNG?author=zhangpanqin)
+![公式来推算和配置数据库合适的总内存](/blog/20210306184304.PNG?author=zhangpanqin)
 
 ```txt
 图片来自 《MySQL数据库频繁出现OOM问题该如何化解》 https://www.huaweicloud.com/zhishi/19122601.html
@@ -128,7 +128,7 @@ GROUP BY
 	ts.TABLE_SCHEMA;
 ```
 
-![image-20210306230137102](http://oss.mflyyou.cn/blog/20210306230137.png?author=zhangpanqin)
+![image-20210306230137102](/blog/20210306230137.png?author=zhangpanqin)
 
 内存的容量小于索引数据的时候，需要考虑增加内存容量。
 
@@ -184,7 +184,7 @@ show variables like 'slow_query_log%';
 show variables like 'long_query_time%';
 ```
 
-![image-20210307151402651](http://oss.mflyyou.cn/blog/20210307151402.png?author=zhangpanqin)
+![image-20210307151402651](/blog/20210307151402.png?author=zhangpanqin)
 
 开启慢 sql 日志记录，这是动态修改，没有持久化，数据库重启就失效了。
 
@@ -256,7 +256,7 @@ oc 记录的是某个某个组织机构下某个仓库的库存数量，oid,cid,
 EXPLAIN SELECT o.`name`,t.`库存总量` FROM (SELECT oc.oid,sum(oc.oc_num) AS '库存总量' FROM oc GROUP BY oc.oid HAVING SUM(oc.oc_num)>5000 ) AS t INNER JOIN o ON t.oid=o.id;
 ```
 
-![image-20210307155802832](http://oss.mflyyou.cn/blog/20210307155802.png?author=zhangpanqin)
+![image-20210307155802832](/blog/20210307155802.png?author=zhangpanqin)
 
 #### id
 
@@ -409,7 +409,7 @@ set profiling=1;
 SHOW PROFILES;
 ```
 
-![image-20210307171104670](http://oss.mflyyou.cn/blog/20210307171104.png?author=zhangpanqin)
+![image-20210307171104670](/blog/20210307171104.png?author=zhangpanqin)
 
 ```sql
 -- show profile cpu, block io, memory,swaps,context switches,source for query [Query_ID];
@@ -424,7 +424,7 @@ show profile cpu, block io, memory,swaps,context switches,source for query 173;
 
 查看数据库线程中的状况。
 
-![image-20210307174502849](http://oss.mflyyou.cn/blog/20210307174502.png?author=zhangpanqin)
+![image-20210307174502849](/blog/20210307174502.png?author=zhangpanqin)
 
 ```sql
 SHOW PROCESSLIST;

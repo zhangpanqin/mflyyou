@@ -53,7 +53,7 @@ async();
 
 在 SpringBoot `@EnableAsync` 和 `@Async` 就可以助你异步编程。底层原理就是 `ThreadPoolExecutor` 和 `Future` 的封装。
 
-<img src="http://oss.mflyyou.cn/blog/20201108120510.png?author=zhangpanqin" alt="1583165-20200710095540896-1284477865" style="zoom: 33%;" />
+<img src="/blog/20201108120510.png?author=zhangpanqin" alt="1583165-20200710095540896-1284477865" style="zoom: 33%;" />
 
 我们拿这个烧水举例子，当你同步串行执行，需要消耗 20 分钟。同步编程思维模型较简单，容易实现。
 

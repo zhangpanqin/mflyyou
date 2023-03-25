@@ -25,9 +25,9 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 目录只介绍一些重要常用的。大致了解什么作用即可。
 
-![image-20200320134926002](http://oss.mflyyou.cn/blog/20200320134926.png?author=zhangpanqin)
+![image-20200320134926002](/blog/20200320134926.png?author=zhangpanqin)
 
-![190301204277681](http://oss.mflyyou.cn/blog/20200320144522.png?author=zhangpanqin)
+![190301204277681](/blog/20200320144522.png?author=zhangpanqin)
 
 ### 根目录-`/`
 
@@ -172,7 +172,7 @@ ssh mflyyou.com
 ssh-keygen -o -t rsa  -b 4096
 ```
 
-![img](http://oss.mflyyou.cn/blog/20200320210953.png?author=zhangpanqin)
+![img](/blog/20200320210953.png?author=zhangpanqin)
 
 ### 2、将公钥复制到远程服务器
 
@@ -187,7 +187,7 @@ ssh-copy-id -i /Users/zhangpanqin/.ssh/test_local_server.pub parallels@10.211.55
 
 运行上述命令将公钥内容拷贝到 /home/parallels/.ssh/authorized_keys。
 
-![img](http://oss.mflyyou.cn/blog/20200320211111.png?author=zhangpanqin)
+![img](/blog/20200320211111.png?author=zhangpanqin)
 
 ### 3、本地电脑配置私钥
 
@@ -200,7 +200,7 @@ Host mflyyou.com
   IdentityFile /Users/zhangpanqin/.ssh/test_local_server
 ```
 
-![img](http://oss.mflyyou.cn/blog/20200320211422.png?author=zhangpanqin)
+![img](/blog/20200320211422.png?author=zhangpanqin)
 
 ```bash
 # 验证登录
@@ -241,7 +241,7 @@ chmod  400 /etc/sudoers
 
 ## 文件权限控制
 
-![image-20200320212048568](http://oss.mflyyou.cn/blog/20200320212048.png?author=zhangpanqin)
+![image-20200320212048568](/blog/20200320212048.png?author=zhangpanqin)
 
 每行信息开头的第一个字母表示文件类型。
 
@@ -288,7 +288,7 @@ rpm 包安装的好处之一是我们不需要配置环境变量了。包已经�
 
 比如我们安装 jdk ,通过官网下载 jdk rpm 包。
 
-![img](http://oss.mflyyou.cn/blog/20200320231817.png?author=zhangpanqin)
+![img](/blog/20200320231817.png?author=zhangpanqin)
 
 #### rpm 包安装
 
@@ -297,7 +297,7 @@ rpm 包安装的好处之一是我们不需要配置环境变量了。包已经�
 rpm -lvh 包全名
 ```
 
-![img](http://oss.mflyyou.cn/blog/20200320231924.png?author=zhangpanqin)
+![img](/blog/20200320231924.png?author=zhangpanqin)
 
 #### 卸载 rpm 包
 
@@ -319,7 +319,7 @@ rpm -qa | grep nginx
 rpm -qi 包名
 ```
 
-![image-20200320232543119](http://oss.mflyyou.cn/blog/20200320232543.png?author=zhangpanqin)
+![image-20200320232543119](/blog/20200320232543.png?author=zhangpanqin)
 
 #### 查找 rpm 包会安装哪些文件及位置
 
@@ -328,7 +328,7 @@ rpm -qi 包名
 rpm -ql 包名
 ```
 
-![image-20200320232309137](http://oss.mflyyou.cn/blog/20200320232309.png?author=zhangpanqin)
+![image-20200320232309137](/blog/20200320232309.png?author=zhangpanqin)
 
 #### 其他命令
 

@@ -192,7 +192,7 @@ public class AuthController {
 
 效果演示，访问` http://localhost:9090/index.html` 的时候由于没有登录，`nginx` 错误状态码 `403` 跳转到了登录页面，在登录页面点击登录，跳转到 ` http://localhost:9090/index.html`
 
-![auth](http://oss.mflyyou.cn/blog/20200404234250.gif?author=zhangpanqin)
+![auth](/blog/20200404234250.gif?author=zhangpanqin)
 
 ### **ngx_http_secure_link_module**
 
@@ -301,7 +301,7 @@ public class HttpSecureLink {
 
 **ngx_http_limit_req_module** 采用 `漏桶算法` 进行限流。
 
-<img src="http://oss.mflyyou.cn/blog/20200405104827.png?author=zhangpanqin" alt="28171216_TJQR" style="zoom:67%;" />
+<img src="/blog/20200405104827.png?author=zhangpanqin" alt="28171216_TJQR" style="zoom:67%;" />
 
 水滴比作网络请求，当水滴超过桶的容量，请求会被拒绝。`漏桶算法`是以匀速掉落水滴（处理请求）。
 

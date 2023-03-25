@@ -63,7 +63,7 @@ INSERT INTO `index_hash_test` VALUES (5, 'e');
 EXPLAIN SELECT * FROM index_hash_test WHERE description >= 'b'
 ```
 
-![image-20201207222246741](http://oss.mflyyou.cn/blog/20201207222246.png?author=zhangpanqin)
+![image-20201207222246741](/blog/20201207222246.png?author=zhangpanqin)
 
 #### HASH 等值查找生效
 
@@ -71,7 +71,7 @@ EXPLAIN SELECT * FROM index_hash_test WHERE description >= 'b'
 EXPLAIN SELECT * FROM index_hash_test WHERE description = 'b'
 ```
 
-![image-20201207222418954](http://oss.mflyyou.cn/blog/20201207222418.png?author=zhangpanqin)
+![image-20201207222418954](/blog/20201207222418.png?author=zhangpanqin)
 
 ### B+Tree 数据结构的索引
 
@@ -101,7 +101,7 @@ EXPLAIN SELECT * FROM index_test WHERE description > 'b';
 EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 ```
 
-<img src="http://oss.mflyyou.cn/blog/20210216173430.png?author=zhangpanqin" alt="image-20210216173430636" style="zoom: 50%;" />
+<img src="/blog/20210216173430.png?author=zhangpanqin" alt="image-20210216173430636" style="zoom: 50%;" />
 
 分别查看执行计划可以看到，等值查找和范围查找都使用到了索引，但是这三者性能上会有所差别 （以后会详细介绍这部分内容）。
 
@@ -114,7 +114,7 @@ EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
 ```
 
-![image-20200923203559362](http://oss.mflyyou.cn/blog/20200923203559.png?author=zhangpanqin)
+![image-20200923203559362](/blog/20200923203559.png?author=zhangpanqin)
 
 相较于二叉树，B+ 树子节点会更多，树的高度会更低，在查找数据的时候，减少了遍历的次数以达到可以减少 Io 次数 （从磁盘加载数据到内存中）。
 
@@ -152,7 +152,7 @@ INSERT INTO `my_test` VALUES (5, 'b', '2');
 
 聚簇索引（也可以简单理解为主键）的叶子节点存的是整行数据，而非聚簇索引的叶子节点存的是索引数据和主键。
 
-![未命名文件](http://oss.mflyyou.cn/blog/20200923213114.svg?author=zhangpanqin)
+![未命名文件](/blog/20200923213114.svg?author=zhangpanqin)
 
 非叶子节点都是主键，叶子节点中既有主键对应的行数据。
 
@@ -162,7 +162,7 @@ INSERT INTO `my_test` VALUES (5, 'b', '2');
 
 联合索引：就是多个列组成一个索引。比如 name 和 age 组成一个索引
 
-#### ![联合索引](http://oss.mflyyou.cn/blog/20200923214615.svg?author=zhangpanqin)
+#### ![联合索引](/blog/20200923214615.svg?author=zhangpanqin)
 
 我们看到联合索引是按照 name，age 进行排序的，当 name 一样的时候，按 age 排序，并且叶子节点会有 id 的数据。
 
@@ -192,7 +192,7 @@ Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一�
 
 图来自《[MySQL 是怎样运行的：从根儿上理解 MySQL](https://juejin.im/book/6844733769996304392)》
 
-![img](http://oss.mflyyou.cn/blog/20200923215958.png?author=zhangpanqin)
+![img](/blog/20200923215958.png?author=zhangpanqin)
 
 ### 索引的使用和添加
 
@@ -210,7 +210,7 @@ Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一�
 SHOW INDEX FROM index_test;
 ```
 
-![image-20210216180939368](http://oss.mflyyou.cn/blog/20210216180939.png?author=zhangpanqin)
+![image-20210216180939368](/blog/20210216180939.png?author=zhangpanqin)
 
 当我们创建索引之后，可以通过查看 `Cardinality` 来判断索引添加是否合理。`Cardinality/表总行数` 值越接近 1 查询性能越好。
 

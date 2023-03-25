@@ -8,7 +8,7 @@ title: 从linux内核理解Java怎样实现Socket通信
 
 我们目前使用的 `HTTP` , `FTP` , `SMTP` , `DNS` , `HTTPS` , `SSH` , `MQTT` , `RPC` 等都是以 `TCP/IP协议` 为基础。下图针对的是 `传输层为 TCP` 。
 
-<img src="http://oss.mflyyou.cn/blog/20200718221518.svg?author=zhangpanqin" alt="TCP_IP 同一以太网 (1)" style="zoom:50%;" />
+<img src="/blog/20200718221518.svg?author=zhangpanqin" alt="TCP_IP 同一以太网 (1)" style="zoom:50%;" />
 
 `Linux 内核` 为我们屏蔽了 `TCP/IP` 通信模型的复杂性，并且 Linux 中一切皆文件，因此为我们抽象了 `Socket` 文件，实际我们编码的时候，主要是通过一些系统调用和 `Socket` 打交道。
 
@@ -77,13 +77,13 @@ https://github.com/zhangpanqin/fly-java-socket
 
 ## BIO 通信
 
-![Socket 通信 (1)](http://oss.mflyyou.cn/blog/20200719112747.svg?author=zhangpanqin)
+![Socket 通信 (1)](/blog/20200719112747.svg?author=zhangpanqin)
 
 `BIO 通信模型` 中，`服务端` `ServerSocket.accpet` 会阻塞等待新的客户端经过 `TCP 三次握手` 建立连接，当客户端 `Socket` 建立了链接，就可以通过 `ServerSocket.accpet` 得到这个 `Socket` ，然后对这个 `Socket` 进行读写数据。
 
 `Socket` 读写数据时，会阻塞当前线程直到操作完成，因此我们需要为每个客户端分配一个线程，然后在线程中死循环从 `Socket` 读取数据（客户端发来的数据）。还需要分配一个线程池对 `Socket` 进行写数据 （发送数据到客户端）。
 
-<img src="http://oss.mflyyou.cn/blog/20200719151354.svg?author=zhangpanqin" alt="Java Bio"  />
+<img src="/blog/20200719151354.svg?author=zhangpanqin" alt="Java Bio"  />
 
 应用程序调用系统调用 `read` 将数据从 `内核态` 到 `用户态` ,这个过程在 `BIO` 中是阻塞的。而且数据你不知道什么时候过来，只能在一个线程中死循环查看数据是否可读。
 
@@ -150,7 +150,7 @@ public void writeMessage(Integer clientId, String message) {
 
 比如我们的浏览器加载页面的时候，实际是随机创建了一个合法 `本地 port` ，加上已知的 `clientIp` 去请求 `serverIp` 和 `serverPort` 获取数据。
 
-![TCP 链接建立 (2)](http://oss.mflyyou.cn/blog/20200726150610.svg?author=zhangpanqin)
+![TCP 链接建立 (2)](/blog/20200726150610.svg?author=zhangpanqin)
 
 ​ 客户端链接服务端的 `TCP` 三次握手过程：
 
@@ -190,13 +190,13 @@ echo 2 > /proc/sys/net/ipv4/tcp_synack_retries
 
 当 `tcp_abort_on_overflow` 为 0 时（默认），表示如果第三次握手（客户端发送了 `ACK`）的时候，全连接队列满了，服务端会发送给客户端一个包让其重试发送 `ACK`。`sysctl -a | grep tcp_synack_retries` 查看服务端配置第三次握手重试的次数，默认为 5 次。
 
-![image-20200725201134175](http://oss.mflyyou.cn/blog/20200725201134.png?author=zhangpanqin)
+![image-20200725201134175](/blog/20200725201134.png?author=zhangpanqin)
 
 TCP 三次握手中的第三次客户端发送 `ACK` 给服务端，全连接队列满了，会丢弃第三次的 `ACK` 包，所以后续的过程中，是客户端再次发送 `ACK` 的包给服务端，服务端一直丢弃，所以，客户端一直发送 `ACK`。
 
 当 `tcp_abort_on_overflow` 为 1 时，表示如果第三次握手（客户端发送了 `ACK`）的时候，全连接队列满了，服务端会回复一个 `RST` 包，关闭连接过程
 
-![image-20200725200200971](http://oss.mflyyou.cn/blog/20200725200201.png?author=zhangpanqin)
+![image-20200725200200971](/blog/20200725200201.png?author=zhangpanqin)
 
 ### 半链接队列溢出
 
@@ -261,7 +261,7 @@ linux 中是内核参数 `net.ipv4.tcp_syn_retries = 6` ，限制 `SYN` 重试�
 
 当设置 `tcp_syncookies=0` 时，是不能抵御 `SYN FLOOD` 攻击的，新的正常用户建立不了链接。
 
-![image-20200726134431509](http://oss.mflyyou.cn/blog/20200726134558.png?author=zhangpanqin)
+![image-20200726134431509](/blog/20200726134558.png?author=zhangpanqin)
 
 当设置 `tcp_syncookies=1` 时，新的正常链接（走三次握手）还是可以建立 TCP 连接的，前提是 `全连接队列没有满`，全连接队列满了，走全连接队列的逻辑。
 
@@ -579,11 +579,11 @@ TCP 链接数据发送的时候，会有一个滑动窗口控制数据的发送�
 
 下图是在流控之内正常发送，服务端发包，客户端接收到，恢复一个 `ACK`。
 
-<img src="http://oss.mflyyou.cn/blog/20200726191559.png?author=zhangpanqin" alt="image-20200726191559755" style="zoom:150%;" />
+<img src="/blog/20200726191559.png?author=zhangpanqin" alt="image-20200726191559755" style="zoom:150%;" />
 
 这个是流控之外没有发送成功，会等待接着发送的。
 
-![image-20200726191825717](http://oss.mflyyou.cn/blog/20200726191825.png?author=zhangpanqin)
+![image-20200726191825717](/blog/20200726191825.png?author=zhangpanqin)
 
 这个也和 fd 的读写缓冲区有关系，客户端的度读缓冲区满了，服务端再怎么发，也不会成功的。
 

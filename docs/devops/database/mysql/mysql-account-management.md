@@ -222,7 +222,7 @@ CREATE USER 'ssl_test'@'%' IDENTIFIED BY 'Mysql@12345678' REQUIRE X509;
 
 文件都在数据目录下 `SHOW VARIABLES LIKE '%datadir`
 
-![image-20201123235514374](http://oss.mflyyou.cn/blog/20201123235514.png?author=zhangpanqin)
+![image-20201123235514374](/blog/20201123235514.png?author=zhangpanqin)
 
 ```shell
 ## 安全方式登录 Mysql

@@ -156,7 +156,7 @@ rmem_default、wmem_default、 rmem_max、wmem_max 这 4 个参数的设置需�
 
 ### large_client_header_buffers
 
-![image-20200329190558284](http://oss.mflyyou.cn/blog/20200412191248.png?author=zhangpanqin)
+![image-20200329190558284](/blog/20200412191248.png?author=zhangpanqin)
 
 ### client_body_in_single_buffer
 

@@ -126,7 +126,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 有异常标记的请求，在 Tomcat 中会转发到 /error 去处理，`ErrorMvcAutoConfiguration` 注册的 `BasicErrorController` 用于处理 /error 请求。
 
-![exception](http://oss.mflyyou.cn/blog/20210815195645.png?author=zhangpanqin)
+![exception](/blog/20210815195645.png?author=zhangpanqin)
 
 ### 公共库 Bean 管理
 
@@ -159,7 +159,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 
 为了知道为什么会发生这个问题，我们需要知道 aop 切面执行的顺序。它执行 和 Filter 差不多，责任链模式。
 
-![aop](http://oss.mflyyou.cn/blog/20210815195651.png?author=zhangpanqin)
+![aop](/blog/20210815195651.png?author=zhangpanqin)
 
 执行顺序可以按照标注的序号理解，如果 aspect 2 为事务切面，aspect 1 为分布式锁切面。
 

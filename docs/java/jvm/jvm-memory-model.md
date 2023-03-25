@@ -14,11 +14,11 @@ JAVA 内存区域（JAVA 运行时数据区）不要和 JAVA 内存模型（JMM�
 
 **JAVA 内存模型（JMM）定义了 Java 虚拟机(JVM)在计算机内存(RAM)中的工作方式**，java 内存模型指的是一套规范，规范线程如何访问内存。
 
-![20180413163825001](http://oss.mflyyou.cn/blog/20210323144335.png?author=zhangpanqin)
+![20180413163825001](/blog/20210323144335.png?author=zhangpanqin)
 
 > 图片引用 https://luoyoubao.gitbooks.io/jvm/content/javanei-cun-mo-xing/javanei-cun-mo-xing.html
 
-<img src="http://oss.mflyyou.cn/blog/20210323144519.png?author=zhangpanqin" alt="20180615135951001" style="zoom: 67%;" />
+<img src="/blog/20210323144519.png?author=zhangpanqin" alt="20180615135951001" style="zoom: 67%;" />
 
 > 图片引用 https://luoyoubao.gitbooks.io/jvm/content/chapter1.html
 
@@ -58,7 +58,7 @@ java 虚拟机中每个线程都有自己的 pc 寄存器。在任意时刻，�
 
 ## 内存区域异常抛出演示
 
-![image-20210323171447455](http://oss.mflyyou.cn/blog/20210323171447.png?author=zhangpanqin)
+![image-20210323171447455](/blog/20210323171447.png?author=zhangpanqin)
 
 > 图片引用 https://mp.weixin.qq.com/s/hj2GcW5nHS6U8wVZM7YBFg
 
@@ -97,7 +97,7 @@ public class HeapOOM {
 }
 ```
 
-![image-20210323154208310](http://oss.mflyyou.cn/blog/20210323154208.png?author=zhangpanqin)
+![image-20210323154208310](/blog/20210323154208.png?author=zhangpanqin)
 
 ### 栈溢出
 
@@ -184,4 +184,4 @@ interface IMetaService {
     }
 ```
 
-![image-20210323173300937](http://oss.mflyyou.cn/blog/20210323173300.png?author=zhangpanqin)
+![image-20210323173300937](/blog/20210323173300.png?author=zhangpanqin)

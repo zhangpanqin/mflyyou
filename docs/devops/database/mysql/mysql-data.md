@@ -18,7 +18,7 @@ title: 深入理解Mysql数据存储
 
 ## Mysql 架构说明
 
-![https://dev.mysql.com/doc/refman/8.0/en/images/mysql-architecture.png](http://oss.mflyyou.cn/blog/20200920151544.png?author=zhangpanqin)
+![https://dev.mysql.com/doc/refman/8.0/en/images/mysql-architecture.png](/blog/20200920151544.png?author=zhangpanqin)
 
 客户端链接 **Mysql** 的 **Server** 层，Server 层会对 sql 进行语法解析和优化并生成**执行计划**，然后调用**存储引擎**提供的接口获取要查询的数据。
 
@@ -106,7 +106,7 @@ mysql> show variables like '%innodb_file_per_table%';
 
 ## InnoDB 逻辑储存结构
 
-![image-20200921113000653](http://oss.mflyyou.cn/blog/20200921183000.png?author=zhangpanqin)
+![image-20200921113000653](/blog/20200921183000.png?author=zhangpanqin)
 
 ### 表空间
 
@@ -176,7 +176,7 @@ Max_data_length: 0
 
 `Row_format` 定义了一行数据在数据页中怎么保存。
 
-![image-20200921120326750](http://oss.mflyyou.cn/blog/20200921190326.png?author=zhangpanqin)
+![image-20200921120326750](/blog/20200921190326.png?author=zhangpanqin)
 
 **VARCHAR(M)** 和 **TEXT** 类型的字段为变长字段，变长字段占用多少字节，记录在 `变长字段长度列表`
 

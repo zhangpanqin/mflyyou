@@ -24,7 +24,7 @@ jsonp 基本告别了，了解即可。
 
 简单理解：当 url 中的协议/域名/端口不同时，就产生了跨域。
 
-![](http://oss.mflyyou.cn/blog/20200606200050.png?author=zhangpanqin)
+![](/blog/20200606200050.png?author=zhangpanqin)
 
 ### 跨域的解决方案？
 
@@ -152,7 +152,7 @@ Access-Control-Allow-Credentials:true
 
 后端如果使用 `SpringBoot` 可以看下 `CorsFilter` 源码即可理解。
 
-![image-20200607105838792](http://oss.mflyyou.cn/blog/20200607105838.png?author=zhangpanqin)
+![image-20200607105838792](/blog/20200607105838.png?author=zhangpanqin)
 
 #### 简单请求
 
@@ -282,18 +282,18 @@ $.ajax({
 
 #### cookie Path 设置错误
 
-![](http://oss.mflyyou.cn/blog/20200606200102.png?author=zhangpanqin)
+![](/blog/20200606200102.png?author=zhangpanqin)
 
 > 上图只能看到当前页面可以访问的 cookie
 
 > 查看域名下所有的 cookie
 
-![](http://oss.mflyyou.cn/blog/20200606200112.png?author=zhangpanqin)
+![](/blog/20200606200112.png?author=zhangpanqin)
 
 > 进入下级页面即可看到 cookie 选项
 
 > 可以查看某个域名下的全部 cookie
-> ![](http://oss.mflyyou.cn/blog/20200606200124.png?author=zhangpanqin)
+> ![](/blog/20200606200124.png?author=zhangpanqin)
 
 ```java
         Cookie retCookie=new Cookie("serverCookie",String.valueOf(Math.random()));

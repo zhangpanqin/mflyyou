@@ -25,7 +25,7 @@ Java 虚拟机提供了一套内存自动管理方案，我们不需要手动去
 
 怎么样才能判断一个对象是否可以被回收呢？通过 `GC Roots` 的根对象开始，根据引用关系向下搜索（搜索过程走的路径称为 `引用链`）,如果对象和 `GC Roots` 之间没有引用链，那么这个对象就可以视为 “垃圾” ，可以被回收。
 
-<img src="http://oss.mflyyou.cn/blog/20210329153821.png?author=zhangpanqin" alt="可以作为GC Roots的对象" style="zoom:50%;" />
+<img src="/blog/20210329153821.png?author=zhangpanqin" alt="可以作为GC Roots的对象" style="zoom:50%;" />
 
 **在 java 中可以看做 GC Roots 的有：**
 
@@ -36,7 +36,7 @@ Java 虚拟机提供了一套内存自动管理方案，我们不需要手动去
 
 方法的调用是通过在虚拟机栈中对栈帧压栈和弹栈完成的。每次函数的调用都有对应的一个栈帧压入到虚拟机栈中，函数调用结束都会有一个对应的栈帧弹出。栈帧中保存了当前函数的局部变量等结果。
 
-![栈帧](http://oss.mflyyou.cn/blog/20210329154429.png?author=zhangpanqin)
+![栈帧](/blog/20210329154429.png?author=zhangpanqin)
 
 因此当一个方法调用结束后，局部变量指向的对象如果没有 GC ROOTS 可达就会被回收掉。
 
@@ -110,7 +110,7 @@ StackGC.gc 调用之后触发 gc
 
 ### 垃圾回收算法
 
-![jvm堆空间](http://oss.mflyyou.cn/blog/20210329171328.png?author=zhangpanqin)
+![jvm堆空间](/blog/20210329171328.png?author=zhangpanqin)
 
 新生代采用 `标记-复制算法` ,new 对象首先分配到 eden 区，当经历一次垃圾回收还存活，对象会从 eden 复制到 s0，然后清空 eden 区，当再经历一次垃圾回收，对象会从 eden 到 s1，s0 存活的对象复制到 s1。标记-复制算法，会浪费一部分内存，但是它回收效率高速度快，不会产生内存碎片。
 

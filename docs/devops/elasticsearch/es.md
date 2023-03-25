@@ -10,7 +10,7 @@ title: Elasticsearch
 
 分词器由 `Character Filters` 、`Tokenizer` 和 `Token Filter` 组成。`Tokenizer` 是必须的。
 
-![image-20200314174642330](http://oss.mflyyou.cn/blog/20200314174642.png?author=zhangpanqin)
+![image-20200314174642330](/blog/20200314174642.png?author=zhangpanqin)
 
 Tokenizer 是将 `Character Filters` 处理之后的文本再处理。调用顺序如上所述。
 
@@ -708,7 +708,7 @@ elasticsearch  -  nofile  65535
 /etc/sysconfig/elasticsearch
 ```
 
-![image-20200313220432178](http://oss.mflyyou.cn/blog/20200313220432.png?author=zhangpanqin)
+![image-20200313220432178](/blog/20200313220432.png?author=zhangpanqin)
 
 ```http
 # 查看文件描述符

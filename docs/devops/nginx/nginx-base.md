@@ -68,7 +68,7 @@ sudo systemctl start nginx
 sudo systemctl status nginx
 ```
 
-![image-20200327220547818](http://oss.mflyyou.cn/blog/20200327220547.png?author=zhangpanqin)
+![image-20200327220547818](/blog/20200327220547.png?author=zhangpanqin)
 
 如果想查看 `nginx`包都安装了哪些文件，可以使用
 
@@ -76,7 +76,7 @@ sudo systemctl status nginx
 rpm -qvl nginx
 ```
 
-![image-20200327221058643](http://oss.mflyyou.cn/blog/20200327221058.png?author=zhangpanqin)
+![image-20200327221058643](/blog/20200327221058.png?author=zhangpanqin)
 
 ### Nginx 命令
 
@@ -122,7 +122,7 @@ sudo systemctl status nginx
 
 部署的 `Nginx` 使用一个 `master` 进程管理多个 `worker` 进程。`master` 进程不处理请求，提供管理服务，包括启动、停止、重载配置文件等服务，通常以 `root` 用户启动， `worker` 进程进行请求的处理，一般用非管理员账户启用，`worker` 进程数量和 cpu 核心设置一直，降低进程切换带来的 `cpu` 切换。
 
-![image-20200327222127446](http://oss.mflyyou.cn/blog/20200327222127.png?author=zhangpanqin)
+![image-20200327222127446](/blog/20200327222127.png?author=zhangpanqin)
 
 `http` 上下文中的配置是我们重点需要知道的，其余的了解会配置即可。
 
@@ -583,7 +583,7 @@ location /permanent2 {
 
 临时重定向，浏览器每次都要询问 `nginx` 需要跳转到哪里。可以关闭 `nginx` 就知道验证结果了。
 
-![image-20200328181255172](http://oss.mflyyou.cn/blog/20200328181255.png?author=zhangpanqin)
+![image-20200328181255172](/blog/20200328181255.png?author=zhangpanqin)
 
 ## try_files
 
@@ -644,7 +644,7 @@ gzip 压缩对文本效果比较好，推荐只对文本之类的压缩。
 
 为了减轻服务器压力，节省带宽，可以配置缓存。
 
-![image-20200328185715962](http://oss.mflyyou.cn/blog/20200328185716.png?author=zhangpanqin)
+![image-20200328185715962](/blog/20200328185716.png?author=zhangpanqin)
 
 `memory cache`:它是将资源文件缓存到内存中，缓存有效直接从内存加载。
 

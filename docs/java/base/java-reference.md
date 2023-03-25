@@ -120,7 +120,7 @@ public class SoftReferenceDemo {
 }
 ```
 
-![image-20200625213429845](http://oss.mflyyou.cn/blog/20200625213429.png?author=zhangpanqin)
+![image-20200625213429845](/blog/20200625213429.png?author=zhangpanqin)
 
 通过 `jvisualvm` 查看 jvm 堆的使用，可以看到堆在要溢出的时候就会回收掉，空闲的内存很大的时候，你主动执行 `执行垃圾回收`，内存是不会回收的。
 
@@ -430,9 +430,9 @@ public class TheadLocal{
 
 demo 验证，以上分析
 
-![image-20200627232351534](http://oss.mflyyou.cn/blog/20200627232351.png?author=zhangpanqin)
+![image-20200627232351534](/blog/20200627232351.png?author=zhangpanqin)
 
-![image-20200627225502636](http://oss.mflyyou.cn/blog/20200627225502.png?author=zhangpanqin)
+![image-20200627225502636](/blog/20200627225502.png?author=zhangpanqin)
 
 ### 内存泄漏原因
 
@@ -475,13 +475,13 @@ public class ThreadLocalDemo {
 
 运行程序，没有打印 gc 日志，说明没有进行垃圾回收
 
-![image-20200628020439866](http://oss.mflyyou.cn/blog/20200628020439.png?author=zhangpanqin)
+![image-20200628020439866](/blog/20200628020439.png?author=zhangpanqin)
 
-![image-20200628020512394](http://oss.mflyyou.cn/blog/20200628020512.png?author=zhangpanqin)
+![image-20200628020512394](/blog/20200628020512.png?author=zhangpanqin)
 
 在 `Java VisualVM` 中我们 `执行垃圾回收`，回收之后的内存分布，这个 20 个 `ThreadLocalDemo$Demo[]` 是回收不了的，这就是内存泄漏。
 
-![image-20200628020811328](http://oss.mflyyou.cn/blog/20200628020811.png?author=zhangpanqin)
+![image-20200628020811328](/blog/20200628020811.png?author=zhangpanqin)
 
 程序循环 50 次创建了 50 个 `Demo` ，程序运行期间是不会触发垃圾回收（设置 jvm 参数保证的），所以 `ThreadLocalDemo$Demo[]` 存活的实例数为 `50`。
 
@@ -493,7 +493,7 @@ public class ThreadLocalDemo {
 
 `ThreadLocalMap` 中有 `Entry[] tables`，k 为弱引用。当我们将 threadLocal 置为 null 的时候，GC ROOT 到 `ThreadLocalDemo$Demo[]` 引用链还是存在的，只是 k 回收掉了，value 依然存在的，tables 长度是不会变的，是不会被回收的。
 
-![image-20200628023936332](http://oss.mflyyou.cn/blog/20200628023936.png?author=zhangpanqin)
+![image-20200628023936332](/blog/20200628023936.png?author=zhangpanqin)
 
 ThreadLocal 在`set` 和 `get` 的时候，针对 k 为 null 的情况做了优化，会将对应的 tables[i] 设置为 null。这样单个 Entry 就可以被回收了。但是我们将 ThreadLocal 置为 null 之后，不能操作方法调用了。只能等到 Thread 再次调用别的 `ThreadLocal` 时操作 `ThreadLocalMap` 时根据条件判断，进行 Map 的 rehash,将 k 为 null 的 Entry 删除掉。
 
