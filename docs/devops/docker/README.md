@@ -1,6 +1,6 @@
 # Docker
 
-由于 [Docker Desktop](https://www.docker.com/products/docker-desktop/)  商业使用收费了，因此不能只将安装这个了。
+由于 [Docker Desktop](https://www.docker.com/products/docker-desktop/) 商业使用收费了，因此不能只将安装这个了。
 
 为了简便构建开发环境，还是需要 docker 的，所以用 [colima](https://github.com/abiosoft/colima) 代替。
 
@@ -10,39 +10,32 @@
 
 [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
 
-
-
 ## colima
 
 可以在本地运行 docker 命令。
 
-```shell
+```shelldocker build . -t vue-demo:0.0.1
 colima start
 colima stop
 ```
 
-
-
 ## docker command
 
 ```shell
-# 有的时候想看看 image 有什么文件。
+# 构建 image
+docker build . -t vue-demo:0.0.1
+# 有的时候想看看 image 有什么文件。4bd0f9394726 是 image 的 id
 docker run -it --entrypoint sh 4bd0f9394726
+docker run -it --entrypoint sh vue-demo:0.0.1
 # 查看 image 信息
 docker inspect 4bd0f9394726
 ```
-
-
 
 ## 镜像介绍
 
 随波逐流选镜像，我看好多官方镜像都是以 `debian:bullseye-slim` 作为基础镜像。
 
 `bullseye` 是 debian 11 的代号。slim 是最小镜像。
-
-
-
-
 
 ## 多阶段构建
 
@@ -62,13 +55,7 @@ COPY --from=build /go/bin/app /
 CMD ["/app"]
 ```
 
-
-
 第一阶段构建，第二阶段只是打包最终运行的程序。比如 java 构建的时候需要 gradle 什么的，我只把 jar 包最终放到 docker image 中。
-
-
-
-
 
 ## 基础镜像选择
 
@@ -86,17 +73,13 @@ java ，node，go，python 等等都提供了镜像支持。而且考虑安全�
 
 :::tip
 
-Distroless images contain only your application and its runtime dependencies. 
+Distroless images contain only your application and its runtime dependencies.
 
 They do not contain package managers, shells or any other programs you would expect to find in a standard Linux distribution.
 
 :::
 
-
-
-
-
-### 该不该选择alpine做为基础镜像？
+### 该不该选择 alpine 做为基础镜像？
 
 我们选择 alpine 的原因是它更小。
 
