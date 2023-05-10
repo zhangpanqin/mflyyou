@@ -46,6 +46,14 @@ postgresql 中的 user 和 role 是同一个东西。user 可以登录，都可�
 
 将一个 role a grant to role b, b 会继承 a 的权限。b 是 a 的一个 member
 
+
+
+:::tip
+
+PostgreSQL 提供了 set role 设置 child 以 parent 身份进行数据库操作，意味着每个由 child 创建的表的 owner 都是同一个 parent。
+
+:::
+
 ```sql
 -- 查看 role
 \du
@@ -160,3 +168,18 @@ psql -h localhost -U postgres -d sample
 -- 查看表的访问权限
 \z
 ```
+
+
+
+### pg_gump
+
+```shell
+pg_dump --no-owner --data-only --column-inserts --table=table_pattern --schema=public postgres://user:password@host:port/db_name > /tmp/table_pattern.sql
+```
+
+
+
+```shell
+psql postgres://user:password@host:port/db_name < /tmp/table_pattern.sql
+```
+

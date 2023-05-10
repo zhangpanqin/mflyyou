@@ -13,7 +13,8 @@ Debian 11 的代号是 bullseye。
 debian 官方文件有一句话
 
 ```shell
-Users are recommended to use the new apt(8) command for interactive usage and use the apt-get(8) and apt-cache(8) commands in the shell script.
+Users are recommended to use the new apt(8) command for interactive usage 
+and use the apt-get(8) and apt-cache(8) commands in the shell script.
 ```
 
 意思就是我们在写脚本的时候还是使用 apt-get，terminal 中使用用 apt。
