@@ -92,3 +92,33 @@ musl-libc 和 glibc 是 c 语言标准库的不同实现。glibc 兼容性更好
 为了部署应用建议选择 glibc，因为好多语言都是基于 glibc 编译构建的，兼容性更好。
 
 建议后端部署，还是选择 google distroless 吧。
+
+
+
+### ENTRYPOINT 和 CMD
+
+`ENTRYPOINT` 的格式和 `RUN` 指令格式一样，分为 `exec` 格式和 `shell` 格式。
+
+`ENTRYPOINT` 的目的和 `CMD` 一样，都是在指定容器启动程序及参数。`ENTRYPOINT` 在运行时也可以替代，不过比 `CMD` 要略显繁琐，需要通过 `docker run` 的参数 `--entrypoint` 来指定。
+
+:::tip
+
+当指定了 `ENTRYPOINT` 后，`CMD` 的含义就发生了改变，不再是直接的运行其命令，
+
+而是将 `CMD` 的内容作为参数传给 `ENTRYPOINT` 指令，换句话说实际执行时，将变为：<ENTRYPOINT> <CMD>
+
+:::
+
+
+
+那么有了 `CMD` 后，为什么还要有 `ENTRYPOINT` 呢？这种 `<ENTRYPOINT> "<CMD>"` 有什么好处么？让我们来看几个场景。
+
+`ENTRYPOINT` + `CMD` = 默认容器命令参数
+
+推荐指定 `ENTRYPOINT` ,  然后通过  cmd 来追加参数
+
+```dockerfile
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
+```
+
