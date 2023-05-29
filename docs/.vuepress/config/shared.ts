@@ -8,6 +8,7 @@ export function getJava(): SidebarConfigArray {
             collapsable: false,
             children: [
                 'base/java-messy-code',
+                'base/java-run-command.md',
                 'base/java-reference',
                 'base/how-to-read-file-in-java',
                 'base/java-asynchronous-programming',
@@ -47,17 +48,20 @@ export function getJava(): SidebarConfigArray {
 export function getSpringboot(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
         {
-            title: 'SpringBoot',
+            title: "项目总结",
             collapsable: false,
-            children: [
-                {
-                    title: "项目总结",
-                    collapsable: false,
-                    path: "project-sumary",
-                },
-                'jpa/jpa'
-            ]
-        },]
+            path: "project-sumary",
+        },
+        {
+            title: "属性配置",
+            collapsable: false,
+            path: 'externalized-configuration',
+        },
+        {
+            title: "数据库连接池",
+            collapsable: false,
+            path: 'datasource',
+        }]
     return sidebar;
 }
 
