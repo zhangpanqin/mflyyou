@@ -26,6 +26,38 @@ title: Nginx-包教包会-入门
 
 ## Nginx 安装
 
+### docker 
+
+```shell
+docker pull nginx:1.25.0-alpine3.17-slim
+mkdir -p ~/docker-nginx/html && mkdir -p ~/docker-nginx/nginx/conf.d
+
+
+docker run -it --name mflyyou-nginx \
+nginx:1.25.0-alpine3.17-slim
+
+docker cp mflyyou-nginx:/etc/nginx/conf.d/default.conf ~/docker-nginx/nginx/conf.d/default.conf
+docker cp mflyyou-nginx:/etc/nginx/nginx.conf ~/docker-nginx/nginx/nginx.conf
+docker cp mflyyou-nginx:/usr/share/nginx/html ~/docker-nginx/
+
+docker container stop mflyyou-nginx
+docker container rm mflyyou-nginx
+
+
+docker run -it -d --name mflyyou-nginx -p 80:80 \
+-v ~/docker-nginx/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf \
+-v ~/docker-nginx/nginx/nginx.conf:/etc/nginx/nginx.conf \
+-v ~/docker-nginx/html:/usr/share/nginx/html \
+nginx:1.25.0-alpine3.17-slim
+
+
+docker exec -it mflyyou-nginx sh
+```
+
+
+
+
+
 ### Nginx 安装步骤
 
 根据 [阿里 CentOS 镜像](https://developer.aliyun.com/mirror/centos) 配置 `yum` 源，提高下载速度。
