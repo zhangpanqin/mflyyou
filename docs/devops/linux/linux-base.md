@@ -153,59 +153,7 @@ export PATH
 
 一般我们用 `yum` 安装环境已经给配置好了环境变量。
 
-## 系统登录
 
-我比较讨厌一遍一遍输入用户名和密码访问服务器。
-
-我每次只要输入 `ssh mflyyou` 连接我的服务器。
-
-```bash
-ssh mflyyou.com
-```
-
-### 1、生成公钥私钥
-
-```bash
-ssh-keygen -o -t rsa  -b 4096
-```
-
-![img](/blog/20200320210953.png?author=zhangpanqin)
-
-### 2、将公钥复制到远程服务器
-
-`.pub` 结尾是公钥。
-
-```bash
-# ssh-copy-id -i {公钥绝对路径} {远程服务器用户名}@{远程服务器 ip}
-ssh-copy-id -i /Users/zhangpanqin/.ssh/test_local_server.pub parallels@10.211.55.8
-```
-
-以上命令作用是，将指定的公钥内容，拷贝到远程服务器上的指定用户`parallels`下。这样以后这个用户（parallels）就可以不用输入密码登录了。
-
-运行上述命令将公钥内容拷贝到 /home/parallels/.ssh/authorized_keys。
-
-![img](/blog/20200320211111.png?author=zhangpanqin)
-
-### 3、本地电脑配置私钥
-
-```bas
-Host mflyyou.com
-  HostName 10.211.55.8
-  AddKeysToAgent yes
-  UseKeychain yes
-  User parallels
-  IdentityFile /Users/zhangpanqin/.ssh/test_local_server
-```
-
-![img](/blog/20200320211422.png?author=zhangpanqin)
-
-```bash
-# 验证登录
-# ssh -T 私钥文件 用户名@ip
-ssh -T /Users/zhangpanqin/.ssh/mflyyou_server_rs mysql@192.168.10.1
-```
-
-以上配置结束，你可以 `ssh mflyyou.com` 登录远程服务器了。
 
 ## 用户管理
 
@@ -579,3 +527,4 @@ find / -name "a.sh"
 
 find / -name "a.sh" -type f
 ```
+
