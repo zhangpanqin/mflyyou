@@ -2,27 +2,22 @@
 title: Linux 基础
 ---
 
-## 前言
+## Linux 简介
 
-Linux 内核最初是由 Linus Torvalds 开发的。
-
-Linux 能运行主要的 UNIX 工具软件、应用程序和网络协议。它支持 32 位和 64 位硬件。Linux 继承了 Unix 以网络为核心的设计思想，是一个性能稳定的多用户网络操作系统。
-
+Linux 内核最初是由 Linus Torvalds 开发维护的。
+Linux 能运行主要的 UNIX 工具软件、应用程序和网络协议。它支持 32 位和 64 位硬件。
+Linux 继承了 Unix 以网络为核心的设计思想，是一个性能稳定的多用户网络操作系统。
 Linux 的发行版说简单点就是将 Linux 内核与应用软件做一个打包。
 
-可选的有 Debian，Ubuntu，Centos，服务器部署选择 Debian 吧。
+可选的有 Debian，Ubuntu，服务器部署选择 Debian 吧。
 
 在 Linux 中，一切皆文件。所以各种目录、文件的权限、创建者、所属组都是比较实用的东西。
 
-本文内容基于<font color=red> `Centos 7.4`</font> 版本。
 
-## 目录介绍
 
-Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大家了解。
+## Linux 目录介绍
 
-目录只介绍一些重要常用的。大致了解什么作用即可。
-
-![190301204277681](/blog/20200320144522.png?author=zhangpanqin)
+![190301204277681](./linux-base.assets/20200320144522.png)
 
 ### 根目录-`/`
 
@@ -38,13 +33,13 @@ Linux 中的目录还是要清楚的，有一些约定成俗的规定需要大�
 
 ### `/bin`
 
-`/bin` 是一些二进制的执行文件,  也可能是软连接。
+`/bin` 是一些二进制的执行文件, 也可能是软连接。
 
 ### `/sbin`
 
 `s` 指 Spuer user。
 
-`/sbin` 是一些二进制的执行文件,  也可能是软连接，管理员可执行的命令。
+`/sbin` 是一些二进制的执行文件, 也可能是软连接，管理员可执行的命令。
 
 ### `/etc`
 
@@ -120,6 +115,8 @@ echo 11
 
 当我执行 `pwd` 的时候，命令运行的是 `a.sh`
 
+
+
 ## PATH
 
 ### PATH 生效的原理
@@ -136,11 +133,15 @@ echo 11
 
 `/ect/bashrc` 将 `/etc/profile.d/*.sh` 进行初始化。
 
+
+
 ### PATH 全局配置
 
 基于以上的理解，<font color=red>全局命令配置建议直接在 `/usr/bin`下建立软连接到你的可执行文件。</font>
 
 不要想着在 `/etc/profile.d/` 下写脚本进行配置 PATH。当脚本写错，那么你可能会配置 `PATH` 的有效性，
+
+
 
 ### PATH 用户配置
 
@@ -184,9 +185,11 @@ mflyyou ALL=(ALL)      PASSWD:ALL
 chmod  400 /etc/sudoers
 ```
 
+
+
 ## 文件权限控制
 
-![image-20200320212048568](/blog/20200320212048.png?author=zhangpanqin)
+![image-20200320212048568](./linux-base.assets/20200320212048.png)
 
 每行信息开头的第一个字母表示文件类型。
 
@@ -221,106 +224,7 @@ chmod 754 /opt/config
 chown -R admin:admin  /opt/config
 ```
 
-![img](https://user-gold-cdn.xitu.io/2020/1/13/16f9f1268d7b6f9e?w=1286&h=554&f=png&s=154657)
 
-## 程序安装
-
-### rpm
-
-linux 分为源码包和 rpm 包。源码包需要我们自己编译，然后安装，自由度比较高。rpm 包是厂商编译好的二进制包，可以类比 windows .exe 包。但 rpm 包安装的时候需要处理依赖关系。因此，yum 管理 rpm 包诞生。yum 一般需要联网，有的时候，部署的服务器没有网络，我们可以通过挂载光盘或者 U 盘搭建本地 yum 源使用。
-
-rpm 包安装的好处之一是我们不需要配置环境变量了。包已经内置处理好了。
-
-比如我们安装 jdk ,通过官网下载 jdk rpm 包。
-
-![img](/blog/20200320231817.png?author=zhangpanqin)
-
-#### rpm 包安装
-
-```bash
-# 安装
-rpm -lvh 包全名
-```
-
-![img](/blog/20200320231924.png?author=zhangpanqin)
-
-#### 卸载 rpm 包
-
-```bash
-# 卸载
-rpm -e 包名
-```
-
-#### 查询安装了哪些 npm 包
-
-```bash
-rpm -qa | grep nginx
-```
-
-#### 查看安装的 rpm 包的信息
-
-```bash
-# 查询安装包的信息
-rpm -qi 包名
-```
-
-![image-20200320232543119](/blog/20200320232543.png?author=zhangpanqin)
-
-#### 查找 rpm 包会安装哪些文件及位置
-
-```bash
-# 查询包安装位置
-rpm -ql 包名
-```
-
-![image-20200320232309137](/blog/20200320232309.png?author=zhangpanqin)
-
-#### 其他命令
-
-```bash
-# 查询文件属于的安装程序
-rpm -qf 系统文件名
-
-# 校验安装的包中的文件是否被修改
-rpm -V 包名
-
-# 升级
-rpm -Uvh 包全名
-```
-
-### yum
-
-国外的 yum 源速度较慢，使用阿里云提供了 yum 源镜像，速度挺快，给阿里点赞。
-
-yum 实际是也是安装的 `rpm` 包，只是包之间的依赖关系由 `rpm` 管理了。
-
-#### yum 源配置
-
-[阿里 Centos yum 源](https://developer.aliyun.com/mirror/centos?spm=a2c6h.13651102.0.0.217a1b1181urQb)
-
-[阿里 epel 源](https://developer.aliyun.com/mirror/epel?spm=a2c6h.13651102.0.0.217a1b1181urQb)
-
-#### yum 命令
-
-```bash
-# 列出一个或一组软件包
-yum list
-
-# 列出已经安装包
-yum list installed | grep mysql
-
-# 在软件包详细信息中搜索指定字符串
-yum search
-
-# 安装包
-yum -y install 包名
-
-# 升级包，一定要指定包，不然 linux 全局更新
-yum -y update 包名
-
-# 卸载包，尽量不卸载
-yum -y remove 包名
-```
 
 ## 常用命令
 
@@ -337,32 +241,6 @@ nginx -h
 ### 基本命令
 
 ```bash
-# 复制 a.txt 到tmp 目录下
-cp a.txt /tmp
-# 复制 test 目录到 /tmp,保持文件所有特性和权限一样
-cp -r -a test /tmp
-# 复制为软连接，快捷方式
-cp -s  a.txt /tmp/a.txt
-
-
-# 递归删除 test 目录及旗下内容
-rm -f -r test
-
-# 将a.txt 移动到/tmp 下
-mv a.txt /tmp
-
-# 创建文件夹
-mkdir b
-
-# 查看文本内容
-cat a.txt
-
-# 查看目录下内容
-ll
-# 查看目录下全部内容
-ll -a
-
-
 # 查看一个文件新生成内容，动态观看
 
 tail -f -n 10 a.txt
@@ -376,54 +254,11 @@ a && b
 a || b
 ```
 
-### cp
-
--   创建软连接
-
-```bash
-# 复制为软连接，快捷方式
-cp -s  a.txt /tmp/a.txt
-```
-
 ### scp-远程拷贝
 
 ```bash
 # 将 a 目录下的所有资源 拷贝到指定远程地址的 /usr/share/nginx/html/ 下
 scp -rp /a/* 用户名@ip:/usr/share/nginx/html/
-```
-
-### 重定向
-
-Linux shell 使用 3 种标准的 I/O 流，每种流都与一个文件描述符相关联：
-
-1. _stdout_ 是*标准输出流*，它显示来自命令的输出。它的文件描述符为 1。
-2. _stderr_ 是*标准错误流*，它显示来自命令的错误输出。它的文件描述符为 2。
-3. _stdin_ 是*标准输入流*，它为命令提供输入。它的文件描述符为 0。
-
-`>` 改变输出流。`>` 等价于 `1>`
-
-`<` 改变输入流。
-
-```bash
-# 改变输出流量,a.txt 不存在的情况下创建
-echo "111" > a.txt
-
-# 有时候我们需要将标准输出流和标准错误流输入到一个文件。a.txt 存在，bb.txt 不存在。内容不会追加。
-ls a.txt bb.txt > error.log 2>&1
-
-# 如果内容需要追加
-ls a.txt bb.txt >> error.log 2>&1
-
-# 如果不想要输出内容, 写入到 /dev/null 的内容都会被丢弃掉
-ls a.txt bb.txt >> /dev/null 2>&1
-```
-
-### 管道流-`|`
-
-多个命令通过 `|` 链接，前一个命令的输出，是后一个命令的输入。
-
-```bash
-cat error.log  | grep "a.txt"
 ```
 
 ### grep-查询文本
@@ -527,4 +362,3 @@ find / -name "a.sh"
 
 find / -name "a.sh" -type f
 ```
-

@@ -176,9 +176,10 @@ export function getDevops(): SidebarConfigArray {
             title: 'Linux',
             collapsable: false,
             children: [
+                'linux/linux-base',
                 'linux/vim',
                 'linux/ssh',
-                'linux/linux-base',
+                'linux/redirect-pipeline',
                 'linux/debian',
                 'linux/shell-base',
                 'linux/shell-example',
