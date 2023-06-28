@@ -23,10 +23,19 @@ export AWS_ASSUME_ROLE
 
 ### jq，操作 json 文件
 
+- `-e` / `--exit-status`:
+
+当最后的输出结果不是 `false` 或者 `null`， 退出状态码为 0。如果是 `false` 或者 `null`，退出状态码是 1。
+
+4 if no valid result was ever produced. Normally jq exits with 2 if there was any usage problem or system error, 3 if there was a jq program compile error, or 0 if the jq program ran.
+
+- `--raw-output` / `-r`:
+
+以字符串输出会去掉双引号。
+
 ```shell
-yum install epel-release -y
-yum update -y
-yum install jq -y
+echo '{}' | jq -er 'if (.k8s_ns | length) >0 then .k8s_ns[] else "" end'
+echo '{"k8s_ns":["a","b"]}'| jq -er 'if (.k8s_ns | length) >0 then .k8s_ns[] else "" end'
 ```
 
 ### 年月日
