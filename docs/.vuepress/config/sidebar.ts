@@ -2,6 +2,7 @@ import { SidebarConfig4Multiple } from 'vuepress/config'
 import {
     getGuideSidebar,
     getJava,
+    getGo,
     getSpringboot,
     getDevops,
     getTcpIp,
@@ -10,6 +11,7 @@ import {
 
 export const Sidebar4ZH: SidebarConfig4Multiple = {
     '/java/': getJava(),
+    '/go/': getGo(),
     '/springboot/': getSpringboot(),
     '/dev-tools/': getDevTools(),
     '/tcp-ip/': getTcpIp(),

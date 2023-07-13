@@ -44,6 +44,20 @@ export function getJava(): SidebarConfigArray {
     return sidebar
 }
 
+export function getGo(): SidebarConfigArray {
+    const sidebar: SidebarConfigArray = [
+        {
+            title: 'Go 基础',
+            collapsable: false,
+            children: [
+                'base/go-command',
+                'base/recover-panic'
+            ]
+        }
+    ]
+    return sidebar
+}
+
 
 export function getSpringboot(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
@@ -71,6 +85,11 @@ export function getTcpIp(): SidebarConfigArray {
             title: 'HTTP',
             collapsable: false,
             children: [
+                {
+                    title: "HTTP 缓存",
+                    collapsable: false,
+                    path: "http/http-caching",
+                },
                 {
                     title: "跨域",
                     collapsable: false,

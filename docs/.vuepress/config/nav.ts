@@ -6,6 +6,10 @@ export const NavItems4ZH: NavItem[] = [
         link: '/java/base/java-messy-code'
     },
     {
+        text: "Go",
+        link: '/go/base/go-command'
+    },
+    {
         text: "SpringBoot",
         link: '/springboot/project-sumary/'
     },
