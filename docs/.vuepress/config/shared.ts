@@ -47,6 +47,13 @@ export function getJava(): SidebarConfigArray {
 export function getGo(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
         {
+            title: 'Go 学习',
+            collapsable: false,
+            children: [
+                ''
+            ]
+        },
+        {
             title: 'Go 基础',
             collapsable: false,
             children: [
