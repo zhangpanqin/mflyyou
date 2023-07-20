@@ -15,24 +15,24 @@
         </div>
         <div class="right-sidebar-toolbar">
             <div class="option-box" @click="toggleShowTocContainer">
-                <img src="/images/system/toc.png" class="nozoom" />
+                <img :src="$withBase('/images/system/toc.png')" class="nozoom" />
                 <span class="show-txt">目录</span>
             </div>
 
             <div class="option-box" @click="$emit('toggle-sidebar-force')">
-                <img src="/images/system/toggle.png" width="30px" class="nozoom" />
+                <img :src="$withBase('/images/system/toggle.png')" width="30px" class="nozoom" />
                 <span class="show-txt">左栏</span>
             </div>
 
             <div class="option-box" v-if="prev" style="padding-left:2px;text-align:center;" :title="prev.title">
                 <RouterLink :to="prev.path">
-                    <img src="/images/system/pre2.png" width="30px" class="nozoom" />
+                    <img :src="$withBase('/images/system/pre2.png')" width="30px" class="nozoom" />
                     <span class="show-txt">上一篇</span>
                 </RouterLink>
             </div>
             <div class="option-box" v-if="next" style="padding-left:2px;text-align:center;" :title="next.title">
                 <RouterLink :to="next.path">
-                    <img src="/images/system/next2.png" width="30px" class="nozoom" />
+                    <img :src="$withBase('/images/system/next2.png')" width="30px" class="nozoom" />
                     <span class="show-txt">下一篇</span>
                 </RouterLink>
             </div>
