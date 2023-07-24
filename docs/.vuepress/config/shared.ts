@@ -58,7 +58,11 @@ export function getGo(): SidebarConfigArray {
             collapsable: false,
             children: [
                 'base/go-command',
-                'base/recover-panic'
+                'base/func',
+                'base/init-main',
+                'base/pointers',
+                'base/recover-panic',
+                'base/variables',
             ]
         }
     ]
