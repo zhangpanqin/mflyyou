@@ -135,7 +135,31 @@ export function getDevTools(): SidebarConfigArray {
             title: 'Git',
             collapsable: false,
             children: [
-                'git'
+                {
+                    title: 'Git 配置',
+                    collapsable: false,
+                    path: "git/git",
+                },
+                {
+                    title: 'Git 命令',
+                    collapsable: false,
+                    path: "git/git-command",
+                },
+                {
+                    title: 'Git 原理',
+                    collapsable: false,
+                    path: "git/git-principle",
+                },
+                {
+                    title: 'Git Hook',
+                    collapsable: false,
+                    path: "git/git-hook",
+                },
+                {
+                    title: 'Git Submodule',
+                    collapsable: false,
+                    path: "git/git-submodule",
+                },
             ]
         }, {
             title: 'Brew',
