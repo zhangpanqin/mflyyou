@@ -191,13 +191,7 @@ export function getDevTools(): SidebarConfigArray {
             children: [
                 'mac'
             ]
-        }, {
-            title: 'Pre-commit',
-            collapsable: false,
-            children: [
-                'pre-commit'
-            ]
-        },
+        }
     ]
 
     return sidebar;
