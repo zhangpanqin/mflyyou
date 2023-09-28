@@ -766,5 +766,19 @@ plugins {
 
 
 
+## Gradle Cache
 
+[The Directories and Files Gradle Uses](https://docs.gradle.org/8.2/userguide/directory_layout.html)
+
+
+
+禁止 gradle 删除 cache `gradleUserHome/init.d/cache-settings.gradle`
+
+```groovy
+beforeSettings { settings ->
+    settings.caches {
+        cleanup = Cleanup.DISABLED
+    }
+}
+```
 
