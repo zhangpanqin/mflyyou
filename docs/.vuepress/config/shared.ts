@@ -39,6 +39,14 @@ export function getJava(): SidebarConfigArray {
                 'jvm/jvm-memory-model',
                 'jvm/jvm-gc'
             ]
+        },
+        {
+            title: "通用工具",
+            collapsable: false,
+            children: [
+                'lib/snowflake',
+                'lib/distributed_lock'
+            ]
         }
     ]
     return sidebar
