@@ -70,6 +70,23 @@ gradle-wrapper.jar 会判断是否下载 wrapper 配置的 gradle，并且将传
 
 
 
+配置 gradle wrapper 下载需要的密码 和 mtls 证书
+
+```properties
+systemProp.gradle.wrapperUser=xx
+systemProp.gradle.wrapperPassword=xx
+
+
+# mtls
+systemProp.javax.net.ssl.keyStore=/Users/panqinzhang/xx.pfx
+systemProp.javax.net.ssl.keyStoreType=pkcs12
+systemProp.javax.net.ssl.keyStorePassword=xx
+```
+
+
+
+
+
 升级 wrapper 定义的 gradle 版本
 
 ```shell
