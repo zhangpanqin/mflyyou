@@ -46,7 +46,7 @@ public static void main(String[] args) {
 
 ### 类加载过程
 
-![Java类加载过程](class-loader.assets/v2-57bcbeda8f5ebc4e90a1322cd5af3f80_1440w.image)
+![Java类加载过程](./class-loader.assets/load-process.png)
 
 ### 加载
 
