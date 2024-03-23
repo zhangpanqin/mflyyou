@@ -40,11 +40,21 @@ public static void main(String[] args) {
 
 ![classloader](./class-loader.assets/classloader.png)
 
+### 双亲委派机制
+
+双亲委派模型并不是一种强制性的约束。而是官方推荐的一种方式。
+
+当我需要遵循双亲委派机制，我们实现 `findClass(String name)` 。
+
+当我们<font color=red>不需要</font> 双亲委派机制，我们实现 `loadClass(String name) `。
 
 
 
+`Tomcat` 打破了双亲委派机制，为了实现每个 web 应用加载同个 jar 的不同版本。
 
-### 类加载过程
+
+
+## 类加载过程
 
 ![Java类加载过程](./class-loader.assets/load-process.png)
 
