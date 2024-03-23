@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Git 原理 | Mflyyou</title>
+    <meta name="generator" content="VuePress 1.9.9">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="description" content="张攀钦的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    
+    <link rel="preload" href="/assets/css/0.styles.0ce27dc8.css" as="style"><link rel="preload" href="/assets/js/app.9063a2a7.js" as="script"><link rel="preload" href="/assets/js/3.a2cf49c7.js" as="script"><link rel="preload" href="/assets/js/2.b18ee37c.js" as="script"><link rel="preload" href="/assets/js/5.bc8ead88.js" as="script"><link rel="preload" href="/assets/js/7.f81fa904.js" as="script"><link rel="prefetch" href="/assets/js/10.eb6d8b92.js"><link rel="prefetch" href="/assets/js/100.19912b69.js"><link rel="prefetch" href="/assets/js/101.856ea470.js"><link rel="prefetch" href="/assets/js/102.3102257f.js"><link rel="prefetch" href="/assets/js/103.90c7e07d.js"><link rel="prefetch" href="/assets/js/104.136fa880.js"><link rel="prefetch" href="/assets/js/11.24f40608.js"><link rel="prefetch" href="/assets/js/12.ea9da3c7.js"><link rel="prefetch" href="/assets/js/13.cac51d66.js"><link rel="prefetch" href="/assets/js/14.d3ef3ad4.js"><link rel="prefetch" href="/assets/js/15.452f0997.js"><link rel="prefetch" href="/assets/js/16.084ff694.js"><link rel="prefetch" href="/assets/js/17.5f564f33.js"><link rel="prefetch" href="/assets/js/18.52b4a43b.js"><link rel="prefetch" href="/assets/js/19.8f553865.js"><link rel="prefetch" href="/assets/js/20.39cdc1e8.js"><link rel="prefetch" href="/assets/js/21.59327323.js"><link rel="prefetch" href="/assets/js/22.fdc2b370.js"><link rel="prefetch" href="/assets/js/23.115b96f3.js"><link rel="prefetch" href="/assets/js/24.d67c7de6.js"><link rel="prefetch" href="/assets/js/25.568b5010.js"><link rel="prefetch" href="/assets/js/26.955bc611.js"><link rel="prefetch" href="/assets/js/27.59775561.js"><link rel="prefetch" href="/assets/js/28.3144828a.js"><link rel="prefetch" href="/assets/js/29.c1fcfaf9.js"><link rel="prefetch" href="/assets/js/30.c98e1d22.js"><link rel="prefetch" href="/assets/js/31.3fe1aff6.js"><link rel="prefetch" href="/assets/js/32.eeedfa58.js"><link rel="prefetch" href="/assets/js/33.2fd4c4a5.js"><link rel="prefetch" href="/assets/js/34.db2ddcd5.js"><link rel="prefetch" href="/assets/js/35.469ef364.js"><link rel="prefetch" href="/assets/js/36.9a8ecc3e.js"><link rel="prefetch" href="/assets/js/37.bd1c542c.js"><link rel="prefetch" href="/assets/js/38.0c3a87cd.js"><link rel="prefetch" href="/assets/js/39.8621ed93.js"><link rel="prefetch" href="/assets/js/4.172fe702.js"><link rel="prefetch" href="/assets/js/40.a30932f3.js"><link rel="prefetch" href="/assets/js/41.7d217427.js"><link rel="prefetch" href="/assets/js/42.c9a49e70.js"><link rel="prefetch" href="/assets/js/43.71aa35cf.js"><link rel="prefetch" href="/assets/js/44.d841d19d.js"><link rel="prefetch" href="/assets/js/45.a19ede26.js"><link rel="prefetch" href="/assets/js/46.906e285f.js"><link rel="prefetch" href="/assets/js/47.10c5a8ca.js"><link rel="prefetch" href="/assets/js/48.761c5188.js"><link rel="prefetch" href="/assets/js/49.7ff096d3.js"><link rel="prefetch" href="/assets/js/50.91baf706.js"><link rel="prefetch" href="/assets/js/51.2889eabe.js"><link rel="prefetch" href="/assets/js/52.cfd59763.js"><link rel="prefetch" href="/assets/js/53.ec2b1458.js"><link rel="prefetch" href="/assets/js/54.fe5324f4.js"><link rel="prefetch" href="/assets/js/55.1c8a21ea.js"><link rel="prefetch" href="/assets/js/56.dba32333.js"><link rel="prefetch" href="/assets/js/57.76bd3a1b.js"><link rel="prefetch" href="/assets/js/58.4ca04372.js"><link rel="prefetch" href="/assets/js/59.5ef32f3e.js"><link rel="prefetch" href="/assets/js/6.579be253.js"><link rel="prefetch" href="/assets/js/60.6ab8599f.js"><link rel="prefetch" href="/assets/js/61.7c8bc316.js"><link rel="prefetch" href="/assets/js/62.8254d6a8.js"><link rel="prefetch" href="/assets/js/63.372f1ef3.js"><link rel="prefetch" href="/assets/js/64.9e7a0a69.js"><link rel="prefetch" href="/assets/js/65.8404ea2d.js"><link rel="prefetch" href="/assets/js/66.ca8c1521.js"><link rel="prefetch" href="/assets/js/67.188642b8.js"><link rel="prefetch" href="/assets/js/68.3446bdd7.js"><link rel="prefetch" href="/assets/js/69.1c4a4093.js"><link rel="prefetch" href="/assets/js/70.5c7dd73d.js"><link rel="prefetch" href="/assets/js/71.cda81ae5.js"><link rel="prefetch" href="/assets/js/72.287835b9.js"><link rel="prefetch" href="/assets/js/73.6adf879c.js"><link rel="prefetch" href="/assets/js/74.806e9e79.js"><link rel="prefetch" href="/assets/js/75.6763e52e.js"><link rel="prefetch" href="/assets/js/76.3f51a8f2.js"><link rel="prefetch" href="/assets/js/77.cd06ed98.js"><link rel="prefetch" href="/assets/js/78.7c870450.js"><link rel="prefetch" href="/assets/js/79.dcb8ff45.js"><link rel="prefetch" href="/assets/js/8.44113c74.js"><link rel="prefetch" href="/assets/js/80.8b5672ac.js"><link rel="prefetch" href="/assets/js/81.47a8e842.js"><link rel="prefetch" href="/assets/js/82.5a330af6.js"><link rel="prefetch" href="/assets/js/83.1928728d.js"><link rel="prefetch" href="/assets/js/84.7b0a8415.js"><link rel="prefetch" href="/assets/js/85.0526fa24.js"><link rel="prefetch" href="/assets/js/86.682b020c.js"><link rel="prefetch" href="/assets/js/87.773527c4.js"><link rel="prefetch" href="/assets/js/88.09bd150d.js"><link rel="prefetch" href="/assets/js/89.983ab36b.js"><link rel="prefetch" href="/assets/js/9.54a2a8e1.js"><link rel="prefetch" href="/assets/js/90.74e82ca3.js"><link rel="prefetch" href="/assets/js/91.2210fdbb.js"><link rel="prefetch" href="/assets/js/92.bd9b03cc.js"><link rel="prefetch" href="/assets/js/93.e322527d.js"><link rel="prefetch" href="/assets/js/94.1b8344d6.js"><link rel="prefetch" href="/assets/js/95.7b8a2981.js"><link rel="prefetch" href="/assets/js/96.f345feee.js"><link rel="prefetch" href="/assets/js/97.3fc0f4be.js"><link rel="prefetch" href="/assets/js/98.302d5747.js"><link rel="prefetch" href="/assets/js/99.e9f28656.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.0ce27dc8.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Mflyyou</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/java/base/java-messy-code.html" class="nav-link">
+  Java
+</a></div><div class="nav-item"><a href="/go/base/go-command.html" class="nav-link">
+  Go
+</a></div><div class="nav-item"><a href="/springboot/project-sumary/" class="nav-link">
+  SpringBoot
+</a></div><div class="nav-item"><a href="/tcp-ip/http/http-cors-jsonp/" class="nav-link">
+  TCP/IP
+</a></div><div class="nav-item"><a href="/dev-tools/asdf/" class="nav-link">
+  开发工具
+</a></div><div class="nav-item"><a href="/devops/docker/" class="nav-link">
+  DevOps
+</a></div> <a href="https://github.com/zhangpanqin/mflyyou" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/java/base/java-messy-code.html" class="nav-link">
+  Java
+</a></div><div class="nav-item"><a href="/go/base/go-command.html" class="nav-link">
+  Go
+</a></div><div class="nav-item"><a href="/springboot/project-sumary/" class="nav-link">
+  SpringBoot
+</a></div><div class="nav-item"><a href="/tcp-ip/http/http-cors-jsonp/" class="nav-link">
+  TCP/IP
+</a></div><div class="nav-item"><a href="/dev-tools/asdf/" class="nav-link">
+  开发工具
+</a></div><div class="nav-item"><a href="/devops/docker/" class="nav-link">
+  DevOps
+</a></div> <a href="https://github.com/zhangpanqin/mflyyou" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>asdf 工具多版本管理</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/asdf.html" class="sidebar-link">asdf</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Git</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/git/git.html" class="sidebar-link">Git 配置</a></li><li><a href="/dev-tools/git/git-command.html" class="sidebar-link">Git 命令</a></li><li><a href="/dev-tools/git/git-principle.html" aria-current="page" class="active sidebar-link">Git 原理</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-概念" class="sidebar-link">Git 概念</a></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-的工作原理" class="sidebar-link">Git 的工作原理</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#初始化仓库" class="sidebar-link">初始化仓库</a></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#查看-git-保存的-object" class="sidebar-link">查看 git 保存的 object</a></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-commit" class="sidebar-link">Git commit</a></li></ul></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-递归三路合并" class="sidebar-link">Git 递归三路合并</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#三路合并" class="sidebar-link">三路合并</a></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#递归三路合并" class="sidebar-link">递归三路合并</a></li><li class="sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-使用方法不对-导致提交丢失" class="sidebar-link">Git 使用方法不对，导致提交丢失？</a></li></ul></li></ul></li><li><a href="/dev-tools/git/git-hook.html" class="sidebar-link">Git Hook</a></li><li><a href="/dev-tools/git/git-submodule.html" class="sidebar-link">Git Submodule</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Brew</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/brew.html" class="sidebar-link">HomeBrew</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Iterm2</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/iterm2.html" class="sidebar-link">Iterm2</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Gradle</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/gradle.html" class="sidebar-link">Gradle</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Maven</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/maven.html" class="sidebar-link">Maven</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>Mac</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/dev-tools/mac.html" class="sidebar-link">Mac</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="git-原理"><a href="#git-原理" class="header-anchor">#</a> Git 原理</h1> <h2 id="git-概念"><a href="#git-概念" class="header-anchor">#</a> Git 概念</h2> <p><img src="/assets/img/git-arch.3bc9d5f2.png" alt="git-arch"></p> <ul><li>Workspace：工作区</li> <li>Index / Stage：暂存区</li> <li>Repository：本地仓库</li> <li>Remote：远程仓库</li></ul> <h2 id="git-的工作原理"><a href="#git-的工作原理" class="header-anchor">#</a> Git 的工作原理</h2> <p>Git 是一个<strong>基于快照的文件版本管理系统</strong>。</p> <p>我们对文件的每次修改，Git 都会帮我们计算一个 hash 值，然后将内容写入到以这个 hash 值命名的文件中。</p> <p>当我们 commit 修改之后，实际 commit 对应的对象保存了：提交信息和上次提交的 hash 值，本次提交对应的对象。</p> <p><img src="/assets/img/image-20230730000805908.e710b84a.png" alt="image-20230730000805908"></p> <p><a href="https://git-graph.harshkapadia.me/" target="_blank" rel="noopener noreferrer">Git Graph: git-graph.harshkapadia.me<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 生成以上图片</p> <p><code>.git/objects</code> 为 git 相关对象保存的地方。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>.git/objects
+├── <span class="token number">13</span>
+│   └── dbba697fb437e53017aa604ad01f917d00fc33
+├── <span class="token number">53</span>
+│   └── b18ae7196672c11ef2a9c9b8477b597487ad77
+├── <span class="token number">58</span>
+│   └── c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c
+├── 9c
+│   └── 62517b0d01486e69033dae6dc65503cd808f96
+├── ae
+│   └── f06e3d27cc6b17730daf473499ab58b68e772d
+├── b0
+│   └── 2b1164ed5a571b723cb25d978780b15d826d62
+├── c2
+│   └── 00906efd24ec5e783bee7f23b5d7c941b0c12c
+├── info
+└── pack
+</code></pre></div><h3 id="初始化仓库"><a href="#初始化仓库" class="header-anchor">#</a> 初始化仓库</h3> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">mkdir</span> git-yuanli <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> git-yuanli <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> init
+<span class="token builtin class-name">echo</span> <span class="token string">'111'</span> <span class="token operator">&gt;</span> a.txt
+<span class="token function">mkdir</span> <span class="token function">dir</span> <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">echo</span> <span class="token string">'222'</span> <span class="token operator">&gt;</span> dir/b.txt
+<span class="token function">git</span> <span class="token function">add</span> a.txt dir/b.txt
+</code></pre></div><h3 id="查看-git-保存的-object"><a href="#查看-git-保存的-object" class="header-anchor">#</a> 查看 git 保存的 object</h3> <p>每次我们当我们执行 <code>git add</code> 的时候，实际上 Git 会对我们 add 的文件进行 hash 计算，并将内容写到这个 hash 值命名的文件中。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>tree .git/objects
+.git/objects
+├── <span class="token number">58</span>
+│   └── c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c
+├── c2
+│   └── 00906efd24ec5e783bee7f23b5d7c941b0c12c
+├── info
+└── pack
+</code></pre></div><div class="language-shell extra-class"><pre class="language-shell"><code>// 计算 <span class="token builtin class-name">hash</span> 值
+<span class="token function">git</span> hash-object a.txt // 58c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c
+<span class="token function">git</span> hash-object b.txt // c200906efd24ec5e783bee7f23b5d7c941b0c12c
+
+// 查看对象内容
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> 58c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c <span class="token comment"># 111</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> c200906efd24ec5e783bee7f23b5d7c941b0c12c <span class="token comment"># 222</span>
+
+// 查看对象类型
+<span class="token function">git</span> cat-file <span class="token parameter variable">-t</span> 58c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c <span class="token comment"># blob</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-t</span> c200906efd24ec5e783bee7f23b5d7c941b0c12c <span class="token comment"># blob</span>
+</code></pre></div><h3 id="git-commit"><a href="#git-commit" class="header-anchor">#</a> Git commit</h3> <p>Git commit 也会生成一个对象。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">'commit'</span>
+
+tree .git/objects
+
+.git/objects
+├── <span class="token number">13</span>
+│   └── dbba697fb437e53017aa604ad01f917d00fc33
+├── <span class="token number">58</span>
+│   └── c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c
+├── ae
+│   └── f06e3d27cc6b17730daf473499ab58b68e772d
+├── b0
+│   └── 2b1164ed5a571b723cb25d978780b15d826d62
+├── c2
+│   └── 00906efd24ec5e783bee7f23b5d7c941b0c12c
+├── info
+└── pack
+
+
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> aef06e3d27cc6b17730daf473499ab58b68e772d <span class="token comment"># b.txt</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-t</span> aef06e3d27cc6b17730daf473499ab58b68e772d <span class="token comment"># tree</span>
+
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> b02b1164ed5a571b723cb25d978780b15d826d62
+<span class="token number">100644</span> blob 58c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c	a.txt
+040000 tree aef06e3d27cc6b17730daf473499ab58b68e772d	<span class="token function">dir</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-t</span> b02b1164ed5a571b723cb25d978780b15d826d62 <span class="token comment"># tree</span>
+
+
+<span class="token function">git</span> cat-file <span class="token parameter variable">-t</span> 13dbba697fb437e53017aa604ad01f917d00fc33 <span class="token comment"># commit</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> 13dbba697fb437e53017aa604ad01f917d00fc33
+Found existing <span class="token builtin class-name">alias</span> <span class="token keyword">for</span> <span class="token string">&quot;git&quot;</span><span class="token builtin class-name">.</span> You should use: <span class="token string">&quot;g&quot;</span>
+tree b02b1164ed5a571b723cb25d978780b15d826d62
+author zhangpanqin <span class="token operator">&lt;</span>zhangpanqin@outlook.com<span class="token operator">&gt;</span> <span class="token number">1690645464</span> +0800
+committer zhangpanqin <span class="token operator">&lt;</span>zhangpanqin@outlook.com<span class="token operator">&gt;</span> <span class="token number">1690645464</span> +0800
+
+commit
+
+
+</code></pre></div><p>综合以上，我们可以看出，git object 有三种类型，commit，tree，blob。</p> <p>commit 对象保存： 提交信息，对应提交的 tree 以及上一次提交的 commit hash 值。Git 根据 tree 可以查询到 blob，然后就可以知道本次提交的所有内容了。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token builtin class-name">echo</span> <span class="token string">'111'</span> <span class="token operator">&gt;</span> ac.txt
+<span class="token function">git</span> <span class="token function">add</span> ac.txt
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">'ac.txt'</span>
+<span class="token function">git</span> cat-file <span class="token parameter variable">-p</span> 9c62517b0d01486e69033dae6dc65503cd808f96
+tree 53b18ae7196672c11ef2a9c9b8477b597487ad77
+parent 13dbba697fb437e53017aa604ad01f917d00fc33
+author zhangpanqin <span class="token operator">&lt;</span>zhangpanqin@outlook.com<span class="token operator">&gt;</span> <span class="token number">1690646057</span> +0800
+committer zhangpanqin <span class="token operator">&lt;</span>zhangpanqin@outlook.com<span class="token operator">&gt;</span> <span class="token number">1690646057</span> +0800
+
+ac.txt
+</code></pre></div><p>在 Git 仓库里面，HEAD、分支、普通的 Tag 可以简单的理解成是一个指针，指向对应 commit 的 hash 值。</p> <p><code>parent</code> 可能不止一个。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">cat</span> .git/HEAD <span class="token comment"># ref: refs/heads/main</span>
+<span class="token function">cat</span> .git/refs/heads/main <span class="token comment"># 9c62517b0d01486e69033dae6dc65503cd808f96</span>
+</code></pre></div><h2 id="git-递归三路合并"><a href="#git-递归三路合并" class="header-anchor">#</a> Git 递归三路合并</h2> <p>Git 是基于文本文件逐行比较来做合并的。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>    A---B---C topic
+    /
+D---E---F---G master
+</code></pre></div><p>Git 使用 <code>递归三路合并</code> 算法将两个分支代码合并（git rebase，git merge）。</p> <h3 id="三路合并"><a href="#三路合并" class="header-anchor">#</a> 三路合并</h3> <p>了解 <code>递归三路合并</code> 之前，我们先了解一下 <code>三路合并</code>。</p> <p>比如 topic 和 master 合并，C commit 和 G commit 合并, 找到 C 和 G 父 commit E。</p> <p>三路合并将基于基线 E , 来比较 C 和 G 来确定代码的最终结果。git 算法无法解决的冲突，会提示我们解决。</p> <p>文件内容是同一行内容，比如 a.js 这个文件的内容如下：</p> <p>基线 E 中只有一行（第一行）内容：小明，</p> <p>在 Commit C 只有一行（第一行）内容 ：小明，</p> <p>在 Commit G 只有一行（第一行）内容 ： 小明</p> <p>a.js 合并之后内容是不会变化的。</p> <p>如果提交改的行数不一样，Git 会给我做合并。</p> <table><thead><tr><th>文件名</th> <th>基线 E</th> <th>Commit C</th> <th>Commit G</th> <th>结果</th></tr></thead> <tbody><tr><td>a.js</td> <td>小明</td> <td>小明</td> <td>小明</td> <td>小明</td></tr> <tr><td>b.js</td> <td>小明</td> <td>小明</td> <td>peter</td> <td>peter</td></tr> <tr><td>c.js</td> <td>小明</td> <td>mflyyou</td> <td>小明</td> <td>mflyyou</td></tr> <tr><td>d.js</td> <td>小明</td> <td>mflyyou</td> <td>peter</td> <td>冲突，提示手动解决</td></tr> <tr><td>e.js</td> <td>小明（第一行）</td> <td>mflyyou（第二行）</td> <td>peter（第三行）</td> <td>小明<br>mflyyou<br>peter</td></tr> <tr><td>f.js</td> <td>小明</td> <td>mflyyou</td> <td>-</td> <td>冲突，提示手动解决</td></tr> <tr><td>g.js</td> <td>-</td> <td>mflyyou</td> <td>peter</td> <td>冲突，提示手动解决</td></tr></tbody></table> <p>如果 <code>Commit C</code> 和 <code>Commit G</code> 基于基线 E 都做了修改，那么 Git 就会提示我们手动解决冲突。</p> <p><code>e.js</code> 这个情况只是举例，同一个文件，修改不用行。如果只是很少行的文件修改，Git 的算法也会提示我们手动解决冲突。</p> <h3 id="递归三路合并"><a href="#递归三路合并" class="header-anchor">#</a> 递归三路合并</h3> <p><img src="/assets/img/300px-Criss-cross-merge-fix.svg.97d8c6ce.png" alt="img"></p> <p><code>递归三路合并</code> 当出现两个 <code>基线 commit</code> 的时候，实际是先把两个基线 commit 合并做为这次合并的基线 commit。</p> <h3 id="git-使用方法不对-导致提交丢失"><a href="#git-使用方法不对-导致提交丢失" class="header-anchor">#</a> Git 使用方法不对，导致提交丢失？</h3> <div class="language- extra-class"><pre class="language-text"><code>*   721a2b9 (HEAD -&gt; main) Merge branch 'dev'
+|\
+| * 963d2f6 (dev) d.js
+* | cffbdc8 c.js
+* | d246449 Revert &quot;Merge branch 'dev'&quot;
+* | 3e38eb1 fix conflict
+* | 9dc2907 Merge branch 'dev'
+|\|
+| * 47dcd36 fix aa
+| * b7cd112 add b.js
+* | 94998e6 加注释
+|/
+* d6a4e7c init
+</code></pre></div><p>一个是 main 分支，我们从 <code>d6a4e7c</code> checkout dev 分支。</p> <p>然后在 dev 分支添加了两次提交，其中有一个创建文件 b.js。</p> <p>然后合并到 main 分支，然后又对 main 分支 revert 刚合并的代码。以后的 dev 分支合并进来，就不会带 b.js 了。</p> <p>就拿当前例子说：</p> <p>dev 的 <code>963d2f6</code> 和 main 的 cffbdc8 进行 merge。他们的共同父分支是 <code>47dcd36</code> .</p> <table><thead><tr><th>文件名</th> <th>基线 47dcd36</th> <th>dev <code>963d2f6</code></th> <th>main cffbdc8</th> <th>结果</th></tr></thead> <tbody><tr><td>b.js</td> <td>有</td> <td>有</td> <td>-</td> <td>没有</td></tr></tbody></table> <p>这和我们预期的结果不一样。这就是三路合并的理解。</p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/zhangpanqin/mflyyou/edit/main/docs/dev-tools/git/git-principle.md" target="_blank" rel="noopener noreferrer">在 GitHub 上编辑此页</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">2024/3/23 下午1:18:45</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+            ←
+            <a href="/dev-tools/git/git-command.html" class="prev">
+                Git 命令
+            </a></span> <span class="next"><a href="/dev-tools/git/git-hook.html">
+                Git Hook
+            </a>
+            →
+        </span></p></div> </main> <aside class="right-sidebar"> <div class="right-sidebar-toc-container" style="display:;"><div class="pos-box"><div class="icon-arrow"></div> <div class="scroll-box" style="max-height:650px"><div style="font-weight:bold;text-align:center;">Git 原理</div> <hr> <div class="toc-box"><ul><li><a href="/dev-tools/git/git-principle.html#git-概念" class="toc-sidebar-link">Git 概念</a><ul class="toc-sidebar-sub-headers"></ul></li><li><a href="/dev-tools/git/git-principle.html#git-的工作原理" class="toc-sidebar-link">Git 的工作原理</a><ul class="toc-sidebar-sub-headers"><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#初始化仓库" class="toc-sidebar-link">初始化仓库</a></li><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#查看-git-保存的-object" class="toc-sidebar-link">查看 git 保存的 object</a></li><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-commit" class="toc-sidebar-link">Git commit</a></li></ul></li><li><a href="/dev-tools/git/git-principle.html#git-递归三路合并" class="toc-sidebar-link">Git 递归三路合并</a><ul class="toc-sidebar-sub-headers"><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#三路合并" class="toc-sidebar-link">三路合并</a></li><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#递归三路合并" class="toc-sidebar-link">递归三路合并</a></li><li class="toc-sidebar-sub-header"><a href="/dev-tools/git/git-principle.html#git-使用方法不对-导致提交丢失" class="toc-sidebar-link">Git 使用方法不对，导致提交丢失？</a></li></ul></li></ul></div></div></div></div> <div class="right-sidebar-toolbar"><div class="option-box"><img src="/images/system/toc.png" class="nozoom"> <span class="show-txt">目录</span></div> <div class="option-box"><img src="/images/system/toggle.png" width="30px" class="nozoom"> <span class="show-txt">左栏</span></div> <div title="Git 命令" class="option-box" style="padding-left:2px;text-align:center;"><a href="/dev-tools/git/git-command.html"><img src="/images/system/pre2.png" width="30px" class="nozoom"> <span class="show-txt">上一篇</span></a></div> <div title="Git Hook" class="option-box" style="padding-left:2px;text-align:center;"><a href="/dev-tools/git/git-hook.html"><img src="/images/system/next2.png" width="30px" class="nozoom"> <span class="show-txt">下一篇</span></a></div></div> </aside></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.9063a2a7.js" defer></script><script src="/assets/js/3.a2cf49c7.js" defer></script><script src="/assets/js/2.b18ee37c.js" defer></script><script src="/assets/js/5.bc8ead88.js" defer></script><script src="/assets/js/7.f81fa904.js" defer></script>
+  </body>
+</html>

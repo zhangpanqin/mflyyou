@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>刀剑 2</title>
+    </head>
+    <body>
+        <h1>副本和日常</h1>
+        <ul id="itemList">
+            <li>
+                <input type="checkbox" data-item-id="item1" />九凤日常（必做）
+            </li>
+            <li>
+                <input type="checkbox" data-item-id="item2" />忘川日常（必做）
+            </li>
+            <li><input type="checkbox" data-item-id="item3" />试炼（必做）</li>
+            <li>
+                <input
+                    type="checkbox"
+                    data-item-id="item4"
+                />天机和威灵塔（必做）
+            </li>
+            <li>
+                <input type="checkbox" data-item-id="item5" />古城挖凝神 5
+                次（必做）
+            </li>
+            <li><input type="checkbox" data-item-id="item6_1" />异界封魔</li>
+            <li><input type="checkbox" data-item-id="item6" />皇城内院</li>
+            <li><input type="checkbox" data-item-id="item7" />爬山</li>
+            <li><input type="checkbox" data-item-id="item8" />牧野</li>
+            <li><input type="checkbox" data-item-id="item9" />罕水城</li>
+            <li>
+                <input type="checkbox" data-item-id="item10" />一条 + 段金盟声望
+            </li>
+            <li><input type="checkbox" data-item-id="item11" />琼云声望</li>
+            <li><input type="checkbox" data-item-id="item12" />忘川 6 + 6</li>
+            <li><input type="checkbox" data-item-id="item13" />法台</li>
+            <li><input type="checkbox" data-item-id="item14" />古寺</li>
+            <li><input type="checkbox" data-item-id="item15" />西楚声望</li>
+        </ul>
+
+        <script>
+            // 保存设置时间
+
+            // 获取存储在localStorage中的选中状态并更新页面
+            const itemList = document.getElementById("itemList");
+
+            clearData();
+
+            itemList.addEventListener("change", function (event) {
+                if (
+                    event.target.tagName === "INPUT" &&
+                    event.target.getAttribute("data-item-id")
+                ) {
+                    const itemId = event.target.getAttribute("data-item-id");
+                    const isChecked = event.target.checked;
+
+                    // 将选中状态保存在localStorage中
+                    localStorage.setItem(itemId, isChecked);
+
+                    // 在控制台中打印存储的数据，以便验证
+                    console.log(`Item ${itemId} is checked: ${isChecked}`);
+                }
+            });
+
+            // 初始化页面时，根据localStorage中的数据来勾选项目
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+
+                if (key == "daojian2_time") {
+                    continue;
+                }
+
+                const isChecked = localStorage.getItem(key);
+
+                const inputElement = itemList.querySelector(
+                    `[data-item-id="${key}"]`
+                );
+                if (inputElement && isChecked === "true") {
+                    inputElement.checked = true;
+                }
+            }
+
+            // check 是否清空
+            function clearData() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const daojian2_time = localStorage.getItem("daojian2_time");
+                const daojian2_time_now = formatDateToYYYYMMDD(now);
+                if (daojian2_time != daojian2_time_now && currentHour >= 6) {
+                    // 取消所有项目的勾选状态
+                    const checkboxes = document.querySelectorAll(
+                        "#itemList input[type='checkbox']"
+                    );
+                    checkboxes.forEach((checkbox) => {
+                        checkbox.checked = false;
+                        const itemId = checkbox.getAttribute("data-item-id");
+                        localStorage.setItem(itemId, false);
+                    });
+                    localStorage.setItem("daojian2_time", daojian2_time_now);
+                }
+            }
+
+            function formatDateToYYYYMMDD(date) {
+                // Ensure 'date' is a Date object
+                if (!(date instanceof Date)) {
+                    return "Invalid Date";
+                }
+
+                // Get the year, month, and day components
+                const year = date.getFullYear();
+                // Months are zero-based, so we add 1 to get the correct month
+                const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero if needed
+                const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if needed
+
+                // Combine them in the "yyyy-mm-dd" format
+                const formattedDate = `${year}-${month}-${day}`;
+                return formattedDate;
+            }
+        </script>
+    </body>
+</html>
