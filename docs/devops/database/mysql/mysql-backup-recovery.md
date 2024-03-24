@@ -4,54 +4,15 @@ title: Mysql数据备份与恢复
 
 ## 前言
 
-看完本文，删库跑路！？ 再也不可能发生了！一定要养成风险操作备份数据的习惯，避免恢复数据浪费时间。
-
-本文内容：
-
--   binlog 的作用
--   mysqldump 和 mysqlbinlog 做数据备份和数据恢复。
--   XtraBackup 全量备份和增量备份
-
 ## binlog
-
-![mysql 逻辑架构](/blog/20201128120321.jpg?author=zhangpanqin)
 
 ### binlog 作用及配置
 
 Mysql 的 `binlog` (二进制日志) 是 `Server` 层的，不管你的存储引擎是什么都可以使用 `binlog` 。
 
-`binlog` 记录的是数据库 `DML` 和 `DDL` 修改的数据内容，也可以用于数据的备份与恢复。一般我们会用
+`binlog` 记录的是数据库 `DML` 和 `DDL` 修改的数据内容，也可以用于数据的备份与恢复。
 
 `binlog` 也用于主从复制，从库请求主库的 `binlog` 写入到自己的中继日志，然后将中继日志转换为 `sql` ,然后将 sql 执行在从库执行。
-
-```sql
--- 查看是否开启 binlog
-SHOW VARIABLES LIKE '%log_bin%'
-
-mysql> SHOW VARIABLES LIKE '%log_bin%';
-+---------------------------------+-----------------------------+
-| Variable_name                   | Value                       |
-+---------------------------------+-----------------------------+
-| log_bin                         | ON                          |
-| log_bin_basename                | /var/lib/mysql/binlog       |
-| log_bin_index                   | /var/lib/mysql/binlog.index |
-| log_bin_trust_function_creators | OFF                         |
-| log_bin_use_v1_row_events       | OFF                         |
-| sql_log_bin                     | ON                          |
-+---------------------------------+-----------------------------+
-```
-
-#### 开启二进制日志配置
-
-`log_bin` 配置是否启用 `binlog`。`Mysql 8.0` 默认开启 `binlog`。
-
-`log_bin_index` 配置的是 `binlog` 日志文件的索引信息。这个配置最好配置了之后不要修改。
-
-`log_bin_basename` 配置的是 `binlog` 日志的基础路径名称。
-
-`server_id` 这个也需要配置，在一个集群中这个数字不能重复。
-
-`sql_log_bin` 配置当前会话 DML 和 DDL 语句是否记录。
 
 ```txt
 [root@centos-7 mysql]# pwd
@@ -63,95 +24,6 @@ mysql> SHOW VARIABLES LIKE '%log_bin%';
 -rw-r-----. 1 mysql mysql     1700 11月 23 23:40 binlog.000016
 -rw-r-----. 1 mysql mysql       64 11月 22 14:42 binlog.index
 [root@centos-7 mysql]#
-```
-
-### binlog 日志格式
-
-```sql
--- 查看当前 binlog 文件存储什么数据
-SHOW VARIABLES LIKE '%binlog_format%';
-```
-
-`binlog` 日志格式有以下三种
-
-#### STATEMENT
-
-记录的是 sql 语句。
-
-#### ROW
-
-`Mysql 8.0` 默认采用这个格式。记录每行的修改。相较于 `STATEMENT` 它可能记录的内容会更多，但是主从复制时更安全。
-
-比如全表更新 `update test set a=1;` `STATEMENT` 只会记录这个 `sql` ,而 `ROW` 会记录所有数据的修改。
-
-#### MIXED
-
-当需要时，Mysql 将日志格式从 `STATEMENT` 切换为 `ROW`。
-
-比如说更新语句可能记录为逻辑 sql （`STATEMENT`）,而插入语句记录为（`ROW`） 格式。
-
-#### binlog 日志格式验证
-
-创建一张表，插入 10 w 数据
-
-```sql
-DROP TABLE IF EXISTS `account`;
-CREATE TABLE `account` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `age` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-DROP PROCEDURE if EXISTS insertData;
-CREATE PROCEDURE insertData ( )
-BEGIN
-	DECLARE i INT DEFAULT 1;
-	WHILE i < 10000 DO
-		SET i = i + 1;
-		INSERT INTO account ( username, age )VALUES( '测试', 12 );
-	END WHILE;
-END;
-CALL insertData ( );
-```
-
--   `binlog_format` 在 `ROW` 模式下记录的是每行数据的修改
-
-```sql
-mysql> SHOW BINLOG EVENTS IN 'binlog.000018' limit 10;
-+---------------+-------+----------------+-----------+-------------+--------------------------------------+
-| Log_name      | Pos   | Event_type     | Server_id | End_log_pos | Info                                 |
-+---------------+-------+----------------+-----------+-------------+--------------------------------------+
-| binlog.000018 |     4 | Format_desc    |         1 |         125 | Server ver: 8.0.21, Binlog ver: 4    |
-| binlog.000018 |   125 | Previous_gtids |         1 |         156 |                                      |
-| binlog.000018 |   156 | Anonymous_Gtid |         1 |         236 | SET @@SESSION.GTID_NEXT= 'ANONYMOUS' |
-| binlog.000018 |   236 | Query          |         1 |         322 | BEGIN                                |
-| binlog.000018 |   322 | Table_map      |         1 |         386 | table_id: 99 (ceshi2.account)        |
-| binlog.000018 |   386 | Update_rows    |         1 |        8600 | table_id: 99                         |
-| binlog.000018 |  8600 | Update_rows    |         1 |       16814 | table_id: 99                         |
-| binlog.000018 | 16814 | Update_rows    |         1 |       25028 | table_id: 99                         |
-| binlog.000018 | 25028 | Update_rows    |         1 |       33242 | table_id: 99                         |
-| binlog.000018 | 33242 | Update_rows    |         1 |       41456 | table_id: 99                         |
-+---------------+-------+----------------+-----------+-------------+--------------------------------------+
-```
-
--   `binlog_format` 在 `STATEMENT` 模式下记录的是 sql
-
-```sql
-flush logs;
-
-update ceshi2.account set username='2';
-
-mysql> SHOW BINLOG EVENTS IN 'binlog.000019' limit 10;
-+---------------+-----+----------------+-----------+-------------+----------------------------------------+
-| Log_name      | Pos | Event_type     | Server_id | End_log_pos | Info                                   |
-+---------------+-----+----------------+-----------+-------------+----------------------------------------+
-| binlog.000019 |   4 | Format_desc    |         1 |         125 | Server ver: 8.0.21, Binlog ver: 4      |
-| binlog.000019 | 125 | Previous_gtids |         1 |         156 |                                        |
-| binlog.000019 | 156 | Anonymous_Gtid |         1 |         235 | SET @@SESSION.GTID_NEXT= 'ANONYMOUS'   |
-| binlog.000019 | 235 | Query          |         1 |         324 | BEGIN                                  |
-| binlog.000019 | 324 | Query          |         1 |         446 | update ceshi2.account set username='2' |
-| binlog.000019 | 446 | Xid            |         1 |         477 | COMMIT /* xid=300671 */                |
-+---------------+-----+----------------+-----------+-------------+----------------------------------------+
 ```
 
 ### binlog 操作
@@ -174,66 +46,7 @@ mysql> SHOW BINARY LOGS;
 +---------------+-----------+-----------+
 ```
 
-#### 查看当前正在写入的 binlog
 
-```sql
--- 查看当前正在写入的 binlog 文件信息
-SHOW MASTER STATUS;
-
-mysql> SHOW MASTER STATUS;
-+---------------+----------+--------------+------------------+-------------------+
-| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
-+---------------+----------+--------------+------------------+-------------------+
-| binlog.000016 |     1700 |              |                  |                   |
-+---------------+----------+--------------+------------------+-------------------+
-1 row in set (0.00 sec)
-```
-
-#### 生成新的 binlog
-
-```sql
--- 刷新产生新的日志文件
-FLUSH LOGS;
-
--- 原来的日志文件是 binlog.000016
-mysql> SHOW MASTER STATUS;
-+---------------+----------+--------------+------------------+-------------------+
-| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
-+---------------+----------+--------------+------------------+-------------------+
-| binlog.000017 |      156 |              |                  |                   |
-+---------------+----------+--------------+------------------+-------------------+
-1 row in set (0.00 sec)
-```
-
-#### 查看 binlog 中的操作
-
-```sql
-SHOW BINLOG EVENTS
-   [IN 'log_name']
-   [FROM pos]
-   [LIMIT [offset,] row_count]
-
-mysql> show binlog events limit 100,3;
-+---------------+------+----------------+-----------+-------------+-------------------------------------------------------------------------------------+
-| Log_name      | Pos  | Event_type     | Server_id | End_log_pos | Info                                                                                |
-+---------------+------+----------------+-----------+-------------+-------------------------------------------------------------------------------------+
-| binlog.000013 | 9382 | Query          |         1 |        9539 | use `ceshi`; GRANT SELECT ON `ceshi`.`test2` TO 'db_dev'@'localhost' /* xid=1023 */ |
-| binlog.000013 | 9539 | Anonymous_Gtid |         1 |        9616 | SET @@SESSION.GTID_NEXT= 'ANONYMOUS'                                                |
-| binlog.000013 | 9616 | Query          |         1 |        9711 | use `ceshi`; FLUSH PRIVILEGES                                                       |
-+---------------+------+----------------+-----------+-------------+-------------------------------------------------------------------------------------+
-```
-
-### binlog 落盘时机
-
-Mysql 中有很多 `Buffer Pool` (可以简单理解为内存)，为了提高数据库性能，一般提交事务之后，二进制日志先写入 `Buffer Poll` ，在写入到二进制文件中。
-
-如果二进制日志没有落盘，那么二进制日志有可能丢失，从库进行复制时会丢失数据。
-
-参数 `sync_binlog` 配置写入 `Buffer Poll` 多少次的时候调用系统调用 `fsync` 将内存中的二进制日志数据落盘。
-
--   `sync_binlog=1` 表示提交事务的时候同步将二进制日志数据落盘。配合 `innodb_flush_log_at_trx_commit=1`（控制 redo log 落盘） 数据安全。
--   `sync_binlog=N` 表示提交了 N 个二进制数据时才将日志数据落盘。也有人将其设置为 2，提高并发性，系统崩溃时可能丢失二进制日志数据。
--   `sync_binlog=0` 表示由操作系统 IO 调度来决定日志什么时候落盘。一般没人采用这个。
 
 ## Mysql 备份和恢复
 

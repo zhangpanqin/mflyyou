@@ -1,16 +1,10 @@
----
-title: Mysql 用户权限管理
----
+# Mysql 用户权限管理
 
-## 前言
+::: tips
 
-为了避免删库跑路的事情，权限管理和数据备份是必要。
+mysql 8.0.21 x86_64 MySQL Community Serve
 
-### 机器环境
-
--   mysql 8.0.21 x86_64 MySQL Community Serve
-
--   centos 7
+::: 
 
 ## Mysql 权限管理
 
