@@ -267,12 +267,14 @@ export function getDevops(): SidebarConfigArray {
                     collapsable: false,
                     children: [
                         'database/mysql/',
+                        'database/mysql/mysql-arch',
                         'database/mysql/mysql-index',
                         'database/mysql/mysql-lock-and-transaction',
-                        'database/mysql/mysql-explain-optimization',
+                        'database/mysql/mysql-explain',
+                        'database/mysql/mysql-limit',
+                        'database/mysql/mysql-data-types',
                         'database/mysql/mysql-account-management',
                         'database/mysql/mysql-backup-recovery',
-                        'database/mysql/mysql-data',
                     ]
                 },
                 {

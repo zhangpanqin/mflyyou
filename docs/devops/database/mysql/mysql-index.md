@@ -1,21 +1,4 @@
----
-title: 深入了解Mysql索引
----
-
-## 前言
-
-数据库中的索引是为了提高查询效率的，将像字典的目录一样。
-
-当我们了解索引的原理之后，就没有必要去死记硬背所谓的 Mysql 军规之类的东西了。
-
-### 本文内容
-
--   索引的类型：UNIQUE，FULLTEXT，SPATIAL，NORMAL(普通索引)
--   索引为什么会采用 B+ 树结构，为什么不是二叉树、B- 树
--   Mysql 中 B+ 树索引 和 Hash 索引应该选哪个
--   为什么索引的使用需要遵循 `最左匹配原则`
--   `联合索引`、`聚簇索引` 和 `覆盖索引` 分别是什么
--   索引添加的判断依据是什么
+# Mysql索引
 
 ## 索引
 
@@ -63,7 +46,7 @@ INSERT INTO `index_hash_test` VALUES (5, 'e');
 EXPLAIN SELECT * FROM index_hash_test WHERE description >= 'b'
 ```
 
-![image-20201207222246741](/blog/20201207222246.png?author=zhangpanqin)
+![image-20201207222246741](./mysql-index.assets/20201207222246.png)
 
 #### HASH 等值查找生效
 
@@ -71,7 +54,7 @@ EXPLAIN SELECT * FROM index_hash_test WHERE description >= 'b'
 EXPLAIN SELECT * FROM index_hash_test WHERE description = 'b'
 ```
 
-![image-20201207222418954](/blog/20201207222418.png?author=zhangpanqin)
+![image-20201207222418954](./mysql-index.assets/20201207222418.png)
 
 ### B+Tree 数据结构的索引
 
@@ -101,7 +84,7 @@ EXPLAIN SELECT * FROM index_test WHERE description > 'b';
 EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 ```
 
-<img src="/blog/20210216173430.png?author=zhangpanqin" alt="image-20210216173430636" style="zoom: 50%;" />
+<img src="./mysql-index.assets/20210216173430.png" alt="image-20210216173430636" style="zoom: 50%;" />
 
 分别查看执行计划可以看到，等值查找和范围查找都使用到了索引，但是这三者性能上会有所差别 （以后会详细介绍这部分内容）。
 
@@ -114,7 +97,7 @@ EXPLAIN SELECT * FROM index_test WHERE description = 'b';
 https://www.cs.usfca.edu/~galles/visualization/Algorithms.html
 ```
 
-![image-20200923203559362](/blog/20200923203559.png?author=zhangpanqin)
+![image-20200923203559362](./mysql-index.assets/20200923203559.png)
 
 相较于二叉树，B+ 树子节点会更多，树的高度会更低，在查找数据的时候，减少了遍历的次数以达到可以减少 Io 次数 （从磁盘加载数据到内存中）。
 
@@ -152,7 +135,7 @@ INSERT INTO `my_test` VALUES (5, 'b', '2');
 
 聚簇索引（也可以简单理解为主键）的叶子节点存的是整行数据，而非聚簇索引的叶子节点存的是索引数据和主键。
 
-![未命名文件](/blog/20200923213114.svg?author=zhangpanqin)
+![未命名文件](./mysql-index.assets/20200923213114.svg)
 
 非叶子节点都是主键，叶子节点中既有主键对应的行数据。
 
@@ -162,7 +145,7 @@ INSERT INTO `my_test` VALUES (5, 'b', '2');
 
 联合索引：就是多个列组成一个索引。比如 name 和 age 组成一个索引
 
-#### ![联合索引](/blog/20200923214615.svg?author=zhangpanqin)
+![联合索引](./mysql-index.assets/20200923214615.svg)
 
 我们看到联合索引是按照 name，age 进行排序的，当 name 一样的时候，按 age 排序，并且叶子节点会有 id 的数据。
 
@@ -188,11 +171,7 @@ SELECT * FROM my_test WHERE `name` = b;
 
 也有人经常推荐说，查询的时候要查询需要的字段，不要使用 select \* ，这样做的好处一是减少 io，另一个就是避免回表。
 
-Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一页一页的数据，下面这张图可以近似理解。
-
-图来自《[MySQL 是怎样运行的：从根儿上理解 MySQL](https://juejin.im/book/6844733769996304392)》
-
-![img](/blog/20200923215958.png?author=zhangpanqin)
+![img](mysql-index.assets/20200923215958.png)
 
 ### 索引的使用和添加
 
@@ -210,7 +189,7 @@ Mysql 与磁盘交互的最小单位是 Page， B+ 树 中存储的实际是一�
 SHOW INDEX FROM index_test;
 ```
 
-![image-20210216180939368](/blog/20210216180939.png?author=zhangpanqin)
+![image-20210216180939368](./mysql-index.assets/20210216180939.png)
 
 当我们创建索引之后，可以通过查看 `Cardinality` 来判断索引添加是否合理。`Cardinality/表总行数` 值越接近 1 查询性能越好。
 
