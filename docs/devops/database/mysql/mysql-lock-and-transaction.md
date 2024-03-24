@@ -1,6 +1,6 @@
 # Mysql 事务和锁
 
-::: tips
+::: tip
 
 Mysql 的版本为 8.0.17。
 

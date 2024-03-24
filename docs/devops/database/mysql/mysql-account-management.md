@@ -1,6 +1,6 @@
 # Mysql 用户权限管理
 
-::: tips
+::: tip
 
 mysql 8.0.21 x86_64 MySQL Community Serve
 

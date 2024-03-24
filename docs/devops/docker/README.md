@@ -14,7 +14,7 @@
 
 可以在本地运行 docker 命令。
 
-```shelldocker build . -t vue-demo:0.0.1
+```sh
 colima start
 colima stop
 ```
@@ -39,7 +39,7 @@ docker inspect 4bd0f9394726
 
 ## 多阶段构建
 
-```dockerfile
+```
 # Start by building the application.
 FROM golang:1.18 as build
 
@@ -71,7 +71,7 @@ java ，node，go，python 等等都提供了镜像支持。而且考虑安全�
 
 第一优先级我会选择 google 的镜像。
 
-:::tip
+::: tip
 
 Distroless images contain only your application and its runtime dependencies.
 
@@ -99,11 +99,11 @@ musl-libc 和 glibc 是 c 语言标准库的不同实现。glibc 兼容性更好
 
 `ENTRYPOINT` 的目的和 `CMD` 一样，都是在指定容器启动程序及参数。`ENTRYPOINT` 在运行时也可以替代，不过比 `CMD` 要略显繁琐，需要通过 `docker run` 的参数 `--entrypoint` 来指定。
 
-:::tip
+::: tip
 
 当指定了 `ENTRYPOINT` 后，`CMD` 的含义就发生了改变，不再是直接的运行其命令，
 
-而是将 `CMD` 的内容作为参数传给 `ENTRYPOINT` 指令，换句话说实际执行时，将变为：<ENTRYPOINT> <CMD>
+而是将 `CMD` 的内容作为参数传给 `ENTRYPOINT` 指令，换句话说实际执行时，将变为：ENTRYPOINT CMD
 
 :::
 
@@ -113,7 +113,7 @@ musl-libc 和 glibc 是 c 语言标准库的不同实现。glibc 兼容性更好
 
 推荐指定 `ENTRYPOINT` , 然后通过 cmd 来追加参数
 
-```dockerfile
+```
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 ```
