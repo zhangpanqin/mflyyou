@@ -36,9 +36,10 @@ export function getJava(): SidebarConfigArray {
             title: "JVM",
             collapsable: false,
             children: [
-                'jvm/class-loader',
                 'jvm/jvm-memory-model',
-                'jvm/jvm-gc'
+                'jvm/class-loader',
+                'jvm/jvm-gc',
+                'jvm/jvm-gc-demo',
             ]
         },
         {

@@ -1,14 +1,12 @@
-# 认识 Java 内存区域
+# 认识 Java 运行时数据区
 
 
 
-## Java 内存区域
-
-
+Java 虚拟机在执行 java 程序的过程中会把它所管理的内存区域划分为不同的数据区域及 **Java 运行时数据区**。
 
 ::: warning
 
-Java 内存区域（Java 运行时数据区）不要和 Java 内存模型（JMM）混淆。
+**Java 运行时数据区**不要和 **Java 内存模型**（JMM）混淆。
 
 Java 内存模型定义了 JVM 在计算机内存(RAM)中的工作方式，java 内存模型指的是一套规范，规范线程如何访问内存。
 
@@ -16,13 +14,27 @@ Java 内存模型定义了 JVM 在计算机内存(RAM)中的工作方式，java 
 
 
 
+## Java 内存模型
+
 ![20180413163825001](./jvm-memory-model.assets/20210323144335.png)
 
-> 图片引用 https://luoyoubao.gitbooks.io/jvm/content/javanei-cun-mo-xing/javanei-cun-mo-xing.html
+
+
+
+
+当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据同步到主存。
+
+因为 cpu 是多核，同一个数据可能会有多个线程或者进程访问，因此有要一些措施要保证缓存的一致性。
+
+**Java 内存模型**就是规范 java  怎么去处理缓存一致性的。
+
+比如 **volatile** 保证了可见性，Lock, synchronized 操作保证数据的可见性和原子性。
+
+
+
+## Java 运行时数据区
 
 <img src="./jvm-memory-model.assets/20210323144519.png" alt="20180615135951001" style="zoom: 67%;" />
-
-> 图片引用 https://luoyoubao.gitbooks.io/jvm/content/chapter1.html
 
 **JVM 被分为三个主要的子系统**：
 
@@ -30,7 +42,7 @@ Java 内存模型定义了 JVM 在计算机内存(RAM)中的工作方式，java 
 2. 运行时数据区
 3. 执行引擎
 
-类加载子系统负责从文件系统或者网络中加载 Class 信息，Class 信息放在方法区中。
+类加载子系统负责从文件系统或者网络中加载 Class 信息。
 
 ![image-20210323171447455](./jvm-memory-model.assets/20210323171447-1196406.png)
 
@@ -54,130 +66,10 @@ java 虚拟机中每个线程都有自己的 pc 寄存器。在任意时刻，�
 
 ### 方法区（线程共享）
 
-方法区是是一个规范，具体的实现是 `元空间` 。
+方法区是是一个规范，在 jdk 1.8 具体的实现是**元空间** 。
 
-方法区是线程共享的内存区域，它存储 Class 的结构信息。例如，运行时常量池、字段、方法、构造函数。方法区使用的是本地内存（堆外内存），相当于在系统上申请的内存。方法区会抛出 OOM。方法区使用元数据空间来调整。
+方法区是线程共享的内存区域，它存储 Class 的结构信息。例如，运行时常量池、字段、方法、构造函数。方法区使用的是本地内存（堆外内存），相当于在系统上申请的内存。方法区会抛出 OOM。
 
 -XX:MaxMetaspaceSize: 设置，默认 -1 不限制。
 
 -XX:MetaspaceSize:指定元空间初始空间大小。字节为单位。
-
-## 内存区域异常抛出演示
-
-### 堆抛出 OOM
-
-在 idea 启动程序的时候，传入虚拟机参数 -Xms100m -Xmx100m -XX:+HeapDumpOnOutOfMemoryError。并使用 jvisualvm 观察堆的使用情况。
-
-运行结果会抛出 java.lang.OutOfMemoryError: Java heap space。
-
-`HeapDumpOnOutOfMemoryError` 指定了抛出异常时 dump 内存到文件中。我们可以通过分析这个文件，看那些对象占用比较多，从而分析问题。
-
-```java
-public class HeapOOM {
-    static class Obj {
-        private byte[] a = new byte[1024 * 1024 * 10];
-    }
-
-    public static void main(String[] args) {
-        final ArrayList<Object> objects = Lists.newArrayList();
-        int count = 0;
-        while (true) {
-            try {
-                objects.add(new Obj());
-                System.out.println("添加了多少次" + ++count);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-    }
-}
-```
-
-![image-20210323154208310](./jvm-memory-model.assets/20210323154208-1196531.png)
-
-### 栈溢出
-
--Xss 用于设置栈的大小。当栈调用深度过深，会抛出 StackOverflowError 异常。
-
--Xss512k 时，打印结果 `调用深度4868`。
-
--Xss256k 时，打印结果 `调用深度1889`。
-
-```java
-public class StackOverflowErrorDemo {
-
-    private int count = 0;
-
-    public void add() {
-        count++;
-        add();
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public static void main(String[] args) {
-        final StackOverflowErrorDemo stackOverflowErrorDemo = new StackOverflowErrorDemo();
-        try {
-            stackOverflowErrorDemo.add();
-        } catch (Error e) {
-            System.out.println("调用深度" + stackOverflowErrorDemo.getCount());
-        }
-    }
-}
-```
-
-### 方法区溢出
-
-方法区主要是储存类加载的信息，我们可以通过动态代理来模拟出来。
-
--XX:MaxMetaspaceSize=20m 设置元空间大小。
-
-```java
-public class MetaOOM {
-    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        while (true) {
-            try {
-                Enhancer enhancer = new Enhancer();
-                enhancer.setSuperclass(IMetaService.class);
-                enhancer.setUseCache(false);
-                enhancer.setCallback(new MethodInterceptor() {
-                    @Override
-                    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                        return proxy.invoke(obj, args);
-                    }
-                });
-                enhancer.create();
-            } catch (Throwable e) {
-                System.err.println(e.getMessage());
-            }
-        }
-    }
-}
-
-interface IMetaService {
-    void add();
-}
-```
-
-### 直接内存溢出
-
-直接内存（Direct Memory，也是堆外内存）的容量可以通过 `-XX:MaxDirectMemorySize` 设置。默认值是 64m。
-
-一般 Nio 使用了直接内存。-XX:MaxDirectMemorySize=50m
-
-```java
-    public static void main(String[] args) {
-        final ArrayList<Object> objects = new ArrayList<>();
-        while (true) {
-            try {
-                objects.add(ByteBuffer.allocateDirect(1024 * 1024 * 10));
-            } catch (Throwable e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-```
-
-![image-20210323173300937](./jvm-memory-model.assets/20210323173300.png)

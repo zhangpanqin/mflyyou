@@ -1,4 +1,4 @@
-# Java 类加载器
+# Java 类加载器及类加载过程
 
 ::: warning
 JDK 环境：  1.8
@@ -50,7 +50,11 @@ public static void main(String[] args) {
 
 
 
-`Tomcat` 打破了双亲委派机制，为了实现每个 web 应用加载同个 jar 的不同版本。
+#### 打破双亲委派的示例
+
+**Spi** 是 **Service Provider Interface** 的简称，SPI 是系统为第三方专门开放的扩展规范以及动态加载扩展点的机制。
+
+**DriverManager **在 rt.jar 下，是由 BootstrapClassLoader 加载的，类初始化的时候，它需要加载厂商的实现，使用了  `Thread.currentThread().getContextClassLoader` 如果启动线程的时候没有设置值，它就是 `AppClassLoader`，AppClassLoader 加载了我们实现的数据库驱动。
 
 
 
@@ -60,7 +64,59 @@ public static void main(String[] args) {
 
 ### 加载
 
-**加载阶段** 主要定义从哪里加载我们的 class 文件二进制流。
+**加载阶段** 主要定义从哪里加载我们的 class 文件二进制流，生成 class 对象存入堆中。
+
+#### 类的加载时机
+
+- 当我 new 一个对象时
+- 读取或者设置静态字段
+- 调用静态方法
+- 使用反射调用，触发类加载
+- 初始化类的时候，如果父类没有初始化，会触发父类加载
+
+```java
+public class Father {
+    public static int a;
+    static {
+        System.out.println("Father 静态方法");
+    }
+    public static void test1() {
+        System.out.println("Father test");
+    }
+}
+public class Son extends Father{
+    public static int b;
+  	public static final int c = 111;
+    static {
+        System.out.println("Son 静态方法");
+    }
+    public static void test2() {
+        System.out.println("Son test");
+    }
+}
+```
+
+`-XX:+TraceClassLoading ` 可以追踪 class 的加载。
+
+::: tip
+
+`Son.a` 会触发 `Son` 和 `Father` 的类的加载，只会触发 Father 的初始化，而不会触发 `Son` 的初始化。
+
+`Son.b` 会触发 `Son` 和 `Father` 的类的加载和初始化。
+
+`Son.test1` 和 `Son.test2` 一样的原理。
+
+`Son.c` 不会触发会触发 `Son` 和 `Father` 的类的加载。这是因为编译之后，这儿 Son.c 就被替换了成了真正的常量（bipush 111）。
+
+:::
+
+
+
+
+
+
+
+
 
 如果我们自定义了类加载器，我们可以定义从任意地方加载我们的 `class` 文件。
 
@@ -105,48 +161,22 @@ public static int value=111
 
 ### 初始化
 
-执行我们写的 Java 代码进行初始化。一个是类初始化，一个是成员变量初始化。
+执行我们类的初始化 `cinit`。
 
-1. 当类第一次加载的时候，执行类初始化。new 一个对象和反射调用的时候。
+1. 给静态变量赋值
 
-2. 初始化一个类，如果其父类还未初始化，则先触发该父类的初始化。
+2. 执行静态代码块
 
-静态代码块和静态变量赋值都只在类加载的时候初始化。
+静态代码块和静态变量赋值都只在类加载的时候有且只执行一次。
 
-```java
-public class Main {
-
-    private static final int aa1 = aa1();
-    private static final int aa2;
-    private int a;
-
-    static {
-        System.out.println("静态代码块");
-        aa2 = 3;
-    }
-
-    public static int aa1() {
-        System.out.println("静态方法赋值");
-        return 1;
-    }
-
-    public Main() {
-        System.out.println("构造方法");
-    }
-
-    public static void main(String[] args) {
-        new Main();
-        new Main();
-    }
-}
-```
+我们构造器的代码是在，new 对象的执行。每次 new 都会执行。
 
 
 
-```
-静态方法赋值
-静态代码块
-构造方法
-构造方法
-```
+因此 `new Son()` 会执行以下步骤：
+
+- 触发 Son 的类加载，父类 Father 没有加载，先加载 Father
+- 类加载 Father，触发 Father 类初始化
+- 再类加载 Son，触发 Son 类初始化
+- 执行 Father 构造函数，再执行子类 Son 构造函数
 
