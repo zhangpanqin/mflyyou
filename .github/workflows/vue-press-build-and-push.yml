@@ -20,7 +20,7 @@ jobs:
           cache-dependency-path: yarn.lock
 
       - name: Install dependency and Build
-        run: yarn && yarn docs:build:mflyyou
+        run: yarn && yarn docs:build
 
       - name: Deploy GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
