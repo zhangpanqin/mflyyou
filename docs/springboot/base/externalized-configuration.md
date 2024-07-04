@@ -62,6 +62,43 @@ SpringBoot 为了将系统环境变量的值对应到配置文件，它会做一
 
 :::
 
+#### 通用配置提取
+
+有的时候我们需要屏蔽不必要的技术细节和复杂度传递，比如 `sleuth` ，`zipkin`，`actuator` ，`数据库连接池` 等配置，开发的注意力应该较多集中在业务上。
+
+同时又需要提供可以覆写的自由度，比如公共库中配置了 `server.max-http-header-size: 10KB` ，但有的项目也可以修改为 `50KB`。
+
+`Spring` 的配置属性由 `Environment` 统一管理，同时针对不同配置的来源抽象了`PropertySource` ，当需要查找某个属性时，根据配置的优先级从 `PropertySource` 查找，找到就返回。
+
+我们常用到的配置加载顺序
+
+1. Command line arguments
+2. Java System properties
+3. ./file:/config/application-{profile}.yml
+4. ./file:/application-{profile}.yml
+5. ./file:/config/application.yml6
+6. ./file:/application.yml5
+7. classpath:/config/application-{profile}.yml
+8. classpath:/application-{profile}.yml
+9. classpath:/config/application.yml
+10. classpath:/application.yml
+
+我们可以实现 `EnvironmentPostProcessor` 添加一些 PropertySource 到 Environmen 中去。
+
+11. classpath:/application-default-{profile}.yml
+12. classpath:/application-default.yml
+
+[代码预览 ApplicationDefaultEnvironmentPostProcessor](https://github.com/zhangpanqin/fly-spring-cloud/blob/master/cloud-common/src/main/java/com/mflyyou/cloud/common/env/ApplicationDefaultEnvironmentPostProcessor.java)
+
+然后在 `META-INF/spring.factories` 配置让 SpringBoot 的 SPI 去加载我们的实现
+
+```txt
+org.springframework.boot.env.EnvironmentPostProcessor=\
+    com.mflyyou.cloud.common.env.ApplicationDefaultEnvironmentPostProcessor
+```
+
+
+
 ### 配置属性使用
 
 自动化配置 starter 中定义

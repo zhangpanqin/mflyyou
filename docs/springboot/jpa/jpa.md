@@ -6,10 +6,6 @@ title: Spring Data Jpa
 
 目前在做的项目使用的是 Spring Data Jpa，以前都是使用 Mybatis ，前段时间研究了 JPA 的使用。
 
-目前公司项目的架构许多的技术点是我没有实践过的，所以我这段时间在学习这些东西，从 2021-5-15 开始博客的更新尽量保证一周一篇。
-
-下周更新 GraphQL 。
-
 本文例子全部在 [https://github.com/zhangpanqin/jpa-study](https://github.com/zhangpanqin/jpa-study) ,数据库使用的是内存数据库 H2。
 
 ## JPA

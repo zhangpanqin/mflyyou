@@ -1,0 +1,82 @@
+@startuml
+
+actor request
+participant DispatcherServlet as DispatcherServlet
+participant HandlerExecutionChain as HandlerExecutionChain
+participant HandlerInterceptor as HandlerInterceptor
+participant HandlerAdapter as HandlerAdapter
+participant HandlerMapping as HandlerMapping
+participant RequestMappingHandlerAdapter as RequestMappingHandlerAdapter
+participant ServletInvocableHandlerMethod as ServletInvocableHandlerMethod
+participant HandlerMethodArgumentResolver as HandlerMethodArgumentResolver
+participant HandlerMethodReturnValueHandler as HandlerMethodReturnValueHandler
+
+
+
+
+autonumber 1.1
+request->DispatcherServlet
+activate DispatcherServlet
+DispatcherServlet->HandlerMapping: getHandler: HandlerExecutionChain
+activate HandlerMapping
+HandlerMapping->HandlerMapping: getHandler: HandlerExecutionChain
+DispatcherServlet<--HandlerMapping: HandlerExecutionChain
+deactivate HandlerMapping
+deactivate DispatcherServlet
+
+autonumber 2.1
+DispatcherServlet->DispatcherServlet: getHandlerAdapter: HandlerAdapter
+
+autonumber 3.1
+DispatcherServlet->HandlerExecutionChain: HandlerExecutionChain.applyPreHandle
+HandlerExecutionChain->HandlerInterceptor: applyPreHandle
+HandlerInterceptor->HandlerInterceptor: preHandle
+alt 返回 false
+HandlerExecutionChain<--HandlerInterceptor: return false
+HandlerExecutionChain->HandlerInterceptor: triggerAfterCompletion
+HandlerInterceptor->HandlerInterceptor: afterCompletion
+DispatcherServlet<--HandlerExecutionChain: return false
+DispatcherServlet->DispatcherServlet: 请求结束
+
+else 返回 true
+HandlerExecutionChain<--HandlerInterceptor: return true
+DispatcherServlet<--HandlerExecutionChain: return true
+end
+
+autonumber 4.1
+DispatcherServlet->HandlerAdapter: handle()处理请求逻辑
+HandlerAdapter->RequestMappingHandlerAdapter: handleInternal
+activate RequestMappingHandlerAdapter #red
+RequestMappingHandlerAdapter->RequestMappingHandlerAdapter: invokeHandlerMethod
+activate RequestMappingHandlerAdapter #yellow
+activate ServletInvocableHandlerMethod #green
+RequestMappingHandlerAdapter->RequestMappingHandlerAdapter: createInvocableHandlerMethod,\n return ServletInvocableHandlerMethod
+RequestMappingHandlerAdapter->ServletInvocableHandlerMethod: invokeAndHandle
+activate ServletInvocableHandlerMethod
+ServletInvocableHandlerMethod->HandlerMethodArgumentResolver: invokeForRequest，方法入参解析
+ServletInvocableHandlerMethod<--HandlerMethodArgumentResolver: 返回方法解析的入参
+activate ServletInvocableHandlerMethod
+ServletInvocableHandlerMethod->ServletInvocableHandlerMethod: doInvoke, 执行反射 Method
+ServletInvocableHandlerMethod->HandlerMethodReturnValueHandler: 对方法返回值进行处理
+deactivate ServletInvocableHandlerMethod
+ServletInvocableHandlerMethod<--HandlerMethodReturnValueHandler: 对方法返回值进行处理
+deactivate ServletInvocableHandlerMethod
+RequestMappingHandlerAdapter<--ServletInvocableHandlerMethod: 返回 ModelAndView
+deactivate ServletInvocableHandlerMethod
+deactivate RequestMappingHandlerAdapter
+HandlerAdapter<--RequestMappingHandlerAdapter: 返回 ModelAndView
+deactivate RequestMappingHandlerAdapter
+DispatcherServlet<--HandlerAdapter: 返回 ModelAndView
+DispatcherServlet->HandlerExecutionChain: applyPostHandle 执行拦截器代码
+HandlerExecutionChain->HandlerInterceptor: postHandle 执行拦截器代码
+autonumber 5.1
+alt 没有抛出异常
+request<--DispatcherServlet
+else 抛出异常
+DispatcherServlet->HandlerExceptionResolver
+request<--HandlerExceptionResolver
+end
+autonumber 5.1
+DispatcherServlet->HandlerExecutionChain: triggerAfterCompletion 执行拦截器代码
+HandlerExecutionChain->HandlerInterceptor: afterCompletion 执行拦截器代码
+@enduml

@@ -84,19 +84,95 @@ export function getGo(): SidebarConfigArray {
 export function getSpringboot(): SidebarConfigArray {
     const sidebar: SidebarConfigArray = [
         {
-            title: "项目总结",
+            title: "日常使用组件推荐",
             collapsable: false,
-            path: "project-sumary",
+            path: "./",
         },
         {
-            title: "属性配置",
+            title: "基本使用",
             collapsable: false,
-            path: 'externalized-configuration',
+            children: [
+                {
+                    title: "属性配置",
+                    collapsable: false,
+                    path: 'base/externalized-configuration',
+                },
+                {
+                    title: "Bean 的生命周期",
+                    collapsable: false,
+                    path: "base/bean-lifecycle",
+                },
+                {
+                    title: "Spring Context",
+                    collapsable: false,
+                    path: "base/context",
+                },
+                {
+                    title: "自动配置",
+                    collapsable: false,
+                    children: [
+                        {
+                            title: "Import 介绍",
+                            collapsable: false,
+                            path: "base/auto_config/import",
+                        }
+                    ]
+                },
+                {
+                    title: "数据库连接池",
+                    collapsable: false,
+                    path: 'base/datasource',
+                }
+            ]
         },
         {
-            title: "数据库连接池",
+            title: "SpringMvc",
             collapsable: false,
-            path: 'datasource',
+            children: [
+                {
+                    title: "SpringMvc 介绍",
+                    collapsable: false,
+                    path: "spring_mvc/",
+                }
+            ]
+        },
+        {
+            title: "AOP",
+            collapsable: false,
+            children: [
+                {
+                    title: "AOP 使用",
+                    collapsable: false,
+                    path: "aop/",
+                }
+            ]
+        },
+        {
+            title: "JPA",
+            collapsable: false,
+            children: [
+                {
+                    title: "JPA 使用",
+                    collapsable: false,
+                    path: "jpa/jpa",
+                }
+            ]
+        },
+        {
+            title: "Logback",
+            collapsable: false,
+            children: [
+                {
+                    title: "Logback 和 Slf4j",
+                    collapsable: false,
+                    path: "logback/",
+                },
+                {
+                    title: "Logback 日志",
+                    collapsable: false,
+                    path: "logback/detail",
+                }
+            ]
         }]
     return sidebar;
 }

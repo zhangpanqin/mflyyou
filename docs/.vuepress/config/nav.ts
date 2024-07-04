@@ -11,7 +11,7 @@ export const NavItems4ZH: NavItem[] = [
     },
     {
         text: "SpringBoot",
-        link: '/springboot/project-sumary/'
+        link: '/springboot/'
     },
     {
         text: "TCP/IP",

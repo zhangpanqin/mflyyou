@@ -299,7 +299,7 @@ Max_data_length: 0
 
 `Row_format` 定义了一行数据在数据页中怎么保存。
 
-![image_1c9h256f9nke14311adhtu61ie2dn.png-92kB](./mysql-arch.assets/169710e973b70372~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.png)
+![image_1c9h256f9nke14311adhtu61ie2dn.png-92kB](./mysql-arch.assets/mysql_data_jiegou.png)
 
 一个页一般是 `16KB`，当记录中的某个字段类型数据太大，当前页放不下的时候，会把多余的数据存储到其他页中，这种现象称为`行溢出`。
 
