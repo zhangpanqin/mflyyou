@@ -19,7 +19,7 @@
         "vuepress-plugin-medium-zoom": "^1.1.9"
     },
     "scripts": {
-        "docs:dev": "export VUEPRESS_MODE=github && vuepress dev docs",
+        "docs:dev": "set VUEPRESS_MODE=github && set NODE_OPTIONS=--openssl-legacy-provider && vuepress dev docs",
         "docs:build": "export VUEPRESS_MODE=github && vuepress build docs",
         "docs:dev:mflyyou": "export VUEPRESS_MODE=mflyyou.cn && vuepress dev docs",
         "docs:build:mflyyou": "export VUEPRESS_MODE=mflyyou.cn && vuepress build docs"
