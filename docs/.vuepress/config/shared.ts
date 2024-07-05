@@ -148,6 +148,17 @@ export function getSpringboot(): SidebarConfigArray {
             ]
         },
         {
+            title: "Jackson",
+            collapsable: false,
+            children: [
+                {
+                    title: "Jackson 使用",
+                    collapsable: false,
+                    path: "jackson/",
+                }
+            ]
+        },
+        {
             title: "JPA",
             collapsable: false,
             children: [
