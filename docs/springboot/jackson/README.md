@@ -80,3 +80,10 @@ public enum SexEnum {
 ### JsonValue
 
 制定序列化的字段
+
+## Mapped Diagnostic Context
+MDC 的使用，在使用线程池的时候，会丢失信息。
+[线程池使用](https://logback.qos.ch/manual/mdc.html#managedThreads)
+
+### 打印请求的信息
+[MDCInsertingServletFilter](https://logback.qos.ch/manual/mdc.html#mis)
