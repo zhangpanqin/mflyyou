@@ -184,7 +184,7 @@ commit;
 
 
 
-### server 层的锁
+### Server 层的锁
 
 ### Metadata Locks
 
@@ -197,6 +197,8 @@ commit;
 Java 中要想保存数据的一致性一般我们都会使用锁，同理 Mysql 也是使用锁来实现了事务。
 
 InnoDB 实现了两种行级锁：共享锁和排它锁。
+
+#### 意向锁
 
 InnoDB 内部也有意向锁，由 InnoDB 自动添加。意向锁为表级锁。
 
@@ -213,6 +215,12 @@ IS、IX锁是表级锁，它们的提出仅仅为了在之后加表级别的S锁
 -- 手动加 s 锁
 select * from tableName  lock in share mode;
 ```
+
+Mysql 中不加锁的读取数据，都是使用 MVCC来达到的。
+
+不加锁的读，当事务隔离级别为：【可重复读】的时候，读取的是当前事务可看到的数据，每次读取都一致，如果在事务中，使用了 insert,update,delete，可能会改变读取的一致性。
+
+不加锁的读，当事务隔离级别为：【读已提交】的时候，每次读取的数据都是最新的，别的事务提交的数据。
 
 ### 排它锁（X Lock）
 
@@ -249,7 +257,11 @@ InnoDB 存储引擎有 3 种锁的算法，分别是
 -   Gap Lock ，锁的是一个范围，但是不包括当前行
 -   Next-Key Lock ，锁定是记录本身及之间的间隙
 
-Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。隔离级别为 `读已提交` 采用 Record Lock 算法加锁。
+这几个锁，锁的都是索引。
+
+Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。
+
+隔离级别为 `读已提交` 采用 Record Lock 算法加锁。
 
 #### 解决幻读问题
 
@@ -295,3 +307,33 @@ Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。隔�
 使用乐观锁之后，100 个用户可以并发的进行修改，其中可能 30% 的人可能一次就付款成功。剩余的 70 人接着重试去购买，这相对于悲观锁来说并发会提高不少。
 
 但是如果系统 TPS 很大，每次只有 10% 甚至更低的人购买成功，还是考虑用悲观锁实现吧。
+
+## 重复读 READ COMMITTED
+
+不加锁的读，每次读取的都是最新的数据。
+
+对于，SELECT 。。。FOR UPDATE ， SELECT 。。。 LOCK IN SHARE MODE，update，insert，delete 都是在索引上加的记录锁。没有 gap 锁，除非外键检查和 duplicate-key 的时候才使用。
+
+对于读已提交，只支持 binlog_format=ROW，日志中记录的都是数据的变化。
+
+**两个重要特性：**
+
+1. 对于 update 和 delete 操作，获取的 X 锁, 当 where 条件匹配过，数据没有匹配上，锁会释放掉。
+
+```sql
+CREATE TABLE `t2` (
+  `id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `t2` (`id`, `version`) VALUES (1, 1);
+
+-- 当获取 id =1 的行锁，然后匹配 version 没有匹配到，会释放掉，id=1 的行锁，事务不提交，这个时候别的事务是可以获取这行锁的。
+update t2 set version =3 where id =1 and version=2;
+```
+
+
+
+1. 如果 update  锁住一行数据需要更新，那么每次读取都会拿到数据库中最新的数据，为了匹配 where 条件
+
