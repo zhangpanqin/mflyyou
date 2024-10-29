@@ -4,13 +4,12 @@ import {
     MFlyYouPlugin,
     MFlyYouHeads
 } from './config/theme'
-import { MflyyouConfig } from './config/env_config';
 export default defineConfig(ctx => ({
     head: MFlyYouHeads,
     themeConfig: MFlyYouThemeConfig,
     plugins: MFlyYouPlugin,
     title: "张攀钦的笔记",
-    base: MflyyouConfig.base,
+    base: "/mflyyou/",
     locales: {
         "/": {
             lang: "zh-CN",

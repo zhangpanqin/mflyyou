@@ -2,16 +2,16 @@ interface IMflyyouConfig {
     base?: `/${string}/`;
 }
 
-const VUEPRESS_MODE = process.env.VUEPRESS_MODE;
-
-export const MflyyouConfig: IMflyyouConfig = getMflyyouConfig();
-
-function getMflyyouConfig(): IMflyyouConfig {
-    if (!VUEPRESS_MODE) {
+export function getMflyyouConfig(): IMflyyouConfig {
+    const  vuepressMode = process.env.VUEPRESS_MODE;
+    if (!vuepressMode) {
         console.error("配置环境变量 VUEPRESS_MODE : 取值 github 或者 mflyyou ");
         process.exit();
     }
-    if (VUEPRESS_MODE == 'github') {
+    console.log(vuepressMode)
+    console.log(111111111)
+    if ("github"==vuepressMode) {
+        console.log(1111)
         return {
             base: "/mflyyou/"
         };

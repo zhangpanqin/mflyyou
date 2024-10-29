@@ -41,6 +41,7 @@ export function getJava(): SidebarConfigArray {
                 'jvm/class-loader',
                 'jvm/jvm-gc',
                 'jvm/jvm-gc-demo',
+                'jvm/g1',
             ]
         },
         {
