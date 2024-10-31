@@ -308,11 +308,39 @@ Mysql 事务隔离级别为 `重复读` 采用 Next-Key Lock 算法加锁。
 
 但是如果系统 TPS 很大，每次只有 10% 甚至更低的人购买成功，还是考虑用悲观锁实现吧。
 
-## 重复读 READ COMMITTED
+## 读已提交 READ COMMITTED
 
-不加锁的读，每次读取的都是最新的数据。
+**不加锁的读，在同一个事务中，每次读取的都是最新的数据（MVCC）**。
 
-对于，SELECT 。。。FOR UPDATE ， SELECT 。。。 LOCK IN SHARE MODE，update，insert，delete 都是在索引上加的记录锁。没有 gap 锁，除非外键检查和 duplicate-key 的时候才使用。
+```
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| demo  | varchar(255) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
++----+------+
+| id | demo |
++----+------+
+|  1 | 333  |
++----+------+
+```
+
+
+
+| 事务 t1                                        | 事务 t2                                 |
+| ---------------------------------------------- | --------------------------------------- |
+| begin;                                         | begin;                                  |
+| select * from test where id =1;  id=1,demo=2   | update test set demo ='333' where id=1; |
+|                                                | commit;                                 |
+| select * from test where id =1;  id=1,demo=333 |                                         |
+| commit;                                        |                                         |
+
+
+
+对于，SELECT 。。。FOR UPDATE ， SELECT 。。。 LOCK IN SHARE MODE，update，insert，delete 都是在索引上加的记录锁。
+
+没有 gap 锁，除非外键检查和 duplicate-key 的时候才使用。
 
 对于读已提交，只支持 binlog_format=ROW，日志中记录的都是数据的变化。
 
